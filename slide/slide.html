@@ -1,0 +1,226 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Roboto+Mono:wght@500;700&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#0d1117; --panel:#161b22; --panel2:#1c2230;
+  --line:#2a3242; --txt:#e6edf3; --dim:#8b98a9;
+  --up:#3fb950; --down:#f85149; --accent:#58a6ff; --gold:#e3b341;
+}
+body {
+  width:1080px; height:1080px; background:
+    radial-gradient(900px 500px at 85% -8%, rgba(88,166,255,.10), transparent 60%),
+    radial-gradient(700px 500px at -5% 110%, rgba(227,179,65,.08), transparent 55%),
+    var(--bg);
+  color:var(--txt); font-family:'Zen Kaku Gothic New',sans-serif;
+  padding:48px 56px 40px; display:flex; flex-direction:column;
+  overflow:hidden;
+}
+.mono { font-family:'Roboto Mono',monospace; }
+.up { color:var(--up); } .down { color:var(--down); } .flat { color:var(--dim); }
+
+header { display:flex; justify-content:space-between; align-items:flex-end;
+  border-bottom:2px solid var(--line); padding-bottom:22px; }
+.title { font-size:38px; font-weight:900; letter-spacing:.02em; }
+.date { font-size:22px; color:var(--dim); margin-top:6px; }
+.acct { font-size:20px; color:var(--accent); font-weight:700; }
+
+.total-wrap { margin:24px 0 20px; display:flex; align-items:baseline; gap:26px; }
+.total-label { font-size:24px; color:var(--dim); }
+.total { font-size:70px; font-weight:900; letter-spacing:-.01em; }
+.total-day { font-size:30px; font-weight:700; }
+
+.cmps { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:22px; }
+.cmp { background:var(--panel); border:1px solid var(--line); border-radius:16px;
+  padding:16px 14px; text-align:center; }
+.cmp.up { border-color:rgba(63,185,80,.35); }
+.cmp.down { border-color:rgba(248,81,73,.35); }
+.cmp-label { font-size:19px; color:var(--dim); margin-bottom:6px; }
+.cmp-pct { font-size:32px; font-weight:900; }
+.cmp-jpy { font-size:17px; margin-top:3px; opacity:.85; }
+
+.cols { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.panel { background:var(--panel); border:1px solid var(--line);
+  border-radius:18px; padding:20px 20px 12px; }
+.panel-h { font-size:21px; font-weight:700; margin-bottom:10px;
+  display:flex; align-items:center; gap:10px; }
+.panel-h::before { content:''; width:8px; height:22px; border-radius:3px;
+  background:var(--accent); }
+.panel.fund .panel-h::before { background:var(--gold); }
+
+.hold { padding:9px 0; border-bottom:1px solid var(--line); }
+.hold:last-child { border-bottom:none; }
+.hold-main { display:flex; justify-content:space-between; align-items:center; }
+.hold-name { font-size:20px; font-weight:500; }
+.hold-chg { font-size:20px; font-weight:700; }
+.hold-sub { display:flex; justify-content:space-between;
+  font-size:16px; color:var(--dim); margin-top:2px; }
+.hold-jpy { font-weight:700; color:var(--txt); }
+
+.events { background:var(--panel2); border:1px solid var(--line);
+  border-radius:18px; padding:20px 24px; margin-top:20px; }
+.events-h { font-size:21px; font-weight:700; margin-bottom:10px; }
+.ev { display:flex; gap:14px; padding:8px 0; }
+.ev-num { flex:none; width:30px; height:30px; border-radius:50%;
+  background:var(--accent); color:#06111f; font-weight:900;
+  display:flex; align-items:center; justify-content:center; font-size:17px; }
+.ev-title { font-size:19px; font-weight:700; line-height:1.3; }
+.ev-detail { font-size:16px; color:var(--dim); margin-top:3px; line-height:1.4; }
+
+footer { margin-top:18px; text-align:center; font-size:15px; color:var(--dim); }
+</style></head><body>
+  <header>
+    <div>
+      <div class="title">わたしの資産推移</div>
+      <div class="date">2026年6月8日 終値ベース ・ USD/JPY 160.14</div>
+    </div>
+    <div class="acct">@your_account</div>
+  </header>
+
+  <div class="total-wrap">
+    <span class="total-label">総資産</span>
+    <span class="total mono">¥31,853,815</span>
+    <span class="total-day mono flat">—</span>
+  </div>
+
+  <div class="cmps">
+        <div class="cmp flat">
+          <div class="cmp-label">前日比</div>
+          <div class="cmp-pct">—</div>
+          <div class="cmp-jpy">—</div>
+        </div>
+        <div class="cmp up">
+          <div class="cmp-label">先週比</div>
+          <div class="cmp-pct">+0.00%</div>
+          <div class="cmp-jpy">+¥0</div>
+        </div>
+        <div class="cmp up">
+          <div class="cmp-label">先月比</div>
+          <div class="cmp-pct">+0.00%</div>
+          <div class="cmp-jpy">+¥0</div>
+        </div>
+        <div class="cmp up">
+          <div class="cmp-label">年初来</div>
+          <div class="cmp-pct">+0.00%</div>
+          <div class="cmp-jpy">+¥0</div>
+        </div></div>
+
+  <div class="cols">
+    <div class="panel etf">
+      <div class="panel-h">米国ETF</div>
+      
+            <div class="hold">
+              <div class="hold-main">
+                <span class="hold-name">VYM 米国高配当ETF</span>
+                <span class="hold-chg up">+0.38%</span>
+              </div>
+              <div class="hold-sub">
+                <span>$158.84 ・ 313株 / 前日 $158.24</span>
+                <span class="hold-jpy">¥7,961,668</span>
+              </div>
+            </div>
+            <div class="hold">
+              <div class="hold-main">
+                <span class="hold-name">VTI 全米株式ETF</span>
+                <span class="hold-chg up">+0.81%</span>
+              </div>
+              <div class="hold-sub">
+                <span>$366.34 ・ 195株 / 前日 $363.38</span>
+                <span class="hold-jpy">¥11,439,809</span>
+              </div>
+            </div>
+            <div class="hold">
+              <div class="hold-main">
+                <span class="hold-name">HDV 米国高配当ETF</span>
+                <span class="hold-chg up">+0.07%</span>
+              </div>
+              <div class="hold-sub">
+                <span>$27.51 ・ 495株 / 前日 $27.49</span>
+                <span class="hold-jpy">¥2,180,698</span>
+              </div>
+            </div>
+            <div class="hold">
+              <div class="hold-main">
+                <span class="hold-name">QQQ ナスダック100ETF</span>
+                <span class="hold-chg up">+1.82%</span>
+              </div>
+              <div class="hold-sub">
+                <span>$717.91 ・ 15株 / 前日 $705.06</span>
+                <span class="hold-jpy">¥1,724,492</span>
+              </div>
+            </div>
+    </div>
+    <div class="panel fund">
+      <div class="panel-h">投資信託</div>
+      
+            <div class="hold">
+              <div class="hold-main">
+                <span class="hold-name">ニッセイNASDAQ100</span>
+                <span class="hold-chg down">−0.48%</span>
+              </div>
+              <div class="hold-sub">
+                <span>29,014円 ・ 36,374口</span>
+                <span class="hold-jpy">¥105,536</span>
+              </div>
+            </div>
+            <div class="hold">
+              <div class="hold-main">
+                <span class="hold-name">SBI・V・S&P500</span>
+                <span class="hold-chg up">+0.42%</span>
+              </div>
+              <div class="hold-sub">
+                <span>40,746円 ・ 850,904口</span>
+                <span class="hold-jpy">¥3,467,093</span>
+              </div>
+            </div>
+            <div class="hold">
+              <div class="hold-main">
+                <span class="hold-name">iFreeNEXT FANG+</span>
+                <span class="hold-chg down">−2.19%</span>
+              </div>
+              <div class="hold-sub">
+                <span>96,733円 ・ 266,105口</span>
+                <span class="hold-jpy">¥2,574,113</span>
+              </div>
+            </div>
+            <div class="hold">
+              <div class="hold-main">
+                <span class="hold-name">SBI S 米国高配当(年4回)</span>
+                <span class="hold-chg up">+0.71%</span>
+              </div>
+              <div class="hold-sub">
+                <span>12,276円 ・ 1,955,365口</span>
+                <span class="hold-jpy">¥2,400,406</span>
+              </div>
+            </div>
+    </div>
+  </div>
+
+  <div class="events">
+    <div class="events-h">📈 本日の米国市場 3つの動き</div>
+    
+        <div class="ev">
+          <span class="ev-num">1</span>
+          <div>
+            <div class="ev-title">Jobless claims fall to lowest level since mid-May</div>
+            
+          </div>
+        </div>
+        <div class="ev">
+          <span class="ev-num">2</span>
+          <div>
+            <div class="ev-title">Jobless claims stay low in latest week</div>
+            
+          </div>
+        </div>
+        <div class="ev">
+          <span class="ev-num">3</span>
+          <div>
+            <div class="ev-title">Consumer credit growth soars in December</div>
+            
+          </div>
+        </div>
+  </div>
+
+  <footer>※本投稿は記録・情報共有目的であり投資助言ではありません</footer>
+</body></html>
