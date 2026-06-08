@@ -33,20 +33,24 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python fetch_events.py
 
-      - name: Make slide image
-        run: python make_slide.py
+      - name: Make slide images
+        run: |
+          python make_slide.py
+          python make_allocation_slide.py
 
-      - name: Upload slide artifact
+      - name: Upload slide artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: asset-slide
-          path: slide/slide.png
+          name: asset-slides
+          path: |
+            slide/slide.png
+            slide/allocation.png
           retention-days: 30
 
-      - name: Commit data & slide
+      - name: Commit data & slides
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data.json events.json slide/slide.png slide/slide.html
+          git add data.json events.json slide/slide.png slide/slide.html slide/allocation.png slide/allocation.html
           git diff --staged --quiet || git commit -m "update: $(date -u +%Y-%m-%d)"
           git push
