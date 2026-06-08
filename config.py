@@ -2,56 +2,56 @@
 """
 config.py
 =========
-★★★ ここだけ編集すれば動きます ★★★
+銘柄のマスタ情報（名前・ISINなど、めったに変わらないもの）を定義します。
 
-保有しているETF・投資信託の「銘柄」と「保有数量」を設定します。
-証券会社の保有照会画面を見ながら入力してください。
+★ 保有数量（追加購入で変わるもの）は holdings.json に分離しました。
+  買い増したときは holdings.json の数字だけ編集すればOKです。
 """
 
-# ─────────────────────────────────────────────────────
-# 1. 保有ETF：シンボル → (表示名, 保有株数)
-#    シンボルはYahoo Finance(米国)のティッカーをそのまま使います。
-# ─────────────────────────────────────────────────────
+import json
+from pathlib import Path
+
+# 保有数量を holdings.json から読み込む
+_HOLDINGS_FILE = Path(__file__).parent / "holdings.json"
+try:
+    _h = json.loads(_HOLDINGS_FILE.read_text(encoding="utf-8"))
+    _ETF_QTY = _h.get("etf", {})
+    _FUND_QTY = _h.get("fund", {})
+except Exception as e:
+    print(f"holdings.json 読込失敗: {e} -> 数量0で続行")
+    _ETF_QTY, _FUND_QTY = {}, {}
+
+
+# 1. 保有ETF：シンボル -> (表示名, 保有株数)
+_ETF_NAMES = {
+    "VYM": "VYM 米国高配当ETF",
+    "VTI": "VTI 全米株式ETF",
+    "HDV": "HDV 米国高配当ETF",
+    "QQQ": "QQQ ナスダック100ETF",
+}
 ETF_HOLDINGS = {
-    "VYM": ("VYM 米国高配当ETF",     313),
-    "VTI": ("VTI 全米株式ETF",        195),
-    "HDV": ("HDV 米国高配当ETF",      495),
-    "QQQ": ("QQQ ナスダック100ETF",   15),
+    sym: (name, _ETF_QTY.get(sym, 0))
+    for sym, name in _ETF_NAMES.items()
 }
 
-# ─────────────────────────────────────────────────────
-# 2. 保有投資信託
-#    投信協会の公式CSVを使うため、ISINコードと協会コードの両方が必要です。
-#
-#    【調べ方】
-#      投信総合検索ライブラリー https://toushin-lib.fwg.ne.jp/FdsWeb/
-#      でファンド名を検索 → 詳細ページのURLや「CSVダウンロード」リンクに
-#      isinCd=（ISINコード） と associFundCd=（協会コード） が含まれています。
-#
-#      または Yahoo!ファイナンスJP https://finance.yahoo.co.jp/quote/{協会コード}
-#      の「目論見書」等からISINコードを確認できます。
-#
-#    協会コード → (表示名, 保有口数, ISINコード)
-#    ※ ISINコードが不明な場合は None にすると自動でYahoo!フォールバックを使います
-#      （Yahoo!は推定値混じりになる場合があるので、できればISINを入れてください）
-# ─────────────────────────────────────────────────────
-FUND_HOLDINGS = FUND_HOLDINGS = {
-    # 協会コード:        (表示名,                       保有口数,   ISINコード)
-    "29313233":          ("ニッセイNASDAQ100",          36374,    "JP90C000PDY6"),
-    "89311199":          ("SBI・V・S&P500",             850904,   "JP90C000J569"),
-    "04311181":          ("iFreeNEXT FANG+",            266105,   "JP90C000FZD4"),
-    "8931224C":          ("SBI S 米国高配当(年4回)",    1955365,  "JP90C000REE2"),
+
+# 2. 保有投資信託：協会コード -> (表示名, 保有口数, ISINコード)
+_FUND_META = {
+    "29313233":     ("ニッセイNASDAQ100",          "JP90C000PDY6"),
+    "89311199":     ("SBI・V・S&P500",             "JP90C000J569"),
+    "04311181":     ("iFreeNEXT FANG+",            "JP90C000FZD4"),
+    "8931224C":     ("SBI S 米国高配当(年4回)",    "JP90C000REE2"),
+}
+FUND_HOLDINGS = {
+    code: (name, _FUND_QTY.get(code, 0), isin)
+    for code, (name, isin) in _FUND_META.items()
 }
 
-# ─────────────────────────────────────────────────────
-# 3. 市場イベント解説の生成モード
-#    "auto"   : Anthropic APIで自動生成（環境変数 ANTHROPIC_API_KEY が必要・有料）
-#    "semi"   : ニュース見出しだけ自動取得し、解説は手動で追記（デフォルト・無料）
-#    "manual" : すべて手動（events_manual.json を編集）
-# ─────────────────────────────────────────────────────
+
+# 3. 市場イベント解説の生成モード（"semi" / "auto" / "manual"）
 EVENT_MODE = "semi"
 
-# Xアカウント名（スライドの署名に使用。@は不要）
+# Xアカウント名（@は不要）
 X_ACCOUNT = "your_account"
 
 # ポートフォリオのタイトル
