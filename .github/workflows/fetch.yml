@@ -1,0 +1,52 @@
+name: daily-asset-slide
+
+on:
+  schedule:
+    - cron: "30 21 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Fetch prices
+        run: python fetch_prices.py
+
+      - name: Fetch market events
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python fetch_events.py
+
+      - name: Make slide image
+        run: python make_slide.py
+
+      - name: Upload slide artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: asset-slide
+          path: slide/slide.png
+          retention-days: 30
+
+      - name: Commit data & slide
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data.json events.json slide/slide.png slide/slide.html
+          git diff --staged --quiet || git commit -m "update: $(date -u +%Y-%m-%d)"
+          git push
