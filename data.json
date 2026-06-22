@@ -1,34 +1,34 @@
 {
-  "updated_at": "2026-06-20T17:35:31.498678+09:00",
-  "date": "2026-06-20",
-  "usdjpy": 161.27,
-  "total_jpy": 32146647,
-  "day_change_jpy": 280098,
-  "day_change_pct": 0.88,
+  "updated_at": "2026-06-22T10:12:27.032961+09:00",
+  "date": "2026-06-22",
+  "usdjpy": 161.44,
+  "total_jpy": 32161909,
+  "day_change_jpy": 299437,
+  "day_change_pct": 0.94,
   "comparisons": {
     "day": {
-      "base_date": "2026-06-19",
-      "base_jpy": 32000682,
-      "change_jpy": 145965,
-      "change_pct": 0.46
+      "base_date": "2026-06-20",
+      "base_jpy": 32146647,
+      "change_jpy": 15262,
+      "change_pct": 0.05
     },
     "week": {
       "base_date": "2026-06-13",
       "base_jpy": 31753527,
-      "change_jpy": 393120,
-      "change_pct": 1.24
+      "change_jpy": 408382,
+      "change_pct": 1.29
     },
     "month": {
       "base_date": "2026-06-08",
       "base_jpy": 31853815,
-      "change_jpy": 292832,
-      "change_pct": 0.92
+      "change_jpy": 308094,
+      "change_pct": 0.97
     },
     "ytd": {
       "base_date": "2026-06-08",
       "base_jpy": 31853815,
-      "change_jpy": 292832,
-      "change_pct": 0.92
+      "change_jpy": 308094,
+      "change_pct": 0.97
     }
   },
   "etf": {
@@ -39,9 +39,9 @@
       "prev_price": 158.1,
       "curr_price": 158.21,
       "change_pct": 0.07,
-      "prev_jpy": 7980494,
-      "curr_jpy": 7986047,
-      "usdjpy": 161.27
+      "prev_jpy": 7988907,
+      "curr_jpy": 7994465,
+      "usdjpy": 161.44
     },
     "VTI": {
       "name": "VTI 全米株式ETF",
@@ -50,20 +50,20 @@
       "prev_price": 365.76,
       "curr_price": 369.99,
       "change_pct": 1.16,
-      "prev_jpy": 11502292,
-      "curr_jpy": 11635316,
-      "usdjpy": 161.27
+      "prev_jpy": 11514417,
+      "curr_jpy": 11647581,
+      "usdjpy": 161.44
     },
     "HDV": {
       "name": "HDV 米国高配当ETF",
       "type": "ETF",
       "shares": 495,
-      "prev_price": 27.47,
-      "curr_price": 27.11,
-      "change_pct": -1.31,
-      "prev_jpy": 2192893,
-      "curr_jpy": 2164155,
-      "usdjpy": 161.27
+      "prev_price": 27.11,
+      "curr_price": 26.99,
+      "change_pct": -0.44,
+      "prev_jpy": 2166436,
+      "curr_jpy": 2156846,
+      "usdjpy": 161.44
     },
     "QQQ": {
       "name": "QQQ ナスダック100ETF",
@@ -72,9 +72,9 @@
       "prev_price": 722.51,
       "curr_price": 740.62,
       "change_pct": 2.51,
-      "prev_jpy": 1747788,
-      "curr_jpy": 1791597,
-      "usdjpy": 161.27
+      "prev_jpy": 1749630,
+      "curr_jpy": 1793485,
+      "usdjpy": 161.44
     }
   },
   "fund": {
@@ -2109,6 +2109,11 @@
       "date": "2026-06-20",
       "total_jpy": 32146647,
       "usdjpy": 161.27
+    },
+    {
+      "date": "2026-06-22",
+      "total_jpy": 32161909,
+      "usdjpy": 161.44
     }
   ]
 }

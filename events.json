@@ -1,17 +1,23 @@
 {
-  "date": "2026-06-20",
+  "date": "2026-06-22",
   "events": [
     {
-      "title": "Jobless claims fall to lowest level since mid-May",
-      "detail": ""
+      "title": "米国の生産性は第4四半期に鈍化する一方、単位労働コストは加速する",
+      "detail": "",
+      "dir": "down",
+      "cat": "指数"
     },
     {
-      "title": "Jobless claims stay low in latest week",
-      "detail": ""
+      "title": "失業保険申請件数は5月中旬以来の低水準に低下",
+      "detail": "",
+      "dir": "down",
+      "cat": "マクロ"
     },
     {
-      "title": "Consumer credit growth soars in December",
-      "detail": ""
+      "title": "トレインラインは今年2度目となるガイダンスを引き上げる",
+      "detail": "",
+      "dir": "up",
+      "cat": "個別"
     }
   ]
 }
