@@ -54,11 +54,12 @@ python3 -c "import config; print(config.ETF_HOLDINGS); print(config.FUND_HOLDING
 メッセージ形式（実績 commit 735be8d に準拠）:
 
 ```
-Modify fund '<協会コード>' value(buy JPY<金額> of <表示名>) in holdings.json
+Modify fund '<協会コード>' value(buy JPY<金額> of <表示名>) in holdings.json      # 金額指定のとき
+Modify fund '<協会コード>' value(buy <口数> units of <表示名>) in holdings.json   # 口数指定のとき
 Modify etf '<シンボル>' value(buy <株数> shares of <表示名>) in holdings.json
 ```
 
-売却なら `buy` を `sell` にする。
+売却なら `buy` を `sell` にする。口数指定の実績例: commit 5b3b921。
 
 ## 例
 
