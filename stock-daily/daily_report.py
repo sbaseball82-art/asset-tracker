@@ -35,7 +35,15 @@ INDICES = [
     ("S&P500", "^GSPC"),
     ("NASDAQ", "^IXIC"),
     ("ドル円", "JPY=X"),
+    ("FANG+指数", "^NYFANG"),
+    ("半導体ETF(SMH)", "SMH"),
+    ("DRAM関連(4社平均)", "DRAM_AVG"),
 ]
+
+# 主役銘柄の分類用(ハッシュタグ自動判定)
+FANG_TICKERS = {"META", "AAPL", "AMZN", "NFLX", "NVDA", "GOOGL", "MSFT",
+                "AVGO", "TSLA", "CRWD", "NOW", "SNOW"}
+DRAM_TICKERS = {"MU", "WDC", "SNDK", "285A.T"}
 
 JP_UNIVERSE = {
     "7203.T": "トヨタ", "6758.T": "ソニーG", "8306.T": "三菱UFJ", "6861.T": "キーエンス",
@@ -48,6 +56,7 @@ JP_UNIVERSE = {
     "6702.T": "富士通", "4661.T": "OLC", "8001.T": "伊藤忠", "8411.T": "みずほFG",
     "6146.T": "ディスコ", "6857.T": "アドテスト", "7011.T": "三菱重工", "9101.T": "日本郵船",
     "5401.T": "日本製鉄", "4502.T": "武田薬品", "8801.T": "三井不動産", "9020.T": "JR東日本",
+    "285A.T": "キオクシアHD",
 }
 
 US_UNIVERSE = {
@@ -61,6 +70,7 @@ US_UNIVERSE = {
     "PLTR": "Palantir", "UBER": "Uber", "MU": "Micron", "BA": "Boeing",
     "CAT": "Caterpillar", "GS": "Goldman", "PFE": "Pfizer", "WMT": "Walmart",
     "TSM": "TSMC", "ARM": "Arm", "SMCI": "SuperMicro", "COIN": "Coinbase",
+    "WDC": "WesternDigital", "SNDK": "SanDisk",
 }
 
 NEWS_FEEDS = [
@@ -141,14 +151,27 @@ def fetch_changes(tickers):
 def get_market_data():
     if MOCK:
         idx = {"^N225": (41250.55, 1.24), "1306.T": (2985.0, 0.98), "^DJI": (44320.1, -0.35),
-               "^GSPC": (6120.44, 0.42), "^IXIC": (20110.8, 0.88), "JPY=X": (152.34, -0.21)}
+               "^GSPC": (6120.44, 0.42), "^IXIC": (20110.8, 0.88), "JPY=X": (152.34, -0.21),
+               "^NYFANG": (13850.2, 1.55), "SMH": (275.4, 2.10),
+               "DRAM_AVG": (float("nan"), -3.42)}
         jp = {t: (3000.0, v) for t, v in zip(list(JP_UNIVERSE), [5.8, 4.9, 4.1, 3.6, 3.2, 1.0, -2.0, 0.5, 0.2, 2.8])}
         us = {t: (300.0, v) for t, v in zip(list(US_UNIVERSE), [7.2, 6.1, 5.5, 4.0, 3.8, -1.2, 2.2, 0.9, -0.3, 3.1])}
         return idx, jp, us
 
-    idx = retry(lambda: fetch_changes([t for _, t in INDICES]), label="指数") or {}
+    real = [t for _, t in INDICES if t != "DRAM_AVG"] + ["FNGS"]
+    idx = retry(lambda: fetch_changes(real), label="指数") or {}
     jp = retry(lambda: fetch_changes(list(JP_UNIVERSE)), label="日本株") or {}
     us = retry(lambda: fetch_changes(list(US_UNIVERSE)), label="米国株") or {}
+
+    # FANG+指数が取れない日はFNGS(FANG+連動ETN)で代替
+    if "^NYFANG" not in idx and "FNGS" in idx:
+        idx["^NYFANG"] = idx["FNGS"]
+
+    # DRAM関連平均: MU/SanDisk/WesternDigital/キオクシアの前日比の単純平均
+    pool = {**jp, **us}
+    dram = [pool[t][1] for t in DRAM_TICKERS if t in pool]
+    if dram:
+        idx["DRAM_AVG"] = (float("nan"), sum(dram) / len(dram))
     return idx, jp, us
 
 
@@ -174,7 +197,7 @@ def get_news():
 
 def top5(changes: dict, names: dict):
     ranked = sorted(changes.items(), key=lambda kv: kv[1][1], reverse=True)[:5]
-    return [(names.get(t, t), pct) for t, (_, pct) in ranked]
+    return [(names.get(t, t), pct, t) for t, (_, pct) in ranked]
 
 
 # ----------------------------------------------------------------------------
@@ -196,7 +219,7 @@ FONT_BOLD = "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc"
 def make_image(idx, jp5, us5, news, events, path):
     from PIL import Image, ImageDraw, ImageFont
 
-    W, H = 1080, 1530
+    W, H = 1080, 1700
     img = Image.new("RGB", (W, H), BG)
     d = ImageDraw.Draw(img)
 
@@ -237,12 +260,16 @@ def make_image(idx, jp5, us5, news, events, path):
         if tk in idx:
             price, pct = idx[tk]
             c = UP if pct >= 0 else DOWN
-            ps = f"{price:,.2f}" if price < 1000 else f"{price:,.1f}"
-            text(x0 + 18, y0 + 46, ps, 32, WHITE, bold=True)
+            if tk == "DRAM_AVG":
+                ps, psz = "MU/キオクシア等", 24
+            else:
+                ps, psz = (f"{price:,.2f}" if price < 1000 else f"{price:,.1f}"), 32
+            text(x0 + 18, y0 + 46 + (32 - psz) // 2, ps, psz, WHITE, bold=True)
             text(x0 + tile_w - 16, y0 + 52, f"{pct:+.2f}%", 27, c, bold=True, anchor="ra")
         else:
             text(x0 + 18, y0 + 50, "取得失敗", 26, GRAY)
-    y += 2 * tile_h + gap + 40
+    rows = (len(INDICES) + 2) // 3
+    y += rows * (tile_h + gap) + 20
 
     # --- 値上がり率TOP5 ---
     y = section(y, "値上がり率TOP5(主力株)")
@@ -253,7 +280,7 @@ def make_image(idx, jp5, us5, news, events, path):
         text(x0 + 20, y + 12, label, 26, ACCENT, bold=True)
         if not data:
             text(x0 + 20, y + 60, "取得失敗", 24, GRAY)
-        for ri, (name, pct) in enumerate(data):
+        for ri, (name, pct, _) in enumerate(data):
             yy = y + 58 + ri * 47
             text(x0 + 20, yy, f"{ri+1}", 24, GRAY, bold=True)
             text(x0 + 58, yy, clip(name, 25, 290), 25, WHITE)
@@ -294,26 +321,50 @@ def make_image(idx, jp5, us5, news, events, path):
 # 4. X投稿用テキスト
 # ----------------------------------------------------------------------------
 def make_post_text(idx, jp5, us5, events, path):
+    """ASSET LOG運用方針: 煽らない・一人称・「指数を淡々と」に着地。
+    タグ含め100文字以内。#FANG/#DRAMは主役が該当銘柄の日のみ付与。"""
     wd = "月火水木金土日"[TODAY.weekday()]
-    lines = [f"【{TODAY.strftime('%-m/%-d')}({wd}) 今日の株式マーケット情報】", ""]
-    n225 = idx.get("^N225")
-    spx = idx.get("^GSPC")
+    date_s = f"{TODAY.month}/{TODAY.day}({wd})"
+    n225, spx = idx.get("^N225"), idx.get("^GSPC")
+
+    # その日の主役(日米の値上がり1位のうち大きい方)
+    tops = [t for t in (jp5[0] if jp5 else None, us5[0] if us5 else None) if t]
+    star = max(tops, key=lambda x: x[1]) if tops else None
+
+    head = f"【{date_s}】"
     if n225:
-        lines.append(f"日経平均 {n225[0]:,.0f}円 ({n225[1]:+.2f}%)")
+        head += f"日経{n225[0]:,.0f}({n225[1]:+.1f}%)"
     if spx:
-        lines.append(f"S&P500 {spx[0]:,.0f} ({spx[1]:+.2f}%)")
-    if jp5:
-        lines.append(f"日本株の主役: {jp5[0][0]} {jp5[0][1]:+.1f}%")
-    if us5:
-        lines.append(f"米国株の主役: {us5[0][0]} {us5[0][1]:+.1f}%")
-    if events:
-        ed, name = events[0]
-        days = (ed - TODAY).days
-        lines.append(f"次の注目: {ed.strftime('%-m/%-d')} {name}" + ("(本日!)" if days == 0 else f"(あと{days}日)"))
-    lines += ["", "詳細は画像で👇", "#株式投資 #日本株 #米国株 #投資初心者"]
+        head += f" S&P500 {spx[0]:,.0f}({spx[1]:+.1f}%)"
+
+    hook = f"。主役は{star[0]}{star[1]:+.1f}%" if star and star[1] > 0 else ""
+    down = (spx and spx[1] < 0) or (not spx and n225 and n225[1] < 0)
+    stance = "。下げる日も私は指数を淡々と積立" if down else "。それでも私は指数を淡々と積立"
+
+    # 主役がFANG+/DRAM関連のときだけ該当タグを付ける
+    extra = []
+    if star:
+        if star[2] in DRAM_TICKERS:
+            extra.append("#DRAM")
+        if star[2] in FANG_TICKERS:
+            extra.append("#FANG")
+    tags_full = "\n" + " ".join(extra + ["#米国株", "#インデックス投資"])
+    tags_min = "\n" + " ".join(extra + ["#米国株"])
+    candidates = [
+        head + hook + stance + tags_full,
+        head + hook + stance + tags_min,
+        head + hook + "。私は指数を淡々と" + tags_min,
+        head + stance + tags_min,
+        head + tags_min,
+    ]
+    text = next((c for c in candidates if len(c) <= 100), None)
+    if text is None:  # 万一の保険: タグを残して本文を切り詰め
+        body_max = 100 - len(tags_min)
+        text = (head + stance)[:body_max] + tags_min
+    text = text.replace("】。", "】")  # 指数欠損時の体裁調整
     with open(path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines))
-    print(f"[ok] 投稿テキストを保存: {path}")
+        f.write(text)
+    print(f"[ok] 投稿テキストを保存: {path} ({len(text)}文字)")
 
 
 # ----------------------------------------------------------------------------
