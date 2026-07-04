@@ -59,10 +59,22 @@ check("dir が有効値", all(e["dir"] in ("up", "down", "flat") for e in evs))
 EOF
 ```
 
+追加チェック（機械化しにくいが重要）: **前日と同一の見出し3件になっていないか**
+
+```bash
+git show HEAD~1:events.json 2>/dev/null | python3 -c "import json,sys; print([e['title'] for e in json.load(sys.stdin)['events']])"
+python3 -c "import json; print([e['title'] for e in json.load(open('events.json'))['events']])"
+```
+
+2つの出力が完全一致していたら要注意（本当に同じニュースが続いた可能性もあるが、
+取得ロジックの空振りで前日と同じ見出しを拾っている可能性もある）。2日以上続いたら
+オーナーに報告する。
+
 | FAILした項目 | よくある原因 | 対処 |
 |---|---|---|
 | プレースホルダ/— あり | RSS取得失敗（ネットブロック or 配信元障害） | このままだと**失敗文言がスライド画像に載る**。write-event-commentary スキルで手書きするか、オーナーに確認 |
 | title 20字超 | AI生成 or 手書きが長すぎ | スライドで見切れる。events_manual.json で書き直す |
+| 前日と同一見出し | 偶然の一致 or 取得ロジックの空振り | 1日なら記録のみ。連日続くならオーナーに報告 |
 
 ## 工程C: スライド生成（make_slide.py / make_allocation_slide.py の後）
 
