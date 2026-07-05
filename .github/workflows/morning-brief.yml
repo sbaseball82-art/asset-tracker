@@ -1,0 +1,60 @@
+name: morning-brief
+
+# 毎朝 5:45 JST（= 前日 20:45 UTC）に実行。
+# 6:00-8:00 JSTの投稿ゴールデンタイムに間に合わせる。
+# ※GitHubのcronは数分〜十数分遅延することがあります（仕様）。
+on:
+  schedule:
+    - cron: "45 20 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: morning-brief
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: morning-brief/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r morning-brief/requirements.txt
+
+      - name: Generate 5 images + posts
+        env:
+          # 任意：設定すると投稿文をClaudeで自然化（未設定でもテンプレ文で動く）
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python morning-brief/scripts/main.py
+
+      - name: Upload artifact (today's set)
+        uses: actions/upload-artifact@v4
+        with:
+          name: morning-brief-latest
+          path: morning-brief/output/latest/
+          if-no-files-found: error
+
+      - name: Commit outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add morning-brief/output/
+          if git diff --cached --quiet; then
+            echo "変更なし。コミットしません。"
+          else
+            git commit -m "chore: morning brief $(TZ=Asia/Tokyo date +%Y-%m-%d)"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push
+          fi

@@ -1,0 +1,4 @@
+feedparser>=6.0
+matplotlib>=3.7
+matplotlib-fontja>=1.0
+requests>=2.31
