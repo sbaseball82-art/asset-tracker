@@ -14,10 +14,15 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch
+# 日本語フォント登録。japanize-matplotlibはPython 3.12以降で動かない
+# （distutils依存）ため、後継フォークのmatplotlib-fontjaを使う。
 try:
-    import japanize_matplotlib  # noqa
+    import matplotlib_fontja  # noqa
 except Exception:
-    pass
+    try:
+        import japanize_matplotlib  # noqa
+    except Exception:
+        print("[warn] 日本語フォントパッケージ未検出。文字化けの可能性があります。")
 from explainer import build_explainer
 
 BG="#0e1726"; GOLD="#d8b56a"; BLUE="#6aa6e8"; INK="#eef2f8"; DIM="#8fa0b8"
