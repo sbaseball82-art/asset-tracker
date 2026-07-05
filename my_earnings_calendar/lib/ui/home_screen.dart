@@ -11,6 +11,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final repo = ref.watch(repositoryProvider);
+    final funds = ref.watch(fundsProvider);
     final top5 = ref.watch(top5Provider);
     final today = ref.watch(todayEventsProvider);
     final weekIdx = ref.watch(weekIndexProvider);
@@ -194,7 +195,7 @@ class HomeScreen extends ConsumerWidget {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: repo.funds
+            children: funds
                 .where((f) => enabled.contains(f.id))
                 .map((f) => Container(
                       padding: const EdgeInsets.symmetric(
@@ -251,6 +252,7 @@ class _EventCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final text = Theme.of(context).textTheme;
     final c = AppColors.typeColor(s.event.type);
+    final byFund = s.impact.byFund;
     return GlassCard(
       onTap: () => showEventDetail(context, s),
       child: Column(
@@ -284,6 +286,37 @@ class _EventCard extends ConsumerWidget {
             const SizedBox(height: 4),
             Text('総資産の ${s.impact.directPct!.toStringAsFixed(1)}% が直接反応',
                 style: text.bodySmall),
+            // 影響を受けるファンド（上位3件をチップ表示）
+            if (byFund.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [
+                  ...byFund.take(3).map((fi) => Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: c.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          '${fi.fund.id} ${fi.fundPct.toStringAsFixed(1)}%',
+                          style: TextStyle(
+                              color: c,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      )),
+                  if (byFund.length > 3)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 3),
+                      child: Text('+${byFund.length - 3}',
+                          style: text.bodySmall),
+                    ),
+                ],
+              ),
+            ],
           ],
         ],
       ),

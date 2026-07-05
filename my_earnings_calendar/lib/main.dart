@@ -51,14 +51,23 @@ class MyEarningsCalendarApp extends StatelessWidget {
   }
 }
 
-class RootShell extends StatefulWidget {
+class RootShell extends ConsumerStatefulWidget {
   const RootShell({super.key});
   @override
-  State<RootShell> createState() => _RootShellState();
+  ConsumerState<RootShell> createState() => _RootShellState();
 }
 
-class _RootShellState extends State<RootShell> {
+class _RootShellState extends ConsumerState<RootShell> {
   int _index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // 起動時にGitHubの holdings.json から保有数を自動同期（失敗時は同梱値）
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(syncProvider.notifier).sync();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
