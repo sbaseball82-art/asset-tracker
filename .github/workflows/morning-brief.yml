@@ -1,11 +1,12 @@
 name: morning-brief
 
-# 毎朝 5:45 JST（= 前日 20:45 UTC）に実行。
-# 6:00-8:00 JSTの投稿ゴールデンタイムに間に合わせる。
-# ※GitHubのcronは数分〜十数分遅延することがあります（仕様）。
+# 毎朝 6:30 JST（= 前日 21:30 UTC）に実行。
+# ※このリポジトリではGitHubのcronが大幅に遅延する実績があるため、
+#   確実な定時起動はClaudeの定時トリガーがworkflow_dispatchで行う。
+#   このcronは「1日1回は必ず動く」ためのバックアップ。
 on:
   schedule:
-    - cron: "45 20 * * *"
+    - cron: "30 21 * * *"
   workflow_dispatch:
 
 permissions:
