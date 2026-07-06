@@ -2,7 +2,11 @@ name: daily-asset-slide
 
 on:
   schedule:
-    - cron: "30 21 * * 1-5"
+    # 毎日 22:00 UTC (= 07:00 JST 翌朝)。
+    # 別minuteにして morning-brief(30 21) / daily-report(30 22) との同時実行を避ける。
+    # ※このリポジトリはGitHubのcronが大幅に遅延する実績があるため、
+    #   下のコミット手順は push 衝突に強い pull --rebase + リトライ方式にしている。
+    - cron: "0 22 * * *"
   workflow_dispatch:
 
 permissions:
@@ -52,5 +56,17 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data.json events.json slide/slide.png slide/slide.html slide/allocation.png slide/allocation.html
-          git diff --staged --quiet || git commit -m "update: $(date -u +%Y-%m-%d)"
-          git push
+          if git diff --staged --quiet; then
+            echo "変更なし(コミットをスキップ)"
+            exit 0
+          fi
+          git commit -m "update: $(date -u +%Y-%m-%d)"
+          # 他の毎日ワークフロー(morning-brief / daily-report)と push が衝突しても
+          # 更新を取りこぼさないよう、rebase してから push。失敗時は最大5回リトライ。
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push && { echo "push成功 (試行 $i)"; exit 0; }
+            echo "::warning::push 衝突 (試行 $i)。5秒後に再試行"
+            sleep 5
+          done
+          echo "::error::5回試行しても push できませんでした"
+          exit 1
