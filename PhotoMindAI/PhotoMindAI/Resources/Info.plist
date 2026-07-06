@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDisplayName</key>
+    <string>PhotoMind AI</string>
+    <key>CFBundleShortVersionString</key>
+    <string>$(MARKETING_VERSION)</string>
+    <key>CFBundleVersion</key>
+    <string>$(CURRENT_PROJECT_VERSION)</string>
+    <key>UILaunchScreen</key>
+    <dict/>
+
+    <!-- Privacy usage strings (App Store required) -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>写真を AI が解析して自動分類・検索できるようにするためにアクセスします。写真は端末内に保持され、外部には保存されません。</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>整理機能で不要な写真を削除するためにアクセスします。</string>
+    <key>NSFaceIDUsageDescription</key>
+    <string>App ロックを解除するために Face ID を使用します。</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>写真の撮影地から地名を推定し、旅行アルバムを作成するために使用します。</string>
+
+    <!-- Live Activities / Dynamic Island -->
+    <key>NSSupportsLiveActivities</key>
+    <true/>
+
+    <!-- Background analysis -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>processing</string>
+        <string>fetch</string>
+    </array>
+    <key>BGTaskSchedulerPermittedIdentifiers</key>
+    <array>
+        <string>com.photomind.ai.analysis</string>
+    </array>
+
+    <key>UIApplicationSceneManifest</key>
+    <dict>
+        <key>UIApplicationSupportsMultipleScenes</key>
+        <false/>
+    </dict>
+</dict>
+</plist>

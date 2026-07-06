@@ -1,0 +1,18 @@
+# Xcode / generated project
+PhotoMindAI.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+DerivedData/
+build/
+*.xcresult
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# macOS
+.DS_Store
+
+# Secrets — API keys live in the Keychain at runtime, never in the repo
+*.env
+Secrets.plist
