@@ -4,6 +4,10 @@ import '../domain/models.dart';
 /// （仕様書 §3, §25：Repository パターンで複数プロバイダーへ切替可能に）
 abstract class MarketDataRepository {
   List<Fund> get funds;
+  List<FundMeta> get fundMetas; // 保有数と切り離したファンド定義
+  Map<String, double> get defaultQuantities; // fundId -> 保有数（GitHub holdings.json 由来）
+  Map<String, String> get fundCodeToId; // 投信協会コード -> fundId（GitHub同期用）
+  String get holdingsSourceUrl; // GitHub上の holdings.json のURL
   Map<String, Map<String, double>> get holdingWeights; // symbol -> fundId -> %
   Map<String, String> get symbolNames;
   List<MarketEvent> get events;
@@ -32,6 +36,45 @@ class MockMarketDataRepository implements MarketDataRepository {
         Fund('QQQ', 'QQQ ナスダック100', 5.4),
         Fund('NDX', 'ニッセイNASDAQ100', 0.3),
       ];
+
+  /// ファンド定義（単価は2026/7時点の円換算・概算モック。本番は価格APIへ差替）
+  @override
+  List<FundMeta> get fundMetas => const [
+        FundMeta('VTI', 'VTI 全米株式', true, 48000),
+        FundMeta('VYM', 'VYM 米国高配当', true, 20300),
+        FundMeta('HDV', 'HDV 米国高配当', true, 18200),
+        FundMeta('QQQ', 'QQQ ナスダック100', true, 90500),
+        FundMeta('SPX', 'SBI・V・S&P500', false, 3.30), // 基準価額33,000円/万口
+        FundMeta('FNG', 'iFreeNEXT FANG+', false, 6.80), // 68,000円/万口
+        FundMeta('SBH', 'SBI・S 米国高配当', false, 1.35), // 13,500円/万口
+        FundMeta('NDX', 'ニッセイNASDAQ100', false, 2.50), // 25,000円/万口
+      ];
+
+  /// GitHubの holdings.json と同じ初期値（オフライン時のフォールバック）
+  @override
+  Map<String, double> get defaultQuantities => const {
+        'VYM': 313,
+        'VTI': 195,
+        'HDV': 495,
+        'QQQ': 15,
+        'FNG': 36374, // 29313233 iFreeNEXT FANG+
+        'SPX': 850904, // 89311199 SBI・V・S&P500
+        'NDX': 276836, // 04311181 ニッセイNASDAQ100
+        'SBH': 1969774, // 8931224C SBI・S・米国高配当
+      };
+
+  /// 投信協会コード -> アプリ内fundId（holdings.json の "fund" キー対応）
+  @override
+  Map<String, String> get fundCodeToId => const {
+        '29313233': 'FNG',
+        '89311199': 'SPX',
+        '04311181': 'NDX',
+        '8931224C': 'SBH',
+      };
+
+  @override
+  String get holdingsSourceUrl =>
+      'https://raw.githubusercontent.com/sbaseball82-art/asset-tracker/main/holdings.json';
 
   @override
   Map<String, String> get symbolNames => const {

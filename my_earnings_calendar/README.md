@@ -15,6 +15,18 @@ iOS / Android / Web のプラットフォーム雛形（`ios/` `android/` `web/`
 
 初回は `MockMarketDataRepository`（2026年7月のサンプルデータ）で全画面が動きます。Firebase・OpenAI・決算APIのキーは不要です。
 
+## 新機能（2026-07-06 追加）
+
+| 機能 | 実装 |
+|---|---|
+| 保有数の編集（ETF株数・投信口数を鉛筆アイコンから変更→配分%とImpact Score即時再計算） | `lib/ui/etf_screen.dart` 編集ダイアログ + `holdingsProvider` |
+| GitHub自動同期（リポジトリ直下 `holdings.json` を起動時＆ボタンで取得・自動反映。オフライン時は同梱コピーへフォールバック） | `lib/data/holdings_sync.dart` + `syncProvider` |
+| 保有ETF・投信の個別株式割合（帯グラフ＋「あなたの投資額」換算） | `lib/ui/etf_screen.dart` EtfDetailScreen |
+| ニュース→どのETF/投信に効くか可視化（ファンド別影響度%・バー表示。イベントカードにも上位3ファンドをチップ表示） | `EventImpact.byFund` + `lib/ui/common.dart` / `home_screen.dart` |
+| 評価額ベースのポートフォリオ（保有数×単価から配分%を自動計算・合計評価額表示） | `Portfolio.build`（`lib/state/providers.dart`） |
+
+投信協会コード対応（holdings.jsonの "fund" キー）：29313233=iFreeNEXT FANG+ / 89311199=SBI・V・S&P500 / 04311181=ニッセイNASDAQ100 / 8931224C=SBI・S・米国高配当
+
 ## 実装済み（仕様書との対応）
 
 | 仕様書 | 実装 |
@@ -39,10 +51,18 @@ iOS / Android / Web のプラットフォーム雛形（`ios/` `android/` `web/`
 - **OpenAI（AI要約・Impact分析 §11/§17）**：Cloud Functions 経由で `aiWeeklySummary` と `ImpactEngine` を置換
 - **ウィジェット（§12）/ Live Activity（§13）/ Siriショートカット**：iOSネイティブ拡張（WidgetKit / ActivityKit / App Intents）が必要。Xcodeでターゲット追加後に実装
 
-## 検証状況（2026-07-05 実施・Flutter 3.44.4 / Dart 3.12.2）
+## 検証状況（2026-07-06 実施・Flutter 3.44.4 / Dart 3.12.2）
 
 - `flutter analyze`：**error 0 / warning 0 / info 0**
-- `flutter test`：**7テスト（unit 5 + widget 2）全パス**
+- `flutter test`：**17テスト（unit 12 + widget 5）全パス**
+- 新機能もChromium実機操作で検証済み：
+  - 起動時にGitHubの holdings.json から自動同期（「GitHubと同期済み」表示・合計評価額 ¥32,487,011）
+  - 保有数編集：VTI 195株→390株で配分28.8%→44.7%・合計評価額が即時再計算、「初期値に戻す」で復元
+  - 「GitHub同期」ボタンで再同期・オフライン時は同梱値フォールバック（widgetテストで検証）
+  - イベント詳細に「どのETF・投信に効く？（影響度）」：JPM決算→VYM 3.4% / SBI・S 3.0% / SBI・V 1.5% / VTI 1.3%（バー＋資産全体への寄与%）
+  - イベントカードに影響ファンドのチップ表示（例：NFLX決算→FNG 10.0% / QQQ 2.0% / NDX 2.0%）
+  - ETF詳細に構成の帯グラフ＋銘柄ごと「あなたの投資額」換算（VTI→NVDA 約¥561,600 等）
+  - ダークモード表示OK・コンソールエラー0
 - `flutter build web --release` + Chromium 実機操作で全フローを検証済み：
   - ホーム（TOP5 / 今日 / 週切替チップ / 保有ETFピル / AI Weekly Summary）表示
   - イベント詳細ボトムシート（Impact Score・保有ETF内訳・見るポイント）の開閉・シート内スクロール

@@ -197,6 +197,7 @@ class EventDetailSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final e = scored.event;
     final im = scored.impact;
+    final byFund = im.byFund;
     final c = AppColors.typeColor(e.type);
     final text = Theme.of(context).textTheme;
     final dark = Theme.of(context).brightness == Brightness.dark;
@@ -282,10 +283,64 @@ class EventDetailSheet extends ConsumerWidget {
                   ),
                 ),
 
+                // どのETF・投信にどれだけ効くか（ファンド別影響度%）
+                if (byFund.isNotEmpty) ...[
+                  const SizedBox(height: 20),
+                  Text('どのETF・投信に効く？（影響度）',
+                      style: text.titleSmall
+                          ?.copyWith(fontWeight: FontWeight.w800)),
+                  const SizedBox(height: 8),
+                  GlassCard(
+                    padding: const EdgeInsets.all(14),
+                    child: Column(
+                      children: [
+                        for (final fi in byFund) ...[
+                          Row(children: [
+                            Expanded(
+                                child: Text(fi.fund.name,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: text.bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.w700))),
+                            Text('${fi.fundPct.toStringAsFixed(1)}%',
+                                style: text.titleSmall?.copyWith(
+                                    fontWeight: FontWeight.w800, color: c)),
+                          ]),
+                          const SizedBox(height: 4),
+                          ImpactBar(pct: fi.fundPct, max: 25, color: c),
+                          const SizedBox(height: 3),
+                          Row(children: [
+                            Expanded(
+                              child: Text(
+                                  '対象銘柄：${fi.symbols.join('・')}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: text.bodySmall),
+                            ),
+                            Text(
+                                '資産全体へ +${fi.contribPct.toStringAsFixed(2)}%',
+                                style: text.bodySmall),
+                          ]),
+                          if (fi != byFund.last)
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: Divider(height: 1),
+                            ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                      '「影響度」＝そのファンドの中で、このイベントの銘柄が占める割合（％）。'
+                      '大きいほどファンドの値動きに直結します。',
+                      style: text.bodySmall),
+                ],
+
                 // 保有ETFへの影響（内訳）
                 if (im.contributions.isNotEmpty) ...[
                   const SizedBox(height: 20),
-                  Text('保有ETFへの影響',
+                  Text('銘柄×ファンドの内訳',
                       style: text.titleSmall
                           ?.copyWith(fontWeight: FontWeight.w800)),
                   const SizedBox(height: 8),

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../data/holdings_sync.dart';
 import '../data/repository.dart';
 import '../domain/models.dart';
 
@@ -7,10 +8,99 @@ final repositoryProvider = Provider<MarketDataRepository>((ref) {
   return MockMarketDataRepository();
 });
 
+/// ポートフォリオ計算（保有数×単価 → 評価額・配分%）
+class Portfolio {
+  /// quantities（fundId->保有数）から Fund リストを構築。配分%は評価額比で自動計算。
+  static List<Fund> build(
+      List<FundMeta> metas, Map<String, double> quantities) {
+    final values = <String, double>{};
+    double total = 0;
+    for (final m in metas) {
+      final q = quantities[m.id] ?? 0;
+      final v = q * m.unitPriceJpy;
+      values[m.id] = v;
+      total += v;
+    }
+    final funds = metas.map((m) {
+      final v = values[m.id]!;
+      final alloc = total > 0 ? v / total * 100 : 0.0;
+      return Fund(m.id, m.name, double.parse(alloc.toStringAsFixed(1)),
+          isEtf: m.isEtf, quantity: quantities[m.id] ?? 0, valueJpy: v);
+    }).toList();
+    funds.sort((a, b) => b.valueJpy.compareTo(a.valueJpy));
+    return funds;
+  }
+}
+
+/// 保有数（fundId -> 株数/口数）。編集・GitHub同期の両方からここを更新する。
+class HoldingsNotifier extends StateNotifier<Map<String, double>> {
+  HoldingsNotifier(super.initial);
+
+  void setQuantity(String fundId, double quantity) {
+    state = {...state, fundId: quantity < 0 ? 0 : quantity};
+  }
+
+  void replaceAll(Map<String, double> next) => state = {...next};
+}
+
+final holdingsProvider =
+    StateNotifierProvider<HoldingsNotifier, Map<String, double>>((ref) {
+  final repo = ref.watch(repositoryProvider);
+  return HoldingsNotifier(repo.defaultQuantities);
+});
+
+/// 保有数から評価額・配分%を計算したファンド一覧（画面とスコア計算の元データ）
+final fundsProvider = Provider<List<Fund>>((ref) {
+  final repo = ref.watch(repositoryProvider);
+  final q = ref.watch(holdingsProvider);
+  return Portfolio.build(repo.fundMetas, q);
+});
+
+/// ポートフォリオ合計評価額（円）
+final totalValueProvider = Provider<double>((ref) =>
+    ref.watch(fundsProvider).fold(0.0, (a, f) => a + f.valueJpy));
+
+/// GitHub holdings.json 同期の状態と実行
+class SyncController extends StateNotifier<SyncState> {
+  final Ref ref;
+  SyncController(this.ref) : super(SyncState.initial);
+
+  HoldingsSyncService _service() {
+    final repo = ref.read(repositoryProvider);
+    return HoldingsSyncService(
+        url: repo.holdingsSourceUrl, fundCodeToId: repo.fundCodeToId);
+  }
+
+  /// GitHub→失敗なら同梱コピー の順で保有数を反映
+  Future<void> sync() async {
+    state = const SyncState(SyncStatus.loading, 'GitHubから同期中…');
+    final service = _service();
+    try {
+      final q = await service.fetchFromGitHub();
+      ref.read(holdingsProvider.notifier).replaceAll(q);
+      state = SyncState(SyncStatus.github, 'GitHubと同期済み', DateTime.now());
+    } catch (_) {
+      try {
+        final q = await service.loadBundled();
+        ref.read(holdingsProvider.notifier).replaceAll(q);
+        state = SyncState(SyncStatus.bundled,
+            'オフライン：アプリ内蔵の登録値を使用', DateTime.now());
+      } catch (e) {
+        state = const SyncState(SyncStatus.error, '同期に失敗しました');
+      }
+    }
+  }
+}
+
+final syncProvider =
+    StateNotifierProvider<SyncController, SyncState>((ref) {
+  return SyncController(ref);
+});
+
 /// オンにしている保有ファンド
 final enabledFundsProvider = StateProvider<Set<String>>((ref) {
   final repo = ref.watch(repositoryProvider);
-  return repo.funds.map((f) => f.id).toSet();
+  return repo.fundMetas.map((m) => m.id).toSet();
 });
 
 /// 選択中の週インデックス
@@ -64,13 +154,14 @@ class ImpactEngine {
   }
 }
 
-/// 全イベントをスコア付きで
+/// 全イベントをスコア付きで（保有数の編集・同期が即スコアに反映される）
 final scoredEventsProvider = Provider<List<ScoredEvent>>((ref) {
   final repo = ref.watch(repositoryProvider);
+  final funds = ref.watch(fundsProvider);
   final enabled = ref.watch(enabledFundsProvider);
   return repo.events
       .map((e) => ScoredEvent(
-          e, ImpactEngine.evaluate(e, repo.funds, enabled, repo.holdingWeights)))
+          e, ImpactEngine.evaluate(e, funds, enabled, repo.holdingWeights)))
       .toList();
 });
 

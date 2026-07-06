@@ -7,7 +7,22 @@ class Fund {
   final String id;
   final String name;
   final double allocPct; // ポートフォリオ内の配分（%）
-  const Fund(this.id, this.name, this.allocPct);
+  final bool isEtf; // true=ETF（株数）/ false=投資信託（口数）
+  final double quantity; // 保有数（株 or 口）
+  final double valueJpy; // 評価額（円）
+  const Fund(this.id, this.name, this.allocPct,
+      {this.isEtf = true, this.quantity = 0, this.valueJpy = 0});
+
+  String get unitLabel => isEtf ? '株' : '口';
+}
+
+/// ファンドの静的メタ情報（保有数と切り離した定義）
+class FundMeta {
+  final String id;
+  final String name;
+  final bool isEtf;
+  final double unitPriceJpy; // 1株/1口あたりの概算価格（円）
+  const FundMeta(this.id, this.name, this.isEtf, this.unitPriceJpy);
 }
 
 class MarketEvent {
@@ -48,6 +63,15 @@ class FundContribution {
   const FundContribution(this.fund, this.symbol, this.weightPct, this.contribPct);
 }
 
+/// ファンド単位に集計したイベント影響（可視化用）
+class FundImpact {
+  final Fund fund;
+  final double fundPct; // そのファンドの中で反応する割合（%）
+  final double contribPct; // 総資産への寄与（%）
+  final List<String> symbols; // 影響銘柄
+  const FundImpact(this.fund, this.fundPct, this.contribPct, this.symbols);
+}
+
 class EventImpact {
   final double? directPct; // 総資産の直接反応（%）
   final String? macroLevel;
@@ -62,6 +86,22 @@ class EventImpact {
   });
 
   int get stars => (score / 20).ceil().clamp(1, 5).toInt();
+
+  /// contributions をファンド単位に集計（影響度の大きい順）
+  List<FundImpact> get byFund {
+    final map = <String, List<FundContribution>>{};
+    for (final c in contributions) {
+      map.putIfAbsent(c.fund.id, () => []).add(c);
+    }
+    final list = map.values.map((cs) {
+      final fundPct = cs.fold(0.0, (a, c) => a + c.weightPct);
+      final contrib = cs.fold(0.0, (a, c) => a + c.contribPct);
+      final syms = cs.map((c) => c.symbol).toSet().toList();
+      return FundImpact(cs.first.fund, fundPct, contrib, syms);
+    }).toList();
+    list.sort((a, b) => b.fundPct.compareTo(a.fundPct));
+    return list;
+  }
 }
 
 class ScoredEvent {
