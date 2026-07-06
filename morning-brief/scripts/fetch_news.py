@@ -54,6 +54,19 @@ def _age_hours(entry) -> float:
             return max(0.0, (time.time() - time.mktime(t)) / 3600.0)
     return 24.0
 
+def _strip_source_suffix(title: str) -> str:
+    """Google News等が見出し末尾に付ける「 - 媒体名」を除去する。
+
+    「執筆 - Investing.com - FX | 株式市場 | ファイナンス | 金融ニュース」の
+    ように複数段付くことがあるため、本文が短くなりすぎない範囲で繰り返し剥がす。
+    """
+    while True:
+        m = re.match(r"^(.*\S)\s+-\s+[^-]{2,45}$", title)
+        if not m or len(m.group(1)) < 10:
+            break
+        title = m.group(1)
+    return re.sub(r"\s*執筆$", "", title).strip()
+
 def fetch_top_stories(n: int = 5, local_files: list[str] | None = None):
     """上位n件の話題ニュースを返す。全滅なら None。"""
     sources = local_files if local_files else [u for _, u in FEEDS]
@@ -68,8 +81,7 @@ def fetch_top_stories(n: int = 5, local_files: list[str] | None = None):
                 ok_feeds += 1
             for e in fp.entries[:30]:
                 title = re.sub(r"\s+", " ", (e.get("title") or "")).strip()
-                # Google Newsは末尾に「 - 媒体名」が付くので除去
-                title = re.sub(r"\s*-\s*[^-]{2,25}$", "", title)
+                title = _strip_source_suffix(title)
                 if not title or not _is_market_news(title):
                     continue
                 entries.append({
