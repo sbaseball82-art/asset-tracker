@@ -2,8 +2,11 @@ name: daily-stock-report
 
 on:
   schedule:
-    # 毎日 07:30 JST (= 22:30 UTC 前日)。米国市場クローズ後・日本市場オープン前。
-    - cron: '30 22 * * *'
+    # 2段構え: GitHubのスケジュールは高負荷時に数時間遅延することがある(実測11〜14時間の例あり)。
+    # 6:15 JSTの本命 + 7:30 JSTの予備で、朝の時点で画像が揃っている確率を上げる。
+    # 両方動いた日は2回コミットされるが、latest.png が新しい方で上書きされるだけで無害。
+    - cron: '15 21 * * *'   # 06:15 JST (米国市場クローズ後)
+    - cron: '30 22 * * *'   # 07:30 JST (予備)
   workflow_dispatch: {}   # 手動実行ボタン(テスト用)
 
 permissions:
@@ -46,14 +49,49 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add stock-daily/output/
-          if git diff --cached --quiet; then
-            echo "変更なし(コミットをスキップ)"
-          else
+
+          # このrunの生成物を退避(このrunの成果が常に最新なので、他のコミットに勝たせる)
+          cp -r stock-daily/output "$RUNNER_TEMP/output-new"
+
+          # rebase/merge を一切使わず「最新の main を取り直して生成物を重ねる」方式。
+          # 理由:
+          #  - 画像(バイナリ)は git がマージ/rebase できず、衝突すると復旧不能で job が落ちる
+          #  - 再実行(Re-run)は失敗当時の古いコミットを checkout するため、
+          #    その上での rebase は main の新しいレポートコミットと必ず衝突していた
+          #  - この方式なら衝突が構造的に発生しない。push 直前に他ワークフローが
+          #    push しても、fetch からやり直して必ず追いつける
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard
+            git clean -fd stock-daily/output/
+            git checkout -B main origin/main
+
+            # 生成物を最新 main の上に重ねる(上書きのみ。他ファイルには触れない)
+            cp -r "$RUNNER_TEMP/output-new/." stock-daily/output/
+
+            # 30日より古いアーカイブの削除(daily_report.py と同じ基準)を最新 main 上で再適用
+            cutoff=$(TZ=Asia/Tokyo date -d '30 days ago' +%Y-%m-%d)
+            for f in stock-daily/output/report_*.png; do
+              [ -e "$f" ] || continue
+              d=$(basename "$f" .png); d=${d#report_}
+              if [[ "$d" < "$cutoff" ]]; then rm -f "$f"; echo "旧ファイル削除: $f"; fi
+            done
+
+            git add -A stock-daily/output/
+            if git diff --cached --quiet; then
+              echo "変更なし(コミットをスキップ)"
+              exit 0
+            fi
             git commit -m "daily report $(TZ=Asia/Tokyo date +'%Y-%m-%d')"
-            git pull --rebase origin "${GITHUB_REF_NAME}"
-            git push
-          fi
+            if git push origin main; then
+              echo "push 成功 (試行 $i)"
+              exit 0
+            fi
+            echo "::warning::push が拒否されました (試行 $i)。5秒後に最新 main から再試行"
+            sleep 5
+          done
+          echo "::error::5回試行しても push できませんでした"
+          exit 1
 
       - name: 画像をアーティファクトとしても保存
         uses: actions/upload-artifact@v4
