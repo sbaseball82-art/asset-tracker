@@ -344,6 +344,14 @@ def main():
     # 当日の純拠出(買い増し-売却)を算出。前回 data.json の保有数量と当日数量の差 ×
     # 当日価格。相場変動と資金の出し入れを分離し、期間比較を市場変動ベースにするため。
     cash_flow_jpy = compute_cash_flow(existing, etf, fund, usdjpy)
+    # 同日に複数回実行された場合(1日に複数回 買い増しを反映する等)、既存の当日拠出に
+    # 上乗せして累計にする。existing は前回runの出力なので、同日なら compute_cash_flow は
+    # 前回run以降の増分のみを返す。既存の当日拠出を足さないと過去分が失われ比較が狂う。
+    if existing.get("date") == today:
+        for h in existing.get("history", []):
+            if h.get("date") == today:
+                cash_flow_jpy += int(h.get("cash_flow_jpy", 0) or 0)
+                break
     if cash_flow_jpy:
         print(f"\n[拠出] 当日の純拠出(買い増し-売却): ¥{cash_flow_jpy:,}")
 
