@@ -199,6 +199,18 @@ def fetch_fund_prices() -> dict:
 
         navs = data["navs"]
         curr, prev = navs[0], navs[1]
+
+        # Yahoo!推定は HTML から粗く数値を拾うため、純資産総額などを誤取得して
+        # 基準価額として異常な値になることがある(総資産・履歴を汚染する)。
+        # 基準価額として不自然な水準・前日比±20%超は不採用にする(堅牢化)。
+        if data.get("estimated"):
+            ok = (all(500 <= n <= 200000 for n in (curr, prev))
+                  and prev and abs(curr - prev) / prev <= 0.20)
+            if not ok:
+                print(f"  ❌ {assoc_code} ({display_name}): Yahoo!推定値が異常 "
+                      f"(curr={curr:g}, prev={prev:g}) → 不採用(ISIN設定を推奨)")
+                continue
+
         change_pct = round((curr - prev) / prev * 100, 2) if prev else None
         curr_jpy = round(units * curr / 10000) if units else 0
         prev_jpy = round(units * prev / 10000) if (units and prev) else 0
