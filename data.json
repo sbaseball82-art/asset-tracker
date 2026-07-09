@@ -9,26 +9,34 @@
     "day": {
       "base_date": "2026-07-08",
       "base_jpy": 32467521,
-      "change_jpy": 167574,
-      "change_pct": 0.52
+      "change_jpy": -58061,
+      "change_pct": -0.18,
+      "gross_change_jpy": 167574,
+      "cash_flow_jpy": 225635
     },
     "week": {
       "base_date": "2026-07-02",
       "base_jpy": 32067163,
-      "change_jpy": 567932,
-      "change_pct": 1.77
+      "change_jpy": 342297,
+      "change_pct": 1.07,
+      "gross_change_jpy": 567932,
+      "cash_flow_jpy": 225635
     },
     "month": {
       "base_date": "2026-06-09",
       "base_jpy": 31510603,
-      "change_jpy": 1124492,
-      "change_pct": 3.57
+      "change_jpy": 898857,
+      "change_pct": 2.85,
+      "gross_change_jpy": 1124492,
+      "cash_flow_jpy": 225635
     },
     "ytd": {
       "base_date": "2026-06-08",
       "base_jpy": 31853815,
-      "change_jpy": 781280,
-      "change_pct": 2.45
+      "change_jpy": 555645,
+      "change_pct": 1.74,
+      "gross_change_jpy": 781280,
+      "cash_flow_jpy": 225635
     }
   },
   "etf": {
@@ -2194,7 +2202,8 @@
     {
       "date": "2026-07-09",
       "total_jpy": 32635095,
-      "usdjpy": 162.42
+      "usdjpy": 162.42,
+      "cash_flow_jpy": 225635
     }
   ]
 }
