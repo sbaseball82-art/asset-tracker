@@ -147,10 +147,10 @@ header {{ display:flex; justify-content:space-between; align-items:flex-end;
   align-items:center; justify-content:center; }}
 .dc-big {{ font-size:30px; font-weight:900; }}
 .dc-sub {{ font-size:15px; color:var(--dim); }}
-.donut-wrap.small {{ width:260px; height:260px; }}
+.donut-wrap.small {{ width:236px; height:236px; margin-bottom:16px; }}
 
-.lg {{ display:flex; align-items:center; gap:10px; padding:7px 0;
-  border-bottom:1px solid var(--line); font-size:18px; }}
+.lg {{ display:flex; align-items:center; gap:10px; padding:5px 0;
+  border-bottom:1px solid var(--line); font-size:17px; }}
 .lg:last-child {{ border-bottom:none; }}
 .dot {{ width:14px; height:14px; border-radius:4px; flex:none; }}
 .lg-name {{ flex:1; }}

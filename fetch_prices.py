@@ -104,10 +104,15 @@ def fetch_fund_nav_toushin(assoc_code: str, isin: str) -> dict | None:
     投信協会の公式CSVから時系列の基準価額を取得。
     CSV列(ヘッダ): 年月日,基準価額(円),純資産総額(百万円),...
     返却: {dates:[...], navs:[...]} 新しい順
+
+    ISINがあれば isinCd+associFundCd で取得。ISINが無くても associFundCd 単独で
+    試す(協会CSVは協会コードだけで取れる場合がある)。取れなければ None を返し、
+    呼び出し側が Yahoo! フォールバックに回す。
     """
-    if not isin:
-        return None
-    url = f"{TOUSHIN_CSV}?isinCd={isin}&associFundCd={assoc_code}"
+    if isin:
+        url = f"{TOUSHIN_CSV}?isinCd={isin}&associFundCd={assoc_code}"
+    else:
+        url = f"{TOUSHIN_CSV}?associFundCd={assoc_code}"
     try:
         res = requests.get(url, headers={"User-Agent": UA}, timeout=20)
         res.raise_for_status()
@@ -322,6 +327,51 @@ def compute_cash_flow(existing: dict, etf: dict, fund: dict, usdjpy: float) -> i
     return int(round(flow))
 
 
+def carry_forward_missing(existing: dict, etf: dict, fund: dict, usdjpy: float):
+    """取得失敗した保有を前回 data.json の値で補完する(堅牢化)。
+
+    ある銘柄の価格取得に失敗すると、その銘柄が総資産から丸ごと抜け、履歴に
+    『見かけ上の急落』として残り、以後の先週比/先月比/年初来まで狂わせてしまう。
+    これを防ぐため、前回値がある銘柄は最終価格を据え置き(当日変化は不明=0%扱い)、
+    現在の数量・為替で円換算し直して総資産に含める。
+    一度も取得できていない新規銘柄は補完材料が無いため対象外(欠落のまま)。
+    """
+    prev_etf = existing.get("etf") or {}
+    prev_fund = existing.get("fund") or {}
+
+    for sym, (name, shares) in ETF_HOLDINGS.items():
+        if sym in etf or sym not in prev_etf:
+            continue
+        price = prev_etf[sym].get("curr_price")
+        if not price:
+            continue
+        jpy = round(price * shares * usdjpy)
+        etf[sym] = {
+            "name": name, "type": "ETF", "shares": shares,
+            "prev_price": price, "curr_price": price, "change_pct": None,
+            "prev_jpy": jpy, "curr_jpy": jpy, "usdjpy": usdjpy, "stale": True,
+        }
+        print(f"  ⚠️  {sym}: 取得失敗 → 前日値で補完 (¥{jpy:,})")
+
+    for code, (name, units, isin) in FUND_HOLDINGS.items():
+        if code in fund or code not in prev_fund:
+            continue
+        nav = prev_fund[code].get("curr_nav")
+        if not nav:
+            continue
+        jpy = round(units * nav / 10000)
+        fund[code] = {
+            "name": name, "type": "投資信託", "fund_code": code, "units": units,
+            "prev_nav": nav, "curr_nav": nav, "change_pct": None,
+            "prev_jpy": jpy, "curr_jpy": jpy, "source": "前日値(取得失敗)",
+            "curr_date": prev_fund[code].get("curr_date", ""), "stale": True,
+            "nav_series": prev_fund[code].get("nav_series", []),
+        }
+        print(f"  ⚠️  {code} ({name}): 取得失敗 → 前日値で補完 (¥{jpy:,})")
+
+    return etf, fund
+
+
 def main():
     now = datetime.now(JST)
     today = now.strftime("%Y-%m-%d")
@@ -335,6 +385,9 @@ def main():
     usdjpy = fetch_usdjpy()
     etf = fetch_etf_prices(usdjpy)
     fund = fetch_fund_prices()
+
+    # 取得失敗した保有は前回値で補完(総資産の見かけ上の急落と履歴汚染を防ぐ)
+    etf, fund = carry_forward_missing(existing, etf, fund, usdjpy)
 
     prev_total, curr_total = calc_total(etf, fund)
     if curr_total == 0:
