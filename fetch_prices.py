@@ -228,7 +228,12 @@ def pct(curr, base):
     return round((curr - base) / base * 100, 2)
 
 def build_comparisons(history: list, curr_total: int, today: datetime) -> dict:
-    """history(date昇順,各{date,total_jpy})から各種比較を作る。"""
+    """history(date昇順,各{date,total_jpy,cash_flow_jpy})から各種比較を作る。
+
+    買い増し・売却(=拠出/引き出し)の影響を除いた『市場変動ベース』の騰落を返す。
+    各期間の生の総資産差から、基準日より後に発生した純拠出(cash_flow_jpy)の累計を
+    差し引くことで、資金の出し入れではなく相場でどれだけ動いたかを表す。
+    """
     comp = {}
     d = today.date()
 
@@ -240,6 +245,12 @@ def build_comparisons(history: list, curr_total: int, today: datetime) -> dict:
         rec = nearest_on_or_before(history, target)
         return rec
 
+    def contrib_after(base_date: str) -> int:
+        # 基準日(排他) < 記録日 <= 当日 の純拠出を合計(当日分を含む)。
+        # cash_flow_jpy を持たない旧レコードは 0 とみなす。
+        return int(sum(h.get("cash_flow_jpy", 0) or 0
+                       for h in history if h["date"] > base_date))
+
     # 前日比は history の最後から2番目(=前回記録)を使う
     prev_rec = history[-2] if len(history) >= 2 else None
     week_rec = find(days_ago=7)
@@ -250,10 +261,15 @@ def build_comparisons(history: list, curr_total: int, today: datetime) -> dict:
                      ("month", month_rec), ("ytd", ytd_rec)):
         if rec:
             base = rec["total_jpy"]
+            gross = curr_total - base            # 総資産の増減(拠出込み)
+            contrib = contrib_after(rec["date"])  # 期間中の純拠出(買い増し-売却)
+            market = gross - contrib             # 相場による変動(拠出を除外)
             comp[key] = {
                 "base_date": rec["date"], "base_jpy": base,
-                "change_jpy": curr_total - base,
-                "change_pct": pct(curr_total, base),
+                "change_jpy": market,
+                "change_pct": (round(market / base * 100, 2) if base else None),
+                "gross_change_jpy": gross,       # 参考: 拠出込みの総資産増減
+                "cash_flow_jpy": contrib,        # 参考: 期間中の純拠出額
             }
         else:
             comp[key] = None
@@ -269,6 +285,41 @@ def calc_total(etf, fund):
     curr = sum(v["curr_jpy"] for v in etf.values()) + \
            sum(v["curr_jpy"] for v in fund.values())
     return int(prev), int(curr)
+
+
+def compute_cash_flow(existing: dict, etf: dict, fund: dict, usdjpy: float) -> int:
+    """当日の純拠出額(円)を算出する。
+
+    前回 data.json(existing)の保有数量と当日の数量の差 × 当日価格の合計。
+    買い増し=正、売却=負。新規銘柄は前回数量0として全量が拠出扱いになる。
+    前回データが無い(初回)場合や数量に変化がなければ 0。
+    FXや価格改定の影響を含まないよう、価格ではなく『数量の差』だけを見る。
+    """
+    if not existing:
+        return 0
+    prev_etf = existing.get("etf") or {}
+    prev_fund = existing.get("fund") or {}
+    flow = 0.0
+
+    def etf_unit_jpy(v):   # 1株あたり当日円価
+        if v.get("shares"):
+            return v["curr_jpy"] / v["shares"]
+        return (v.get("curr_price") or 0) * usdjpy
+
+    def fund_unit_jpy(v):  # 1口あたり当日円価
+        if v.get("units"):
+            return v["curr_jpy"] / v["units"]
+        return (v.get("curr_nav") or 0) / 10000
+
+    for sym, v in etf.items():
+        d_sh = (v.get("shares") or 0) - (prev_etf.get(sym, {}).get("shares") or 0)
+        if d_sh:
+            flow += d_sh * etf_unit_jpy(v)
+    for code, v in fund.items():
+        d_u = (v.get("units") or 0) - (prev_fund.get(code, {}).get("units") or 0)
+        if d_u:
+            flow += d_u * fund_unit_jpy(v)
+    return int(round(flow))
 
 
 def main():
@@ -290,9 +341,16 @@ def main():
         print("\n❌ 取得できた資産がありません。終了します。")
         return
 
+    # 当日の純拠出(買い増し-売却)を算出。前回 data.json の保有数量と当日数量の差 ×
+    # 当日価格。相場変動と資金の出し入れを分離し、期間比較を市場変動ベースにするため。
+    cash_flow_jpy = compute_cash_flow(existing, etf, fund, usdjpy)
+    if cash_flow_jpy:
+        print(f"\n[拠出] 当日の純拠出(買い増し-売却): ¥{cash_flow_jpy:,}")
+
     # 履歴更新(同日上書き, 昇順, 直近400日保持)
     history = [h for h in existing.get("history", []) if h.get("date") != today]
-    history.append({"date": today, "total_jpy": curr_total, "usdjpy": usdjpy})
+    history.append({"date": today, "total_jpy": curr_total,
+                    "usdjpy": usdjpy, "cash_flow_jpy": cash_flow_jpy})
     history = sorted(history, key=lambda x: x["date"])[-400:]
 
     comparisons = build_comparisons(history, curr_total, now)
