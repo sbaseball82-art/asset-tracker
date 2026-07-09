@@ -155,8 +155,13 @@ def fetch_fund_nav_toushin(assoc_code: str, isin: str) -> dict | None:
 # ─────────────────────────────────────────────────────
 def fetch_fund_nav_yahoo(assoc_code: str) -> dict | None:
     """
-    フォールバック: Yahoo!ファイナンスJP の時系列ページから直近2件を推定取得。
+    フォールバック: Yahoo!ファイナンスJP の時系列ページから基準価額を推定取得。
     協会CSVが使えない(ISIN未設定など)場合のみ使用。
+
+    時系列テーブルは「日付 → 基準価額 → 純資産総額(百万円)」の順で並ぶため、
+    ページ全体から数値を無差別に拾うと純資産総額(桁が大きい)を基準価額と誤認する。
+    そこで『日付の直後に来る最初の数値』だけを基準価額として拾い、基準価額として
+    妥当な範囲(500〜200,000円/万口)に収まるものだけ採用する。
     """
     url = f"https://finance.yahoo.co.jp/quote/{assoc_code}/history"
     try:
@@ -165,18 +170,35 @@ def fetch_fund_nav_yahoo(assoc_code: str) -> dict | None:
             timeout=20,
         )
         text = res.text
-        # 基準価額らしき4-6桁の数値(カンマ区切り含む)を抽出
-        nums = []
-        for mt in re.finditer(r"(\d{1,3}(?:,\d{3})+|\d{4,6})", text):
-            v = int(mt.group(1).replace(",", ""))
-            if 1000 <= v <= 999999:
-                nums.append(float(v))
-        if len(nums) >= 2:
-            return {"dates": ["推定", "推定"], "navs": [nums[0], nums[1]],
-                    "estimated": True}
     except Exception:
-        pass
-    return None
+        return None
+
+    # 日付(YYYY/M/D or YYYY年M月D日)ごとに、その直後の最初の数値を基準価額とみなす
+    pairs = []
+    for m in re.finditer(r"(\d{4})[/年](\d{1,2})[/月](\d{1,2})日?", text):
+        tail = text[m.end():m.end() + 400]
+        nm = re.search(r"(\d{1,3}(?:,\d{3})+|\d{3,6})(?:\.\d+)?", tail)
+        if not nm:
+            continue
+        v = float(nm.group(1).replace(",", ""))
+        if not (500 <= v <= 200000):   # 純資産総額など桁違いの値を除外
+            continue
+        ymd = f"{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+        pairs.append((ymd, v))
+
+    if len(pairs) < 2:
+        return None
+    # 日付が新しい順に整列(同日重複は先勝ち)
+    seen, uniq = set(), []
+    for ymd, v in sorted(pairs, key=lambda x: x[0], reverse=True):
+        if ymd in seen:
+            continue
+        seen.add(ymd)
+        uniq.append((ymd, v))
+    if len(uniq) < 2:
+        return None
+    return {"dates": [p[0] for p in uniq[:120]],
+            "navs": [p[1] for p in uniq[:120]], "estimated": True}
 
 
 def fetch_fund_prices() -> dict:
