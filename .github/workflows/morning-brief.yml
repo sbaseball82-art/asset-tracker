@@ -51,11 +51,35 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add morning-brief/output/
-          if git diff --cached --quiet; then
-            echo "変更なし。コミットしません。"
-          else
+
+          BRANCH="${GITHUB_REF_NAME}"
+
+          # このrunの生成物を退避(このrunの成果が常に最新なので他コミットに勝たせる)
+          cp -r morning-brief/output "$RUNNER_TEMP/mb-output-new"
+
+          # rebase/merge を使わず「最新の origin を取り直して生成物を重ねる」方式
+          # (daily_report.yml と同一の実績パターン)。画像(バイナリ)は rebase/merge で
+          # 他ワークフローの同日コミットと衝突すると復旧不能で job が落ちるため。
+          for i in 1 2 3 4 5; do
+            git fetch origin "$BRANCH"
+            git reset --hard
+            git clean -fd morning-brief/output/
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+
+            cp -r "$RUNNER_TEMP/mb-output-new/." morning-brief/output/
+
+            git add -A morning-brief/output/
+            if git diff --cached --quiet; then
+              echo "変更なし。コミットしません。"
+              exit 0
+            fi
             git commit -m "chore: morning brief $(TZ=Asia/Tokyo date +%Y-%m-%d)"
-            git pull --rebase origin "${GITHUB_REF_NAME}"
-            git push
-          fi
+            if git push origin "$BRANCH"; then
+              echo "push 成功 (試行 $i)"
+              exit 0
+            fi
+            echo "::warning::push が拒否されました (試行 $i)。5秒後に最新から再試行"
+            sleep 5
+          done
+          echo "::error::5回試行しても push できませんでした"
+          exit 1
