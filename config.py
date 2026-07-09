@@ -28,6 +28,7 @@ _ETF_NAMES = {
     "VTI": "VTI 全米株式ETF",
     "HDV": "HDV 米国高配当ETF",
     "QQQ": "QQQ ナスダック100ETF",
+    "DRAM": "DRAM メモリ半導体ETF",
 }
 ETF_HOLDINGS = {
     sym: (name, _ETF_QTY.get(sym, 0))
