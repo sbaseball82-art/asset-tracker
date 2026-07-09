@@ -2,41 +2,41 @@
   "updated_at": "2026-07-10T00:09:33.437510+09:00",
   "date": "2026-07-10",
   "usdjpy": 162.38,
-  "total_jpy": 35706432,
-  "day_change_jpy": 2922018,
-  "day_change_pct": 8.91,
+  "total_jpy": 32875702,
+  "day_change_jpy": 161331,
+  "day_change_pct": 0.49,
   "comparisons": {
     "day": {
       "base_date": "2026-07-09",
       "base_jpy": 32816386,
       "change_jpy": 59316,
       "change_pct": 0.18,
-      "gross_change_jpy": 2890046,
-      "cash_flow_jpy": 2830730
+      "gross_change_jpy": 59316,
+      "cash_flow_jpy": 0
     },
     "week": {
       "base_date": "2026-07-03",
       "base_jpy": 32121576,
       "change_jpy": 429243,
       "change_pct": 1.34,
-      "gross_change_jpy": 3584856,
-      "cash_flow_jpy": 3155613
+      "gross_change_jpy": 754126,
+      "cash_flow_jpy": 324883
     },
     "month": {
       "base_date": "2026-06-10",
       "base_jpy": 31603781,
       "change_jpy": 947038,
       "change_pct": 3.0,
-      "gross_change_jpy": 4102651,
-      "cash_flow_jpy": 3155613
+      "gross_change_jpy": 1271921,
+      "cash_flow_jpy": 324883
     },
     "ytd": {
       "base_date": "2026-06-08",
       "base_jpy": 31853815,
       "change_jpy": 697004,
       "change_pct": 2.19,
-      "gross_change_jpy": 3852617,
-      "cash_flow_jpy": 3155613
+      "gross_change_jpy": 1021887,
+      "cash_flow_jpy": 324883
     }
   },
   "etf": {
@@ -2571,29 +2571,6 @@
           "jpy": 76826
         }
       ]
-    },
-    "89311265": {
-      "name": "SBI NASDAQ100",
-      "type": "投資信託",
-      "fund_code": "89311265",
-      "units": 79162,
-      "prev_nav": 8848.0,
-      "curr_nav": 357587.0,
-      "change_pct": 3941.44,
-      "prev_jpy": 70043,
-      "curr_jpy": 2830730,
-      "source": "Yahoo!(推定)",
-      "curr_date": "推定",
-      "nav_series": [
-        {
-          "date": "推定",
-          "jpy": 2830730
-        },
-        {
-          "date": "推定",
-          "jpy": 70043
-        }
-      ]
     }
   },
   "history": [
@@ -2725,9 +2702,9 @@
     },
     {
       "date": "2026-07-10",
-      "total_jpy": 35706432,
+      "total_jpy": 32875702,
       "usdjpy": 162.38,
-      "cash_flow_jpy": 2830730
+      "cash_flow_jpy": 0
     }
   ]
 }
