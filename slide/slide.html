@@ -39,7 +39,7 @@ header { display:flex; justify-content:space-between; align-items:flex-end;
 .cmp-pct { font-size:32px; font-weight:900; }
 .cmp-jpy { font-size:17px; margin-top:3px; opacity:.85; }
 
-.cols { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.cols { display:grid; grid-template-columns:1fr 1fr; gap:20px; flex:1; }
 .panel { background:var(--panel); border:1px solid var(--line);
   border-radius:18px; padding:20px 20px 12px; }
 .panel-h { font-size:21px; font-weight:700; margin-bottom:10px;
@@ -57,59 +57,42 @@ header { display:flex; justify-content:space-between; align-items:flex-end;
   font-size:16px; color:var(--dim); margin-top:2px; }
 .hold-jpy { font-weight:700; color:var(--txt); }
 
-.events { background:var(--panel2); border:1px solid var(--line);
-  border-radius:18px; padding:20px 24px; margin-top:20px; }
-.events-h { font-size:21px; font-weight:700; margin-bottom:10px; }
-.ev { display:flex; gap:14px; padding:8px 0; align-items:flex-start; }
-.ev-num { flex:none; width:30px; height:30px; border-radius:50%;
-  background:var(--accent); color:#06111f; font-weight:900;
-  display:flex; align-items:center; justify-content:center; font-size:17px; margin-top:2px; }
-.ev-body { flex:1; }
-.ev-title { font-size:20px; font-weight:700; line-height:1.35; }
-.ev-detail { font-size:16px; color:var(--dim); margin-top:3px; line-height:1.4; }
-.ev-cat { display:inline-block; font-size:14px; font-weight:700; color:var(--dim);
-  background:rgba(139,152,169,.16); border-radius:6px;
-  padding:1px 8px; margin-right:9px; vertical-align:2px; }
-.ev-arrow { font-weight:900; margin-right:6px; }
-.ev-arrow.up { color:var(--up); }
-.ev-arrow.down { color:var(--down); }
-
 footer { margin-top:18px; text-align:center; font-size:15px; color:var(--dim); }
 </style></head><body>
   <header>
     <div>
       <div class="title">わたしの資産推移</div>
-      <div class="date">2026年7月11日 終値ベース ・ USD/JPY 161.67</div>
+      <div class="date">2026年7月10日 終値ベース ・ USD/JPY 162.37</div>
     </div>
     <div class="acct">@your_account</div>
   </header>
 
   <div class="total-wrap">
     <span class="total-label">総資産</span>
-    <span class="total mono">¥32,545,413</span>
-    <span class="total-day mono up">+0.03%</span>
+    <span class="total mono">¥32,947,107</span>
+    <span class="total-day mono up">+0.15%</span>
   </div>
 
   <div class="cmps">
         <div class="cmp up">
           <div class="cmp-label">前日比</div>
-          <div class="cmp-pct">+0.03%</div>
-          <div class="cmp-jpy">+¥9,988</div>
+          <div class="cmp-pct">+0.15%</div>
+          <div class="cmp-jpy">+¥50,142</div>
         </div>
         <div class="cmp up">
           <div class="cmp-label">先週比</div>
-          <div class="cmp-pct">+1.20%</div>
-          <div class="cmp-jpy">+¥385,271</div>
+          <div class="cmp-pct">+1.31%</div>
+          <div class="cmp-jpy">+¥420,069</div>
         </div>
         <div class="cmp up">
           <div class="cmp-label">先月比</div>
-          <div class="cmp-pct">+3.95%</div>
-          <div class="cmp-jpy">+¥1,236,093</div>
+          <div class="cmp-pct">+2.97%</div>
+          <div class="cmp-jpy">+¥937,864</div>
         </div>
         <div class="cmp up">
           <div class="cmp-label">年初来</div>
-          <div class="cmp-pct">+2.17%</div>
-          <div class="cmp-jpy">+¥691,598</div>
+          <div class="cmp-pct">+2.16%</div>
+          <div class="cmp-jpy">+¥687,830</div>
         </div></div>
 
   <div class="cols">
@@ -119,41 +102,51 @@ footer { margin-top:18px; text-align:center; font-size:15px; color:var(--dim); }
             <div class="hold">
               <div class="hold-main">
                 <span class="hold-name">VYM 米国高配当ETF</span>
-                <span class="hold-chg up">+0.32%</span>
+                <span class="hold-chg up">+0.48%</span>
               </div>
               <div class="hold-sub">
-                <span>$161.06 ・ 313株 / 前日 $160.55</span>
-                <span class="hold-jpy">¥8,150,072</span>
+                <span>$160.55 ・ 313株 / 前日 $159.79</span>
+                <span class="hold-jpy">¥8,159,442</span>
               </div>
             </div>
             <div class="hold">
               <div class="hold-main">
                 <span class="hold-name">VTI 全米株式ETF</span>
-                <span class="hold-chg up">+0.33%</span>
+                <span class="hold-chg up">+0.87%</span>
               </div>
               <div class="hold-sub">
-                <span>$372.69 ・ 195株 / 前日 $371.45</span>
-                <span class="hold-jpy">¥11,749,294</span>
+                <span>$371.45 ・ 195株 / 前日 $368.25</span>
+                <span class="hold-jpy">¥11,760,906</span>
               </div>
             </div>
             <div class="hold">
               <div class="hold-main">
                 <span class="hold-name">HDV 米国高配当ETF</span>
-                <span class="hold-chg up">+0.44%</span>
+                <span class="hold-chg down">−0.97%</span>
               </div>
               <div class="hold-sub">
-                <span>$27.70 ・ 495株 / 前日 $27.58</span>
-                <span class="hold-jpy">¥2,216,738</span>
+                <span>$27.58 ・ 495株 / 前日 $27.85</span>
+                <span class="hold-jpy">¥2,216,691</span>
               </div>
             </div>
             <div class="hold">
               <div class="hold-main">
                 <span class="hold-name">QQQ ナスダック100ETF</span>
-                <span class="hold-chg up">+0.31%</span>
+                <span class="hold-chg up">+1.66%</span>
               </div>
               <div class="hold-sub">
-                <span>$725.51 ・ 15株 / 前日 $723.28</span>
-                <span class="hold-jpy">¥1,759,398</span>
+                <span>$723.28 ・ 16株 / 前日 $711.44</span>
+                <span class="hold-jpy">¥1,879,024</span>
+              </div>
+            </div>
+            <div class="hold">
+              <div class="hold-main">
+                <span class="hold-name">DRAM メモリ半導体ETF</span>
+                <span class="hold-chg up">+3.74%</span>
+              </div>
+              <div class="hold-sub">
+                <span>$64.36 ・ 1株 / 前日 $62.04</span>
+                <span class="hold-jpy">¥10,450</span>
               </div>
             </div>
     </div>
@@ -163,70 +156,64 @@ footer { margin-top:18px; text-align:center; font-size:15px; color:var(--dim); }
             <div class="hold">
               <div class="hold-main">
                 <span class="hold-name">ニッセイNASDAQ100</span>
-                <span class="hold-chg up">+1.38%</span>
+                <span class="hold-chg up">+0.38%</span>
               </div>
               <div class="hold-sub">
-                <span>28,744円 ・ 36,374口</span>
-                <span class="hold-jpy">¥104,553</span>
+                <span>28,354円 ・ 36,374口</span>
+                <span class="hold-jpy">¥103,135</span>
               </div>
             </div>
             <div class="hold">
               <div class="hold-main">
                 <span class="hold-name">SBI・V・S&P500</span>
-                <span class="hold-chg up">+0.54%</span>
+                <span class="hold-chg down">−0.16%</span>
               </div>
               <div class="hold-sub">
-                <span>41,066円 ・ 850,904口</span>
-                <span class="hold-jpy">¥3,494,322</span>
+                <span>40,844円 ・ 850,904口</span>
+                <span class="hold-jpy">¥3,475,432</span>
               </div>
             </div>
             <div class="hold">
               <div class="hold-main">
                 <span class="hold-name">iFreeNEXT FANG+</span>
-                <span class="hold-chg up">+0.83%</span>
+                <span class="hold-chg up">+0.26%</span>
               </div>
               <div class="hold-sub">
-                <span>95,596円 ・ 276,836口</span>
-                <span class="hold-jpy">¥2,646,441</span>
+                <span>94,813円 ・ 287,411口</span>
+                <span class="hold-jpy">¥2,725,030</span>
               </div>
             </div>
             <div class="hold">
               <div class="hold-main">
                 <span class="hold-name">SBI S 米国高配当(年4回)</span>
-                <span class="hold-chg down">−0.49%</span>
+                <span class="hold-chg down">−0.51%</span>
               </div>
               <div class="hold-sub">
-                <span>12,309円 ・ 1,969,774口</span>
-                <span class="hold-jpy">¥2,424,595</span>
+                <span>12,369円 ・ 1,969,774口</span>
+                <span class="hold-jpy">¥2,436,413</span>
+              </div>
+            </div>
+            <div class="hold">
+              <div class="hold-main">
+                <span class="hold-name">イノベーションAI</span>
+                <span class="hold-chg up">+0.76%</span>
+              </div>
+              <div class="hold-sub">
+                <span>70,002円 ・ 14,286口</span>
+                <span class="hold-jpy">¥100,005</span>
+              </div>
+            </div>
+            <div class="hold">
+              <div class="hold-main">
+                <span class="hold-name">SBI NASDAQ100</span>
+                <span class="hold-chg up">+0.37%</span>
+              </div>
+              <div class="hold-sub">
+                <span>10,179円 ・ 79,162口</span>
+                <span class="hold-jpy">¥80,579</span>
               </div>
             </div>
     </div>
-  </div>
-
-  <div class="events">
-    <div class="events-h">📈 本日の米国市場 3つの動き</div>
-    
-        <div class="ev">
-          <span class="ev-num">1</span>
-          <div class="ev-body">
-            <div class="ev-title"><span class="ev-cat">指数</span><span class="ev-arrow down">▼</span>米国の生産性は第4四半期に鈍化する一方、単位労働コストは加速する</div>
-            
-          </div>
-        </div>
-        <div class="ev">
-          <span class="ev-num">2</span>
-          <div class="ev-body">
-            <div class="ev-title"><span class="ev-cat">マクロ</span>最近1週間の失業保険申請件数は低水準にとどまる</div>
-            
-          </div>
-        </div>
-        <div class="ev">
-          <span class="ev-num">3</span>
-          <div class="ev-body">
-            <div class="ev-title"><span class="ev-cat">個別</span><span class="ev-arrow up">▲</span>トレインラインは今年2回目のガイダンスを引き上げる</div>
-            
-          </div>
-        </div>
   </div>
 
   <footer>※本投稿は記録・情報共有目的であり投資助言ではありません</footer>

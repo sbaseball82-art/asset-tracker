@@ -147,10 +147,10 @@ header {{ display:flex; justify-content:space-between; align-items:flex-end;
   align-items:center; justify-content:center; }}
 .dc-big {{ font-size:30px; font-weight:900; }}
 .dc-sub {{ font-size:15px; color:var(--dim); }}
-.donut-wrap.small {{ width:260px; height:260px; }}
+.donut-wrap.small {{ width:236px; height:236px; margin-bottom:16px; }}
 
-.lg {{ display:flex; align-items:center; gap:10px; padding:7px 0;
-  border-bottom:1px solid var(--line); font-size:18px; }}
+.lg {{ display:flex; align-items:center; gap:10px; padding:5px 0;
+  border-bottom:1px solid var(--line); font-size:17px; }}
 .lg:last-child {{ border-bottom:none; }}
 .dot {{ width:14px; height:14px; border-radius:4px; flex:none; }}
 .lg-name {{ flex:1; }}
@@ -206,15 +206,22 @@ def main():
     print(f"💾 {OUT_HTML}")
 
     from playwright.sync_api import sync_playwright
+    import io
+    from PIL import Image
     with sync_playwright() as p:
         browser = p.chromium.launch(args=["--no-sandbox"])
+        # 2倍解像度でレンダリングしてから 1080x1080 へ縮小(スーパーサンプリング)。
+        # 高解像描画の鮮明さは保ちつつ、最終出力は 1080x1080(=1.17MP)に抑える。
+        # 2160x2160(4.67MP)のままだと iOS Safari / GitHub モバイルの画像デコード上限に
+        # 引っかかり、スマホの blob 表示で画像が出ない事象があるため。
         page = browser.new_page(viewport={"width": 1080, "height": 1080},
                                 device_scale_factor=2)
         page.goto(OUT_HTML.resolve().as_uri())
         page.wait_for_timeout(1200)
-        page.screenshot(path=str(OUT_PNG),
-                        clip={"x": 0, "y": 0, "width": 1080, "height": 1080})
+        raw = page.screenshot(clip={"x": 0, "y": 0, "width": 1080, "height": 1080})
         browser.close()
+    Image.open(io.BytesIO(raw)).convert("RGB").resize(
+        (1080, 1080), Image.LANCZOS).save(OUT_PNG)
     print(f"🖼️  {OUT_PNG} を生成しました")
 
 

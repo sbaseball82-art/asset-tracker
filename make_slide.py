@@ -94,25 +94,6 @@ def build_html(data: dict, events: dict) -> str:
     etf_items = list(data.get("etf", {}).values())
     fund_items = list(data.get("fund", {}).values())
 
-    # イベント
-    arrows = {"up": "▲", "down": "▼"}
-    ev_html = ""
-    for i, e in enumerate(events.get("events", [])[:3], 1):
-        detail = e.get("detail") or ""
-        d = e.get("dir") or "flat"
-        cat = e.get("cat") or ""
-        arrow = arrows.get(d, "")
-        arrow_html = f'<span class="ev-arrow {d}">{arrow}</span>' if arrow else ""
-        cat_html = f'<span class="ev-cat">{cat}</span>' if cat else ""
-        ev_html += f"""
-        <div class="ev">
-          <span class="ev-num">{i}</span>
-          <div class="ev-body">
-            <div class="ev-title">{cat_html}{arrow_html}{e.get('title','—')}</div>
-            {f'<div class="ev-detail">{detail}</div>' if detail else ''}
-          </div>
-        </div>"""
-
     date_str = data.get("date", "")
     try:
         d = datetime.strptime(date_str, "%Y-%m-%d")
@@ -163,7 +144,7 @@ header {{ display:flex; justify-content:space-between; align-items:flex-end;
 .cmp-pct {{ font-size:32px; font-weight:900; }}
 .cmp-jpy {{ font-size:17px; margin-top:3px; opacity:.85; }}
 
-.cols {{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }}
+.cols {{ display:grid; grid-template-columns:1fr 1fr; gap:20px; flex:1; }}
 .panel {{ background:var(--panel); border:1px solid var(--line);
   border-radius:18px; padding:20px 20px 12px; }}
 .panel-h {{ font-size:21px; font-weight:700; margin-bottom:10px;
@@ -180,23 +161,6 @@ header {{ display:flex; justify-content:space-between; align-items:flex-end;
 .hold-sub {{ display:flex; justify-content:space-between;
   font-size:16px; color:var(--dim); margin-top:2px; }}
 .hold-jpy {{ font-weight:700; color:var(--txt); }}
-
-.events {{ background:var(--panel2); border:1px solid var(--line);
-  border-radius:18px; padding:20px 24px; margin-top:20px; }}
-.events-h {{ font-size:21px; font-weight:700; margin-bottom:10px; }}
-.ev {{ display:flex; gap:14px; padding:8px 0; align-items:flex-start; }}
-.ev-num {{ flex:none; width:30px; height:30px; border-radius:50%;
-  background:var(--accent); color:#06111f; font-weight:900;
-  display:flex; align-items:center; justify-content:center; font-size:17px; margin-top:2px; }}
-.ev-body {{ flex:1; }}
-.ev-title {{ font-size:20px; font-weight:700; line-height:1.35; }}
-.ev-detail {{ font-size:16px; color:var(--dim); margin-top:3px; line-height:1.4; }}
-.ev-cat {{ display:inline-block; font-size:14px; font-weight:700; color:var(--dim);
-  background:rgba(139,152,169,.16); border-radius:6px;
-  padding:1px 8px; margin-right:9px; vertical-align:2px; }}
-.ev-arrow {{ font-weight:900; margin-right:6px; }}
-.ev-arrow.up {{ color:var(--up); }}
-.ev-arrow.down {{ color:var(--down); }}
 
 footer {{ margin-top:18px; text-align:center; font-size:15px; color:var(--dim); }}
 </style></head><body>
@@ -227,11 +191,6 @@ footer {{ margin-top:18px; text-align:center; font-size:15px; color:var(--dim); 
     </div>
   </div>
 
-  <div class="events">
-    <div class="events-h">📈 本日の米国市場 3つの動き</div>
-    {ev_html}
-  </div>
-
   <footer>※本投稿は記録・情報共有目的であり投資助言ではありません</footer>
 </body></html>"""
 
@@ -246,14 +205,22 @@ def main():
     print(f"💾 {OUT_HTML}")
 
     from playwright.sync_api import sync_playwright
+    import io
+    from PIL import Image
     with sync_playwright() as p:
         browser = p.chromium.launch(args=["--no-sandbox"])
+        # 2倍解像度でレンダリングしてから 1080x1080 へ縮小(スーパーサンプリング)。
+        # 高解像描画の鮮明さは保ちつつ、最終出力は 1080x1080(=1.17MP)に抑える。
+        # 2160x2160(4.67MP)のままだと iOS Safari / GitHub モバイルの画像デコード上限に
+        # 引っかかり、スマホの blob 表示で画像が出ない事象があるため。
         page = browser.new_page(viewport={"width": 1080, "height": 1080},
                                 device_scale_factor=2)
         page.goto(OUT_HTML.resolve().as_uri())
         page.wait_for_timeout(1200)  # フォント読込待ち
-        page.screenshot(path=str(OUT_PNG), clip={"x":0,"y":0,"width":1080,"height":1080})
+        raw = page.screenshot(clip={"x":0,"y":0,"width":1080,"height":1080})
         browser.close()
+    Image.open(io.BytesIO(raw)).convert("RGB").resize(
+        (1080, 1080), Image.LANCZOS).save(OUT_PNG)
     print(f"🖼️  {OUT_PNG} を生成しました")
 
 

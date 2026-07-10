@@ -39,10 +39,10 @@ header { display:flex; justify-content:space-between; align-items:flex-end;
   align-items:center; justify-content:center; }
 .dc-big { font-size:30px; font-weight:900; }
 .dc-sub { font-size:15px; color:var(--dim); }
-.donut-wrap.small { width:260px; height:260px; }
+.donut-wrap.small { width:236px; height:236px; margin-bottom:16px; }
 
-.lg { display:flex; align-items:center; gap:10px; padding:7px 0;
-  border-bottom:1px solid var(--line); font-size:18px; }
+.lg { display:flex; align-items:center; gap:10px; padding:5px 0;
+  border-bottom:1px solid var(--line); font-size:17px; }
 .lg:last-child { border-bottom:none; }
 .dot { width:14px; height:14px; border-radius:4px; flex:none; }
 .lg-name { flex:1; }
@@ -54,21 +54,21 @@ footer { margin-top:18px; text-align:center; font-size:15px; color:var(--dim); }
   <header>
     <div>
       <div class="title">わたしの資産推移｜資産構成</div>
-      <div class="date">2026年7月11日 時点</div>
+      <div class="date">2026年7月10日 時点</div>
     </div>
     <div class="acct">@your_account</div>
   </header>
 
   <div class="total-wrap">
     <span class="total-label">総資産</span>
-    <span class="total mono">¥32,545,413</span>
+    <span class="total mono">¥32,947,107</span>
   </div>
 
   <div class="cols">
     <div class="panel cat">
       <div class="panel-h">資産タイプ別</div>
       <div class="donut-wrap">
-        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"><circle cx="150.0" cy="150.0" r="127.0" fill="none" stroke="#58a6ff" stroke-width="46" stroke-dasharray="585.391 212.573" stroke-dashoffset="-0.000" transform="rotate(-90 150.0 150.0)"/><circle cx="150.0" cy="150.0" r="127.0" fill="none" stroke="#e3b341" stroke-width="46" stroke-dasharray="212.573 585.391" stroke-dashoffset="-585.391" transform="rotate(-90 150.0 150.0)"/></svg>
+        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"><circle cx="150.0" cy="150.0" r="127.0" fill="none" stroke="#58a6ff" stroke-width="46" stroke-dasharray="581.912 216.053" stroke-dashoffset="-0.000" transform="rotate(-90 150.0 150.0)"/><circle cx="150.0" cy="150.0" r="127.0" fill="none" stroke="#e3b341" stroke-width="46" stroke-dasharray="216.053 581.912" stroke-dashoffset="-581.912" transform="rotate(-90 150.0 150.0)"/></svg>
         <div class="donut-center">
           <div class="dc-big">ETF 73%</div>
           <div class="dc-sub">投信 27%</div>
@@ -78,70 +78,88 @@ footer { margin-top:18px; text-align:center; font-size:15px; color:var(--dim); }
         <div class="lg">
           <span class="dot" style="background:#58a6ff"></span>
           <span class="lg-name">米国ETF</span>
-          <span class="lg-pct">73.4%</span>
-          <span class="lg-jpy">¥23,875,502</span>
+          <span class="lg-pct">72.9%</span>
+          <span class="lg-jpy">¥24,026,513</span>
         </div>
         <div class="lg">
           <span class="dot" style="background:#e3b341"></span>
           <span class="lg-name">投資信託</span>
-          <span class="lg-pct">26.6%</span>
-          <span class="lg-jpy">¥8,669,911</span>
+          <span class="lg-pct">27.1%</span>
+          <span class="lg-jpy">¥8,920,594</span>
         </div>
     </div>
 
     <div class="panel sym">
       <div class="panel-h">銘柄別</div>
       <div class="donut-wrap small">
-        <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg"><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#58a6ff" stroke-width="40" stroke-dasharray="249.514 441.637" stroke-dashoffset="-0.000" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#3fb950" stroke-width="40" stroke-dasharray="173.079 518.071" stroke-dashoffset="-249.514" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#56d4dd" stroke-width="40" stroke-dasharray="74.207 616.943" stroke-dashoffset="-422.593" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#79c0ff" stroke-width="40" stroke-dasharray="56.201 634.949" stroke-dashoffset="-496.800" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#e3b341" stroke-width="40" stroke-dasharray="51.490 639.660" stroke-dashoffset="-553.001" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#f0883e" stroke-width="40" stroke-dasharray="47.076 644.075" stroke-dashoffset="-604.491" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#db61a2" stroke-width="40" stroke-dasharray="37.363 653.787" stroke-dashoffset="-651.567" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#bc8cff" stroke-width="40" stroke-dasharray="2.220 688.930" stroke-dashoffset="-688.930" transform="rotate(-90 130.0 130.0)"/></svg>
+        <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg"><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#58a6ff" stroke-width="40" stroke-dasharray="246.715 444.435" stroke-dashoffset="-0.000" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#3fb950" stroke-width="40" stroke-dasharray="171.165 519.985" stroke-dashoffset="-246.715" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#56d4dd" stroke-width="40" stroke-dasharray="72.906 618.244" stroke-dashoffset="-417.881" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#79c0ff" stroke-width="40" stroke-dasharray="57.165 633.986" stroke-dashoffset="-490.787" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#e3b341" stroke-width="40" stroke-dasharray="51.110 640.040" stroke-dashoffset="-547.951" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#f0883e" stroke-width="40" stroke-dasharray="46.501 644.650" stroke-dashoffset="-599.061" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#db61a2" stroke-width="40" stroke-dasharray="39.417 651.733" stroke-dashoffset="-645.562" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#bc8cff" stroke-width="40" stroke-dasharray="2.164 688.987" stroke-dashoffset="-684.979" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#58a6ff" stroke-width="40" stroke-dasharray="2.098 689.053" stroke-dashoffset="-687.143" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#3fb950" stroke-width="40" stroke-dasharray="1.690 689.460" stroke-dashoffset="-689.241" transform="rotate(-90 130.0 130.0)"/><circle cx="130.0" cy="130.0" r="110.0" fill="none" stroke="#56d4dd" stroke-width="40" stroke-dasharray="0.219 690.931" stroke-dashoffset="-690.931" transform="rotate(-90 130.0 130.0)"/></svg>
       </div>
       
         <div class="lg">
           <span class="dot" style="background:#58a6ff"></span>
           <span class="lg-name">VTI</span>
-          <span class="lg-pct">36.1%</span>
-          <span class="lg-jpy">¥11,749,294</span>
+          <span class="lg-pct">35.7%</span>
+          <span class="lg-jpy">¥11,760,906</span>
         </div>
         <div class="lg">
           <span class="dot" style="background:#3fb950"></span>
           <span class="lg-name">VYM</span>
-          <span class="lg-pct">25.0%</span>
-          <span class="lg-jpy">¥8,150,072</span>
+          <span class="lg-pct">24.8%</span>
+          <span class="lg-jpy">¥8,159,442</span>
         </div>
         <div class="lg">
           <span class="dot" style="background:#56d4dd"></span>
           <span class="lg-name">SBI・V・S&P500</span>
-          <span class="lg-pct">10.7%</span>
-          <span class="lg-jpy">¥3,494,322</span>
+          <span class="lg-pct">10.5%</span>
+          <span class="lg-jpy">¥3,475,432</span>
         </div>
         <div class="lg">
           <span class="dot" style="background:#79c0ff"></span>
           <span class="lg-name">iFreeNEXT FANG+</span>
-          <span class="lg-pct">8.1%</span>
-          <span class="lg-jpy">¥2,646,441</span>
+          <span class="lg-pct">8.3%</span>
+          <span class="lg-jpy">¥2,725,030</span>
         </div>
         <div class="lg">
           <span class="dot" style="background:#e3b341"></span>
           <span class="lg-name">SBI S 米国高配当(年4回)</span>
           <span class="lg-pct">7.4%</span>
-          <span class="lg-jpy">¥2,424,595</span>
+          <span class="lg-jpy">¥2,436,413</span>
         </div>
         <div class="lg">
           <span class="dot" style="background:#f0883e"></span>
           <span class="lg-name">HDV</span>
-          <span class="lg-pct">6.8%</span>
-          <span class="lg-jpy">¥2,216,738</span>
+          <span class="lg-pct">6.7%</span>
+          <span class="lg-jpy">¥2,216,691</span>
         </div>
         <div class="lg">
           <span class="dot" style="background:#db61a2"></span>
           <span class="lg-name">QQQ</span>
-          <span class="lg-pct">5.4%</span>
-          <span class="lg-jpy">¥1,759,398</span>
+          <span class="lg-pct">5.7%</span>
+          <span class="lg-jpy">¥1,879,024</span>
         </div>
         <div class="lg">
           <span class="dot" style="background:#bc8cff"></span>
           <span class="lg-name">ニッセイNASDAQ100</span>
           <span class="lg-pct">0.3%</span>
-          <span class="lg-jpy">¥104,553</span>
+          <span class="lg-jpy">¥103,135</span>
+        </div>
+        <div class="lg">
+          <span class="dot" style="background:#58a6ff"></span>
+          <span class="lg-name">イノベーションAI</span>
+          <span class="lg-pct">0.3%</span>
+          <span class="lg-jpy">¥100,005</span>
+        </div>
+        <div class="lg">
+          <span class="dot" style="background:#3fb950"></span>
+          <span class="lg-name">SBI NASDAQ100</span>
+          <span class="lg-pct">0.2%</span>
+          <span class="lg-jpy">¥80,579</span>
+        </div>
+        <div class="lg">
+          <span class="dot" style="background:#56d4dd"></span>
+          <span class="lg-name">DRAM</span>
+          <span class="lg-pct">0.0%</span>
+          <span class="lg-jpy">¥10,450</span>
         </div>
     </div>
   </div>

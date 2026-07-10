@@ -55,17 +55,40 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data.json events.json slide/slide.png slide/slide.html slide/allocation.png slide/allocation.html
-          if git diff --staged --quiet; then
-            echo "変更なし(コミットをスキップ)"
-            exit 0
-          fi
-          git commit -m "update: $(date -u +%Y-%m-%d)"
-          # 他の毎日ワークフロー(morning-brief / daily-report)と push が衝突しても
-          # 更新を取りこぼさないよう、rebase してから push。失敗時は最大5回リトライ。
+
+          BRANCH="${GITHUB_REF_NAME}"
+
+          # このrunの生成物(6ファイル)を退避。このrunの成果が常に最新なので他コミットに勝たせる。
+          mkdir -p "$RUNNER_TEMP/gen/slide"
+          cp data.json events.json "$RUNNER_TEMP/gen/"
+          cp slide/slide.png slide/slide.html slide/allocation.png slide/allocation.html "$RUNNER_TEMP/gen/slide/"
+
+          # rebase/merge を一切使わず「最新の origin を取り直して生成物を重ねる」方式
+          # (daily_report.yml と同一の実績パターン)。理由:
+          #  - 画像(バイナリ)は git がマージ/rebase できず、他ワークフロー(morning-brief /
+          #    daily-report)の同日コミットと衝突すると復旧不能で job が落ちていた
+          #  - Re-run は失敗当時の古いコミットを checkout するため、その上の rebase は必ず衝突する
+          #  - この方式なら衝突が構造的に起きず、push 直前に割り込まれても fetch からやり直して追いつく
           for i in 1 2 3 4 5; do
-            git pull --rebase origin "${GITHUB_REF_NAME}" && git push && { echo "push成功 (試行 $i)"; exit 0; }
-            echo "::warning::push 衝突 (試行 $i)。5秒後に再試行"
+            git fetch origin "$BRANCH"
+            git reset --hard
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+
+            # 最新 origin の上に生成物を重ねる(上書きのみ。他ファイルには触れない)
+            cp "$RUNNER_TEMP/gen/data.json" "$RUNNER_TEMP/gen/events.json" .
+            cp -r "$RUNNER_TEMP/gen/slide/." slide/
+
+            git add data.json events.json slide/slide.png slide/slide.html slide/allocation.png slide/allocation.html
+            if git diff --cached --quiet; then
+              echo "変更なし(コミットをスキップ)"
+              exit 0
+            fi
+            git commit -m "update: $(date -u +%Y-%m-%d)"
+            if git push origin "$BRANCH"; then
+              echo "push 成功 (試行 $i)"
+              exit 0
+            fi
+            echo "::warning::push が拒否されました (試行 $i)。5秒後に最新から再試行"
             sleep 5
           done
           echo "::error::5回試行しても push できませんでした"
