@@ -5,8 +5,7 @@
   一部失敗はその銘柄だけ欠落、全滅なら {} を返す（呼び出し側がフォールバック）。
 - story_instrument(): 見出しのキーワード → 関連インストゥルメント(ticker, 表示名)。
 - draw_price_chart(): ダークテーマの折れ線（面塗り・最新値注釈・騰落バッジ）。
-- draw_topic_bars(): マーケットデータ全滅時のフォールバック。
-  その日のニュース話題度（報道媒体数）の横棒グラフ＝ネット無しでも必ず描ける実データ。
+- フォールバックのビジュアル（数字パネル・概念図）は news_visuals.py 側にある。
 """
 from __future__ import annotations
 import datetime as dt
@@ -139,27 +138,3 @@ def draw_price_chart(fig, rect_px: tuple, W: int, H: int,
             color=(UP if pct6m >= 0 else DOWN), fontsize=13.5,
             fontweight="bold", va="top", ha="right")
     return True
-
-
-def draw_topic_bars(fig, rect_px: tuple, W: int, H: int,
-                    stories: list, highlight: int) -> None:
-    """フォールバック: 今朝の話題度（報道媒体数）横棒。ニュースデータだけで描ける。"""
-    x, y, w, h = rect_px
-    ax = fig.add_axes([x / W, 1 - (y + h) / H, w / W, h / H])
-    ax.set_facecolor(PANEL)
-    top = stories[:5]
-    names = [f"#{i + 1}" for i in range(len(top))]
-    vals = [s.get("n_sources", 1) for s in top]
-    colors = [ACCENT if i == highlight else "#3a4a6b" for i in range(len(top))]
-    # barh は下から積むので、#1 が最上段に来るよう全リストを揃えて反転する
-    bars = ax.barh(names[::-1], vals[::-1], color=colors[::-1], height=0.58)
-    for b, v in zip(bars, vals[::-1]):
-        ax.text(b.get_width() + 0.08, b.get_y() + b.get_height() / 2,
-                f"{v}媒体", color=DIM, fontsize=12.5, va="center")
-    for sp in ax.spines.values():
-        sp.set_visible(False)
-    ax.tick_params(colors=DIM, labelsize=12, length=0)
-    ax.set_xticks([])
-    ax.margins(x=0.14, y=0.22)
-    ax.text(0.02, 0.97, "今朝の話題度（同時報道メディア数）", transform=ax.transAxes,
-            color=INK, fontsize=14.5, fontweight="bold", va="top")

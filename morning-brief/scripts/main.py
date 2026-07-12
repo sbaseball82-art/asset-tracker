@@ -73,8 +73,7 @@ def main() -> int:
         png = os.path.join(out_dir, f"{i+1}_news.png")
         stance = STANCES[(seed + i) % len(STANCES)]
         if stories and i < len(stories):
-            news_card(i + 1, N_CARDS, stories[i], date_str, png, stance,
-                      market, stories)
+            news_card(i + 1, N_CARDS, stories[i], date_str, png, stance, market)
             posts.append(template_post(i, stories[i], today))
         else:
             idx = (seed + i) % len(EVERGREEN)

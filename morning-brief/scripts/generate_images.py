@@ -39,7 +39,8 @@ if _noto:
 
 from explainer import build_explainer
 from market_charts import (story_instrument, daily_move, draw_price_chart,
-                           draw_topic_bars, _fmt_value)
+                           _fmt_value)
+from news_visuals import draw_number_panel, draw_topic_diagram, extract_facts
 
 BG = "#0e1726"; PANEL = "#131f33"; CARD = "#1a2740"
 INK = "#eef2f8"; DIM = "#8fa0b8"; LINE = "#2a3650"
@@ -267,7 +268,7 @@ def _render_validated(build_fn, out: str):
 # カード本体
 # ─────────────────────────────────────────────
 def news_card(rank: int, total: int, story: dict, date_str: str, out: str,
-              stance: str, market: dict, all_stories: list):
+              stance: str, market: dict):
     """1ニュース=1枚。見出し＋関連チャート＋統計タイル＋解説2ブロック。"""
     ex = build_explainer(story["title"])
     ticker, tk_label = story_instrument(story["title"])
@@ -291,14 +292,17 @@ def news_card(rank: int, total: int, story: dict, date_str: str, out: str,
                 fontweight="bold")
         cy += 42
 
-        # 関連チャート（データ無しなら話題度バーにフォールバック）
+        # ビジュアル（ニュース内容ベースの優先順位）:
+        #   ①関連銘柄の実チャート → ②見出しの数字を可視化 → ③トピック概念図
+        # 「何媒体が報じたか」のようなメタ情報はグラフ・表にしない。
         chart_rect = (72, cy, W - 144, 360)
-        drew = draw_price_chart(fig, chart_rect, W, H, market, ticker, tk_label)
-        if not drew:
-            draw_topic_bars(fig, chart_rect, W, H, all_stories, rank - 1)
+        if not draw_price_chart(fig, chart_rect, W, H, market, ticker, tk_label):
+            if not draw_number_panel(fig, chart_rect, W, H, story["title"]):
+                draw_topic_diagram(fig, chart_rect, W, H, ex.get("id", "default"))
         cy += 360 + 24
 
-        # 統計タイル（関連銘柄・S&P500・ドル円の前日比。無い分は話題データで補完）
+        # 統計タイル（関連銘柄・S&P500・ドル円の前日比。
+        # マーケットデータが無い分は「ニュース内容」由来のタイルで補完）
         tiles = []
         for tk2, lbl2 in ((ticker, tk_label), ("^GSPC", "S&P500"), ("JPY=X", "ドル円")):
             if any(t[0] == lbl2 for t in tiles):
@@ -308,11 +312,24 @@ def news_card(rank: int, total: int, story: dict, date_str: str, out: str,
                 col = UP if mv["pct"] >= 0 else RED
                 tiles.append((lbl2, f"{mv['pct']:+.2f}%",
                               _fmt_value(tk2, mv["last"]), col))
-        while len(tiles) < 3:
-            fillers = [("同時報道", f"{story['n_sources']}媒体", "話題度の目安", ACCENT),
-                       ("話題順位", f"#{rank}", "本日のニュース", GOLD),
-                       ("配信地域", region, "ニュース発", BLUE)]
-            tiles.append(fillers[len(tiles) % 3])
+        if len(tiles) < 3:
+            facts = extract_facts(story["title"])
+            for f in facts:
+                if len(tiles) >= 3:
+                    break
+                tiles.append((f["label"], f["raw"], "見出しの数字", ACCENT))
+        topic_names = {"memory": "メモリ", "semi": "半導体", "rates": "金融政策",
+                       "fx": "為替", "rally": "上昇相場", "selloff": "下落相場",
+                       "earnings": "決算", "macro": "経済指標", "ai": "AI",
+                       "fab": "設備投資", "ipo": "IPO", "default": "マーケット"}
+        fillers = [("テーマ", topic_names.get(ex.get("id", "default"), "マーケット"),
+                    "ニュース分類", GOLD),
+                   ("配信", region, "ニュース発", BLUE),
+                   ("注目先", tk_label, "関連マーケット", ACCENT)]
+        for fl in fillers:
+            if len(tiles) >= 3:
+                break
+            tiles.append(fl)
         cy = _stat_tiles(ax, cy, tiles[:3], fs)
 
         # 解説（各2行・文末保証つき・実効ピクセル幅で折返し）
