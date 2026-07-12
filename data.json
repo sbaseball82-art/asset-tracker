@@ -1,41 +1,41 @@
 {
-  "updated_at": "2026-07-12T07:38:52.414063+09:00",
-  "date": "2026-07-12",
-  "usdjpy": 161.67,
-  "total_jpy": 32957844,
-  "day_change_jpy": 114319,
+  "updated_at": "2026-07-13T07:38:50.051329+09:00",
+  "date": "2026-07-13",
+  "usdjpy": 161.98,
+  "total_jpy": 33003871,
+  "day_change_jpy": 114475,
   "day_change_pct": 0.35,
   "comparisons": {
     "day": {
-      "base_date": "2026-07-11",
+      "base_date": "2026-07-12",
       "base_jpy": 32957844,
-      "change_jpy": 0,
-      "change_pct": 0.0,
-      "gross_change_jpy": 0,
+      "change_jpy": 46027,
+      "change_pct": 0.14,
+      "gross_change_jpy": 46027,
       "cash_flow_jpy": 0
     },
     "week": {
-      "base_date": "2026-07-04",
-      "base_jpy": 32160142,
-      "change_jpy": 392240,
-      "change_pct": 1.22,
-      "gross_change_jpy": 797702,
+      "base_date": "2026-07-06",
+      "base_jpy": 32284577,
+      "change_jpy": 313832,
+      "change_pct": 0.97,
+      "gross_change_jpy": 719294,
       "cash_flow_jpy": 405462
     },
     "month": {
-      "base_date": "2026-06-12",
-      "base_jpy": 31466237,
-      "change_jpy": 1086145,
-      "change_pct": 3.45,
-      "gross_change_jpy": 1491607,
+      "base_date": "2026-06-13",
+      "base_jpy": 31753527,
+      "change_jpy": 844882,
+      "change_pct": 2.66,
+      "gross_change_jpy": 1250344,
       "cash_flow_jpy": 405462
     },
     "ytd": {
       "base_date": "2026-06-08",
       "base_jpy": 31853815,
-      "change_jpy": 698567,
-      "change_pct": 2.19,
-      "gross_change_jpy": 1104029,
+      "change_jpy": 744594,
+      "change_pct": 2.34,
+      "gross_change_jpy": 1150056,
       "cash_flow_jpy": 405462
     }
   },
@@ -47,9 +47,9 @@
       "prev_price": 160.55,
       "curr_price": 161.06,
       "change_pct": 0.32,
-      "prev_jpy": 8124265,
-      "curr_jpy": 8150072,
-      "usdjpy": 161.67
+      "prev_jpy": 8139843,
+      "curr_jpy": 8165700,
+      "usdjpy": 161.98
     },
     "VTI": {
       "name": "VTI 全米株式ETF",
@@ -58,9 +58,9 @@
       "prev_price": 371.45,
       "curr_price": 372.69,
       "change_pct": 0.33,
-      "prev_jpy": 11710203,
-      "curr_jpy": 11749294,
-      "usdjpy": 161.67
+      "prev_jpy": 11732657,
+      "curr_jpy": 11771824,
+      "usdjpy": 161.98
     },
     "HDV": {
       "name": "HDV 米国高配当ETF",
@@ -69,9 +69,9 @@
       "prev_price": 27.58,
       "curr_price": 27.7,
       "change_pct": 0.44,
-      "prev_jpy": 2207135,
-      "curr_jpy": 2216738,
-      "usdjpy": 161.67
+      "prev_jpy": 2211367,
+      "curr_jpy": 2220989,
+      "usdjpy": 161.98
     },
     "QQQ": {
       "name": "QQQ ナスダック100ETF",
@@ -80,9 +80,9 @@
       "prev_price": 723.28,
       "curr_price": 725.51,
       "change_pct": 0.31,
-      "prev_jpy": 1870923,
-      "curr_jpy": 1876691,
-      "usdjpy": 161.67
+      "prev_jpy": 1874510,
+      "curr_jpy": 1880290,
+      "usdjpy": 161.98
     },
     "DRAM": {
       "name": "DRAM メモリ半導体ETF",
@@ -91,9 +91,9 @@
       "prev_price": 64.36,
       "curr_price": 63.04,
       "change_pct": -2.05,
-      "prev_jpy": 10405,
-      "curr_jpy": 10192,
-      "usdjpy": 161.67
+      "prev_jpy": 10425,
+      "curr_jpy": 10211,
+      "usdjpy": 161.98
     }
   },
   "fund": {
@@ -2811,6 +2811,12 @@
       "date": "2026-07-12",
       "total_jpy": 32957844,
       "usdjpy": 161.67,
+      "cash_flow_jpy": 0
+    },
+    {
+      "date": "2026-07-13",
+      "total_jpy": 33003871,
+      "usdjpy": 161.98,
       "cash_flow_jpy": 0
     }
   ]
