@@ -2,3 +2,5 @@ feedparser>=6.0
 matplotlib>=3.7
 matplotlib-fontja>=1.0
 requests>=2.31
+yfinance>=0.2.50
+deep-translator>=1.11

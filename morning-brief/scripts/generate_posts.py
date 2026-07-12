@@ -44,19 +44,13 @@ def template_post(i: int, story: dict, date: dt.date) -> str:
     seed = date.toordinal() + i
     opener = OPENERS[seed % len(OPENERS)]
     closer = CLOSERS[seed % len(CLOSERS)]
-    body = f"「{story['title']}」が複数媒体（{story['n_sources']}媒体）で話題になっています。"
+    where = "海外メディア" if story.get("region") == "海外" else "複数媒体"
+    body = f"「{story['title']}」が{where}（{story['n_sources']}媒体）で話題になっています。"
     return f"{opener}{body}\n{_risk_line(story['title'])}{closer}\n{_tags(story['title'])}"
 
 def evergreen_post(idx: int, title: str, body: str) -> str:
     flat = body.replace("\n", "")
     return f"今日の投資の原則：“{title}”。\n{flat}\n自分もこれを守って、今日も淡々と継続します。\n#インデックス投資 #投資"
-
-def summary_post(stories: list | None, date: dt.date) -> str:
-    if not stories:
-        return "本日は休場・話題ニュースの取得なし。こういう日は何もしないのが正解。積立だけ自動で続きます。\n#インデックス投資 #投資"
-    lines = [f"{i}. {s['title']}" for i, s in enumerate(stories[:3], 1)]
-    return ("今朝の話題TOP3。\n" + "\n".join(lines) +
-            "\nどれも先は読めない。だから自分は指数で淡々と。\n#米国株 #投資")
 
 def maybe_llm_upgrade(posts: list[str], stories) -> list[str]:
     """ANTHROPIC_API_KEYがあればClaudeで文面を自然化（無ければそのまま）。"""
