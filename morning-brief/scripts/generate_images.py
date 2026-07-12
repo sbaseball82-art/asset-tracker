@@ -208,7 +208,8 @@ def _block(ax, cy: int, label: str, lines: list[str], fs: float,
     for i, ln in enumerate(lines):
         t = ax.text(84, cy + pad_top + 12 + i * line_h, ln, color=INK,
                     fontsize=17.5 * fs, va="center")
-        t.set_gid(f"maxx:{W - 56 - 16}")   # パネル右端-余白 を超えたら検証NG
+        # パネル右端超過と、フッター線(H-78)への食い込みを検証対象にする
+        t.set_gid(f"maxx:{W - 56 - 16},ybot:{H - 92}")
     return cy + h + 14
 
 
@@ -235,12 +236,17 @@ def validate_card(fig) -> list[str]:
             if not t.get_text().strip():
                 continue
             bb = t.get_window_extent(renderer)
-            limit_x = fw + 2
+            limit_x, limit_ybot = fw + 2, -2   # y は matplotlib座標(下が0)
             gid = t.get_gid() or ""
-            if gid.startswith("maxx:"):
-                limit_x = float(gid.split(":")[1]) + 2
-            if bb.x0 < -2 or bb.y0 < -2 or bb.x1 > limit_x or bb.y1 > fh + 2:
-                bad.append(f"はみ出し: '{t.get_text()[:20]}…' x1={bb.x1:.0f} 上限={limit_x:.0f}")
+            for part in gid.split(","):
+                if part.startswith("maxx:"):
+                    limit_x = float(part.split(":")[1]) + 2
+                elif part.startswith("ybot:"):
+                    # キャンバス上からの px 指定 → 下端がこれより下(=y0が小さい)ならNG
+                    limit_ybot = fh - float(part.split(":")[1]) - 2
+            if (bb.x0 < -2 or bb.y0 < limit_ybot or bb.x1 > limit_x
+                    or bb.y1 > fh + 2):
+                bad.append(f"はみ出し: '{t.get_text()[:20]}…' x1={bb.x1:.0f}/{limit_x:.0f} y0={bb.y0:.0f}/{limit_ybot:.0f}")
     return bad
 
 
@@ -295,11 +301,13 @@ def news_card(rank: int, total: int, story: dict, date_str: str, out: str,
         # ビジュアル（ニュース内容ベースの優先順位）:
         #   ①関連銘柄の実チャート → ②見出しの数字を可視化 → ③トピック概念図
         # 「何媒体が報じたか」のようなメタ情報はグラフ・表にしない。
-        chart_rect = (72, cy, W - 144, 360)
+        # 見出しが3行の日は下のブロックが収まるようチャートを低くする。
+        chart_h = 368 if len(title_lines) <= 2 else 312
+        chart_rect = (72, cy, W - 144, chart_h)
         if not draw_price_chart(fig, chart_rect, W, H, market, ticker, tk_label):
             if not draw_number_panel(fig, chart_rect, W, H, story["title"]):
                 draw_topic_diagram(fig, chart_rect, W, H, ex.get("id", "default"))
-        cy += 360 + 24
+        cy += chart_h + 24
 
         # 統計タイル（関連銘柄・S&P500・ドル円の前日比。
         # マーケットデータが無い分は「ニュース内容」由来のタイルで補完）
