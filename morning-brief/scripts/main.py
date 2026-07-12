@@ -10,10 +10,13 @@ import os, sys, json, argparse, datetime as dt
 
 sys.path.insert(0, os.path.dirname(__file__))
 from fetch_news import fetch_top_stories                     # noqa: E402
-from generate_images import (news_card, evergreen_card, summary_card,
+from generate_images import (news_card, evergreen_card,
                              STANCES, EVERGREEN)             # noqa: E402
-from generate_posts import (template_post, evergreen_post, summary_post,
+from market_charts import fetch_market_data                  # noqa: E402
+from generate_posts import (template_post, evergreen_post,
                             maybe_llm_upgrade)               # noqa: E402
+
+N_CARDS = 5
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_ROOT = os.path.join(ROOT, "output")
@@ -49,33 +52,35 @@ def main() -> int:
     latest = os.path.join(OUT_ROOT, "latest")
     os.makedirs(out_dir, exist_ok=True)
     os.makedirs(latest, exist_ok=True)
+    # 同日の再実行や旧仕様の残骸（5_summary.png等）が混ざらないよう先に空にする
+    for f in os.listdir(out_dir):
+        os.remove(os.path.join(out_dir, f))
 
-    stories = fetch_top_stories(4, args.local)   # 1〜4枚目用にTOP4
+    stories = fetch_top_stories(N_CARDS, args.local)   # 全カード＝ニュース（まとめ無し）
     if stories:
-        print(f"[ok] {len(stories)}件の話題ニュースを取得")
+        intl = sum(1 for s in stories if s.get("region") == "海外")
+        print(f"[ok] {len(stories)}件の話題ニュースを取得（海外{intl}・国内{len(stories)-intl}）")
     else:
         print("[warn] ニュース取得に失敗 → 原則カードへフォールバック")
+
+    market = fetch_market_data()   # チャート・統計タイル用（失敗時は{}→話題度バーで代替）
 
     posts: list[str] = []
     seed = today.toordinal()
 
-    # 1〜4枚目：ニュース深掘り（足りない分は原則カード）
-    for i in range(4):
+    # 1〜5枚目：すべてニュース深掘り（足りない分は原則カード）
+    for i in range(N_CARDS):
         png = os.path.join(out_dir, f"{i+1}_news.png")
         stance = STANCES[(seed + i) % len(STANCES)]
         if stories and i < len(stories):
-            news_card(i + 1, stories[i], date_str, png, stance)
+            news_card(i + 1, N_CARDS, stories[i], date_str, png, stance,
+                      market, stories)
             posts.append(template_post(i, stories[i], today))
         else:
             idx = (seed + i) % len(EVERGREEN)
-            evergreen_card(idx, date_str, png, stance, rank=i + 1)
+            evergreen_card(idx, i + 1, N_CARDS, date_str, png, stance, market)
             t = EVERGREEN[idx]
             posts.append(evergreen_post(idx, t[0], t[1]))
-
-    # 5枚目：まとめ
-    summary_card(stories, date_str, os.path.join(out_dir, "5_summary.png"),
-                 STANCES[(seed + 4) % len(STANCES)])
-    posts.append(summary_post(stories, today))
 
     posts = maybe_llm_upgrade(posts, stories)
 
