@@ -74,7 +74,18 @@ def _tokens(title: str) -> set:
                 toks.add(run[i:i+2])
     return toks
 
+# ニュースではないページタイトル（株価情報・掲示板・チャートページ等）の除外パターン
+_JUNK_PATTERNS = ("株価・株式情報", "：株価", ":株価", "掲示板", "株価予想",
+                  "チャート -", "- チャート", "夜間PTS", "PTS含む", "リアルタイム株価")
+
+
+def _is_junk_title(title: str) -> bool:
+    return any(p in title for p in _JUNK_PATTERNS)
+
+
 def _is_market_news(title: str, lang: str = "ja") -> bool:
+    if _is_junk_title(title):
+        return False
     if lang == "en":
         low = title.lower()
         return any(k in low for k in MARKET_HINT_EN)
