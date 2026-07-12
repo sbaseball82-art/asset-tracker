@@ -109,11 +109,13 @@ def build_explainer(title: str) -> dict:
     """見出し → {背景, 影響, 注意, 用語, 数字} の解説ブロック。"""
     # 「原油先物価格」の「物価」のような部分文字列の誤マッチを防ぐ正規化
     match_title = title.replace("先物価格", "先物")
-    best, best_hits = None, 0
+    # 見出し中で最初に出現したキーワードのトピックを採用（主語が先頭に来るため）。
+    best, best_pos = None, 10**9
     for keys, block in TOPICS:
-        hits = sum(1 for k in keys if k in match_title)
-        if hits > best_hits:
-            best, best_hits = block, hits
+        for k in keys:
+            i = match_title.find(k)
+            if 0 <= i < best_pos:
+                best, best_pos = block, i
     block = dict(best or DEFAULT)
     block["数字"] = extract_numbers(title)
     return block

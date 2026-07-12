@@ -48,9 +48,20 @@ DEFAULT_TICKER = "^GSPC"
 
 
 def story_instrument(title: str) -> tuple[str, str]:
+    """見出し中で最初に出現するキーワードのグループを採用する。
+
+    日本語見出しは主語が先頭に来るため、リスト順ではなく出現位置で選ぶ
+    （例:「日経平均が急反発、AI・半導体に見直し買い」→ 半導体ではなく日経平均）。
+    """
+    low = title.lower()
+    best_tk, best_pos = None, 10**9
     for keys, tk in TOPIC_MAP:
-        if any(k.lower() in title.lower() for k in keys):
-            return tk, UNIVERSE[tk]
+        for k in keys:
+            i = low.find(k.lower())
+            if 0 <= i < best_pos:
+                best_tk, best_pos = tk, i
+    if best_tk:
+        return best_tk, UNIVERSE[best_tk]
     return DEFAULT_TICKER, UNIVERSE[DEFAULT_TICKER]
 
 
