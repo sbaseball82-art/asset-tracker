@@ -420,21 +420,6 @@ class EventDetailSheet extends ConsumerWidget {
                 ],
 
                 const SizedBox(height: 20),
-                GlassCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('自分のスタンス',
-                          style: text.labelMedium?.copyWith(
-                              color: AppColors.special,
-                              fontWeight: FontWeight.w800)),
-                      const SizedBox(height: 4),
-                      Text('イベントで売買はしない。結果を眺めて、積立は淡々と継続。',
-                          style: text.bodyMedium),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton(

@@ -1,0 +1,145 @@
+# MORNING BRIEF 設定（深掘り1〜2枚方式）
+# 1日の生成上限。条件を満たす記事が無い日は0枚で正常終了する。
+max_cards: 2
+
+tickers:
+  # 指数・ETF（レイヤ1の監視対象）
+  indices:
+    "^GSPC": "S&P500"
+    "^IXIC": "ナスダック総合"
+    "^DJI":  "NYダウ"
+    "^SOX":  "SOX指数"
+    "^TNX":  "米10年金利"
+    "JPY=X": "ドル円"
+  etfs:
+    VTI:  "VTI(全米株)"
+    QQQ:  "QQQ(ナスダック100)"
+    VYM:  "VYM(高配当)"
+    HDV:  "HDV(高配当)"
+    SCHD: "SCHD(高配当)"
+    SMH:  "SMH(半導体)"
+    XLE:  "XLE(エネルギー)"
+    XLF:  "XLF(金融)"
+    XLU:  "XLU(公益)"
+  stocks:
+    NVDA:  "エヌビディア"
+    MSFT:  "マイクロソフト"
+    AAPL:  "アップル"
+    GOOGL: "アルファベット"
+    AMZN:  "アマゾン"
+    META:  "メタ"
+    TSLA:  "テスラ"
+    AVGO:  "ブロードコム"
+    MU:    "マイクロン"
+    INTC:  "インテル"
+    TSM:   "TSMC"
+    AMD:   "AMD"
+  # ウォッチしたい銘柄を追加する場合はここに（例 ORCL: "オラクル"）
+  watch: {}
+
+anomaly:
+  z_lookback_days: 60     # z-score算出に使う直近営業日数
+  vol_avg_days: 20        # 出来高比の分母（平均日数）
+  min_abs_z: 1.5          # 深掘り候補にする最低 |z|
+  min_vol_ratio: 1.8      # または出来高がこの倍率以上
+  # 指数・金利・為替は日次変動が小さいので z のみで判定する
+
+scoring:
+  weights:
+    z: 0.35          # min(|z|,4)/4
+    volume: 0.25     # min(出来高比,3)/3
+    media: 0.20      # 独立媒体数の正規化 min(n,6)/6
+    sns: 0.10        # Reddit/HN 熱量の正規化
+    holdings: 0.10   # 保有関連度（下の holdings_relevance）
+  dedup_cosine_threshold: 0.6   # 見出しTF-IDFコサイン類似で同一トピック束ね
+  calendar_bonus: 0.10          # 当日が経済カレンダー該当日のとき加点
+  min_score: 0.45               # これ未満は「材料薄」としてスキップ（0枚の日を許容）
+
+gate:
+  min_numbers: 3        # 検証済み数値（出典・取得日時つき）の最低数
+  min_proper_nouns: 1   # 固有名詞（企業名・指数名）の最低数
+
+# 各枠の文字数上限（全角換算）。超過は描画時の自動改行ではなく生成側で短縮する。
+limits:
+  headline: 20        # 自作見出し（1行あたり・最大2行）
+  conclusion: 30      # 一行結論
+  fact_line: 27       # ❶事実 1行あたり × 最大2行
+  fact_lines: 2
+  why_line: 27        # ❷仕組み × 最大3行
+  why_lines: 3
+  sowhat_line: 27     # ❸波及 × 最大3行
+  sowhat_lines: 3
+  counter_line: 27    # ❹反証 × 最大2行
+  counter_lines: 2
+  post: 140           # 投稿1行目
+
+# 保有関連度（VTI/S&P500/QQQ 構成比への寄与度の近似 0..1。
+# 数値は指数ウェイトの概算で、スコアの重み付けにのみ使用し画像には出さない）
+holdings_relevance:
+  "^GSPC": 1.0
+  "^IXIC": 0.9
+  VTI: 1.0
+  QQQ: 0.9
+  NVDA: 1.0
+  MSFT: 0.95
+  AAPL: 0.9
+  GOOGL: 0.8
+  AMZN: 0.8
+  META: 0.7
+  AVGO: 0.65
+  TSLA: 0.6
+  "^SOX": 0.6
+  SMH: 0.6
+  TSM: 0.5
+  AMD: 0.4
+  MU: 0.35
+  INTC: 0.3
+  "^TNX": 0.7
+  "JPY=X": 0.6
+  "^DJI": 0.5
+  VYM: 0.4
+  HDV: 0.4
+  SCHD: 0.4
+  XLE: 0.3
+  XLF: 0.3
+  XLU: 0.25
+
+# 経済指標カレンダー（該当日は優先度加点＋カード素材に使用）
+# 日付は公表スケジュールに基づく（年次更新が必要。毎年12月に翌年分を追記する）
+calendar:
+  fomc:  # FOMC結果公表日（現地2日目）
+    - 2026-01-28
+    - 2026-03-18
+    - 2026-04-29
+    - 2026-06-17
+    - 2026-07-29
+    - 2026-09-16
+    - 2026-10-28
+    - 2026-12-09
+  boj:   # 日銀金融政策決定会合（結果公表日）
+    - 2026-01-23
+    - 2026-03-19
+    - 2026-04-28
+    - 2026-06-16
+    - 2026-07-31
+    - 2026-09-18
+    - 2026-10-30
+    - 2026-12-18
+  nfp_rule: first_friday   # 米雇用統計＝毎月第1金曜
+
+# レイヤ2: 企業IRプレスリリースRSS（必要に応じて追記）
+ir_feeds:
+  NVDA: "https://nvidianews.nvidia.com/rss"
+  MU:   "https://investors.micron.com/rss/news-releases.xml"
+
+# レイヤ2: FRED系列（FRED_API_KEY があるときのみ取得）
+fred_series:
+  DGS10:    "米10年債利回り"
+  CPIAUCSL: "米CPI"
+  UNRATE:   "米失業率"
+
+# レイヤ3: Reddit（キー不要・User-Agent必須）
+reddit_subs: [stocks, investing, wallstreetbets]
+
+output:
+  keep_days: 30   # out/ と logs/ の保存日数

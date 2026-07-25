@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 .DS_Store
 contact.png
+# APIキーは .env 管理（コミット禁止）
+.env
