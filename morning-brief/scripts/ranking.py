@@ -70,12 +70,21 @@ def independent_outlets(headlines: list[dict], threshold: float) -> tuple[int, l
 
 # ── スコアリング ─────────────────────────────────────────
 def score_candidates(candidates: list[dict], buzz: dict, primary: dict,
-                     cfg: dict) -> list[dict]:
-    """レイヤ1の異常検知候補にレイヤ3の話題度・保有関連度を合成して採点する。"""
+                     cfg: dict, tag_bonus: dict[str, float] | None = None) -> list[dict]:
+    """レイヤ1の異常検知候補にレイヤ3の話題度・保有関連度を合成して採点する。
+
+    tag_bonus: 話題タグ -> 学習ボーナス（learner.topic_bonuses の出力）。
+    過去にViewsが伸びた話題タグを優先する（上限は learner 側でクリップ済み）。
+    """
+    from story_builder import SECTOR
+    from themes import tag_for_sector
+
     w = cfg["scoring"]["weights"]
     thr = cfg["scoring"]["dedup_cosine_threshold"]
     rel = cfg.get("holdings_relevance") or {}
     cal_bonus = cfg["scoring"].get("calendar_bonus", 0.0) if primary.get("calendar") else 0.0
+    global_bonus = cfg["scoring"].get("global_bonus", 0.0)
+    tag_bonus = tag_bonus or {}
 
     for c in candidates:
         m = c["metrics"]
@@ -83,6 +92,8 @@ def score_candidates(candidates: list[dict], buzz: dict, primary: dict,
         heads = (buzz.get("headlines") or {}).get(tk, [])
         n_media, reps = independent_outlets(heads, thr)
         sns = (buzz.get("sns") or {}).get(tk, 0.0)
+        langs = {h.get("lang") for h in heads}
+        tag = tag_for_sector(SECTOR.get(tk, "index"))
 
         parts = {
             "z":        w["z"] * min(abs(m["zscore"]), 4.0) / 4.0,
@@ -92,7 +103,12 @@ def score_candidates(candidates: list[dict], buzz: dict, primary: dict,
             "sns":      w["sns"] * sns,
             "holdings": w["holdings"] * float(rel.get(tk, 0.2)),
             "calendar": cal_bonus,
+            # 日英両方の媒体が報じていれば加点（グローバル一致）
+            "global":   global_bonus if {"ja", "en"} <= langs else 0.0,
+            # 過去にViewsが伸びた話題タグへの学習ボーナス
+            "learn":    float(tag_bonus.get(tag, 0.0)),
         }
+        c["topic_tag"] = tag
         c["n_media"] = n_media           # 内部スコア用（画像には表示しない）
         c["headlines"] = reps
         c["sns_heat"] = round(sns, 3)

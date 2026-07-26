@@ -1,6 +1,6 @@
 {
  "date": "2026-07-22",
- "generated_at": "2026-07-26T04:24:52",
+ "generated_at": "2026-07-26T07:40:07",
  "max_cards": 2,
  "adopted": [
   {
@@ -16,10 +16,15 @@
     "media": 0.1333,
     "sns": 0.1,
     "holdings": 0.035,
-    "calendar": 0.0
+    "calendar": 0.0,
+    "global": 0.0,
+    "learn": 0.0
    },
    "n_media": 4,
    "sns_heat": 1.0,
+   "slot": 1,
+   "template_id": "T2",
+   "topic_tag": "semiconductor",
    "numbers": [
     {
      "label": "マイクロン 日次",
@@ -82,10 +87,15 @@
     "media": 0.0667,
     "sns": 0.0,
     "holdings": 0.06,
-    "calendar": 0.0
+    "calendar": 0.0,
+    "global": 0.0,
+    "learn": 0.0
    },
    "n_media": 2,
    "sns_heat": 0.0,
+   "slot": 2,
+   "template_id": "T4",
+   "topic_tag": "semiconductor",
    "numbers": [
     {
      "label": "SMH(半導体) 日次",

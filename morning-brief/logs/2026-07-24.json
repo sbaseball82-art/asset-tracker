@@ -1,16 +1,81 @@
 {
  "date": "2026-07-24",
- "generated_at": "2026-07-26T04:26:52",
+ "generated_at": "2026-07-26T07:43:32",
  "max_cards": 2,
- "adopted": [],
- "skipped": [
+ "adopted": [
   {
    "ticker": "AAPL",
-   "score": 0.4115,
-   "unmet": [
-    "スコア0.41が閾値0.45未満（材料薄）"
+   "name": "アップル",
+   "theme": "ハイテク",
+   "headline": "アップル上昇 +4%",
+   "conclusion": "アップルのz=+1.8σはハイテク見通しの修正を示唆",
+   "score": 0.5115,
+   "score_parts": {
+    "z": 0.16,
+    "volume": 0.0614,
+    "media": 0.1,
+    "sns": 0.1,
+    "holdings": 0.09,
+    "calendar": 0.0,
+    "global": 0.0,
+    "learn": 0.0
+   },
+   "n_media": 3,
+   "sns_heat": 1.0,
+   "slot": 1,
+   "template_id": "T6",
+   "topic_tag": "ai",
+   "numbers": [
+    {
+     "label": "アップル 日次",
+     "value": "+3.5%",
+     "sub": "z=+1.8σ",
+     "source": "yfinance終値",
+     "asof": "2026-07-24"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "0.7倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-07-24"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+34.3%",
+     "sub": "アップル",
+     "source": "yfinance終値",
+     "asof": "2026-07-24"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+0.0%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-07-24"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-4.3%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-07-24"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.69%",
+     "sub": "2026-07-24",
+     "source": "米財務省",
+     "asof": "2026-07-24"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-07-24_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-07-24_1.txt"
    ]
-  },
+  }
+ ],
+ "skipped": [
   {
    "ticker": "SCHD",
    "score": 0.2881,
