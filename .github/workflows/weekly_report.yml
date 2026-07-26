@@ -1,0 +1,53 @@
+name: weekly-report
+
+on:
+  schedule:
+    # 日曜 13:00 UTC (= 22:00 JST)。evergreen(12:00 UTC)の後。
+    - cron: "0 13 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+
+      - name: Generate weekly report
+        run: python -m src.report.weekly
+
+      - name: Commit outputs
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          BRANCH="${GITHUB_REF_NAME}"
+          mkdir -p "$RUNNER_TEMP/gen"
+          cp -r reports data "$RUNNER_TEMP/gen/" 2>/dev/null || true
+
+          for i in 1 2 3 4 5; do
+            git fetch origin "$BRANCH"
+            git reset --hard
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+            cp -r "$RUNNER_TEMP/gen/reports/." reports/ 2>/dev/null || true
+            cp -r "$RUNNER_TEMP/gen/data/."    data/    2>/dev/null || true
+            git add reports data
+            if git diff --cached --quiet; then
+              echo "変更なし(コミットをスキップ)"; exit 0
+            fi
+            git commit -m "weekly-report: $(date -u +%Y-%m-%d)"
+            if git push origin "$BRANCH"; then exit 0; fi
+            echo "::warning::push拒否 (試行 $i)。5秒後に再試行"; sleep 5
+          done
+          echo "::error::5回試行してもpushできませんでした"; exit 1

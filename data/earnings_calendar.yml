@@ -1,0 +1,59 @@
+# =============================================================
+# 決算・マクロイベントの日程（機能B）
+# -------------------------------------------------------------
+# 既存の「マイ決算カレンダー」アプリ(my_earnings_calendar)の
+# イベントデータを共通ソース化したもの。
+# FINNHUB_API_KEY があれば src/earnings/fetch_calendar.py が
+# watchlist銘柄の日程を自動追記する（無ければ手動でここに書く）。
+#
+# announce_jst: 発表の日本時間（T-60分テンプレの起点）。
+#   米引け後発表は概ね翌朝 5:00-6:30 JST（夏時間）。
+# date: 米国現地の発表日（出力ディレクトリ名に使う）
+# =============================================================
+events:
+  - date: "2026-07-28"
+    ticker: MSFT
+    type: earnings
+    announce_jst: "2026-07-29 05:05"
+    session: 引け後
+  - date: "2026-07-29"
+    ticker: META
+    type: earnings
+    announce_jst: "2026-07-30 05:05"
+    session: 引け後
+  - date: "2026-07-29"
+    ticker: SKHY
+    type: earnings
+    announce_jst: "2026-07-30 05:30"
+    session: 引け後
+    note: 米上場後の初決算（Q2）
+  - date: "2026-07-29"
+    ticker: FOMC
+    type: macro
+    announce_jst: "2026-07-30 03:00"
+    session: 結果発表
+  - date: "2026-07-30"
+    ticker: AAPL
+    type: earnings
+    announce_jst: "2026-07-31 05:30"
+    session: 引け後
+  - date: "2026-07-30"
+    ticker: AMZN
+    type: earnings
+    announce_jst: "2026-07-31 05:05"
+    session: 引け後
+  - date: "2026-07-31"
+    ticker: PCE
+    type: macro
+    announce_jst: "2026-07-31 21:30"
+    session: 6月分
+  - date: "2026-08-07"
+    ticker: NFP
+    type: macro
+    announce_jst: "2026-08-07 21:30"
+    session: 7月分
+  - date: "2026-08-12"
+    ticker: CPI
+    type: macro
+    announce_jst: "2026-08-12 21:30"
+    session: 7月分

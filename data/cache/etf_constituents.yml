@@ -1,0 +1,33 @@
+# =============================================================
+# ETF構成銘柄キャッシュ（上位10銘柄）
+# -------------------------------------------------------------
+# 本来は Vanguard / BlackRock / Invesco / ICE の公開データから
+# src/evergreen/etf_data.py --refresh で更新する。
+# 取得失敗時はこのキャッシュを使い、画像に stale: true を表記する。
+# =============================================================
+as_of: "2026-07"
+source: 各運用会社の公表データより概算（上位10銘柄）
+stale: true   # 自動取得が成功したら false に更新される
+
+etfs:
+  VYM:
+    name: バンガード 米国高配当株式ETF
+    top10: [AVGO, JPM, XOM, HD, PG, JNJ, ABBV, WMT, BAC, KO]
+  HDV:
+    name: iシェアーズ コア米国高配当株ETF
+    top10: [XOM, JNJ, ABBV, CVX, PG, KO, MO, CSCO, VZ, IBM]
+  SCHD:
+    name: シュワブ 米国配当株式ETF（SBI S 米国高配当の投資先）
+    top10: [ABBV, HD, CVX, KO, CSCO, VZ, AMGN, PFE, TXN, LMT]
+  VTI:
+    name: バンガード トータルストックマーケットETF
+    top10: [NVDA, MSFT, AAPL, AMZN, GOOGL, META, AVGO, "BRK.B", TSLA, LLY]
+  VOO:
+    name: バンガード S&P500 ETF
+    top10: [NVDA, MSFT, AAPL, AMZN, GOOGL, META, AVGO, "BRK.B", TSLA, LLY]
+  QQQ:
+    name: インベスコ QQQ（ナスダック100）
+    top10: [NVDA, MSFT, AAPL, AMZN, AVGO, META, GOOGL, TSLA, NFLX, COST]
+  FANGPLUS:
+    name: NYSE FANG+指数（iFreeNEXT FANG+の連動対象・等ウェイト）
+    top10: [META, AAPL, AMZN, NFLX, NVDA, GOOGL, MSFT, AVGO, CRWD, NOW]
