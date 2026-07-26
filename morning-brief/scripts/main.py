@@ -1,107 +1,182 @@
 # -*- coding: utf-8 -*-
-"""毎朝の本体：ニュース取得→5枚の深掘りカード生成→投稿文生成→保存。
+"""MORNING BRIEF 本体：1日1〜2枚の深掘りカードを生成する。
+
+パイプライン:
+  レイヤ1(市場の実際の動き) → 異常検知 → レイヤ3(話題度)・レイヤ2(一次情報)
+  → スコアリング＋重複排除 → 生成ゲート → 描画＋投稿文 → ログ
+
+- 条件を満たす記事が0件の日は「本日は該当なし」で正常終了（空の枠は埋めない）
+- 採用理由・スコア内訳・未充足項目は logs/YYYY-MM-DD.json に残す
 
 使い方:
-  python scripts/main.py                          # 本番（RSSライブ取得）
-  python scripts/main.py --local fixtures/*.xml   # ローカルRSSでテスト
+  python scripts/main.py                       # 本番（ライブ取得）
+  python scripts/main.py --date 2026-07-22     # 過去日のドライラン再現
+  python scripts/main.py --date 2026-07-22 --fixtures   # オフライン合成データ
 """
 from __future__ import annotations
-import os, sys, json, argparse, datetime as dt
+import argparse
+import datetime as dt
+import json
+import os
+import shutil
+import sys
 
-sys.path.insert(0, os.path.dirname(__file__))
-from fetch_news import fetch_top_stories                     # noqa: E402
-from generate_images import (news_card, evergreen_card,
-                             STANCES, EVERGREEN)             # noqa: E402
-from market_charts import fetch_market_data                  # noqa: E402
-from generate_posts import (template_post, evergreen_post,
-                            maybe_llm_upgrade)               # noqa: E402
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-N_CARDS = 5
+from config_loader import load_config, ROOT                     # noqa: E402
+from sources import market as l1                                # noqa: E402
+from sources import primary as l2                               # noqa: E402
+from sources import buzz as l3                                  # noqa: E402
+from sources import fixtures as fx                              # noqa: E402
+import ranking                                                  # noqa: E402
+import gate                                                     # noqa: E402
+from story_builder import build_story                           # noqa: E402
+from render import render_card                                  # noqa: E402
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT_ROOT = os.path.join(ROOT, "output")
-KEEP_DAYS = 14
+OUT_DIR = os.path.join(ROOT, "out")
+LOG_DIR = os.path.join(ROOT, "logs")
 
 
-def prune_old(today: dt.date):
-    if not os.path.isdir(OUT_ROOT):
-        return
-    for name in os.listdir(OUT_ROOT):
-        p = os.path.join(OUT_ROOT, name)
-        if not os.path.isdir(p) or name == "latest":
+def prune_old(asof: dt.date, keep_days: int):
+    for d in (OUT_DIR, LOG_DIR):
+        if not os.path.isdir(d):
             continue
-        try:
-            d = dt.date.fromisoformat(name)
-        except ValueError:
-            continue
-        if (today - d).days > KEEP_DAYS:
-            for f in os.listdir(p):
-                os.remove(os.path.join(p, f))
-            os.rmdir(p)
+        for name in os.listdir(d):
+            stem = name.split("_")[0].split(".")[0]
+            try:
+                fdate = dt.date.fromisoformat(stem)
+            except ValueError:
+                continue
+            if (asof - fdate).days > keep_days:
+                os.remove(os.path.join(d, name))
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--local", nargs="*", default=None)
-    ap.add_argument("--date", default=None)
+    ap.add_argument("--date", default=None, help="YYYY-MM-DD（過去日のドライラン）")
+    ap.add_argument("--fixtures", action="store_true",
+                    help="外部通信なしの合成データで実行（開発・受け入れテスト用）")
     args = ap.parse_args()
 
-    today = dt.date.fromisoformat(args.date) if args.date else dt.date.today()
-    date_str = today.strftime("%Y/%m/%d")
-    out_dir = os.path.join(OUT_ROOT, today.isoformat())
-    latest = os.path.join(OUT_ROOT, "latest")
-    os.makedirs(out_dir, exist_ok=True)
+    cfg = load_config()
+    asof = dt.date.fromisoformat(args.date) if args.date else dt.date.today()
+    date_str = asof.strftime("%Y/%m/%d")
+    os.makedirs(OUT_DIR, exist_ok=True)
+    os.makedirs(LOG_DIR, exist_ok=True)
+    latest = os.path.join(OUT_DIR, "latest")
     os.makedirs(latest, exist_ok=True)
-    # 同日の再実行や旧仕様の残骸（5_summary.png等）が混ざらないよう先に空にする
-    for f in os.listdir(out_dir):
-        os.remove(os.path.join(out_dir, f))
 
-    stories = fetch_top_stories(N_CARDS, args.local)   # 全カード＝ニュース（まとめ無し）
-    if stories:
-        intl = sum(1 for s in stories if s.get("region") == "海外")
-        print(f"[ok] {len(stories)}件の話題ニュースを取得（海外{intl}・国内{len(stories)-intl}）")
+    # ── レイヤ1：市場の実際の動き（最優先シグナル）──
+    mkt = fx.fixture_market(asof) if args.fixtures else l1.fetch_market(cfg, asof)
+    if not mkt:
+        print("[error] マーケットデータ全滅。画像は生成せず終了（空の枠は埋めない）")
+        _write_log(asof, cfg, [], [], note="market_unavailable")
+        return 0
+    market_metrics = {}
+    for tk, s in mkt.items():
+        m = l1.metrics(s, cfg)
+        if m:
+            market_metrics[tk] = m
+
+    # 「最後に市場が動いた日」を基準日にする。
+    # - cronが数時間遅延して日付をまたいでも、直近の取引日のカードを正しく作る
+    # - 週末・休場日は最終バーが変わらないため、同一内容の再生成（差分なし）になる
+    ref = mkt.get("^GSPC") or max(mkt.values(), key=lambda s: s["dates"][-1])
+    market_day = ref["dates"][-1]
+    if not args.date:
+        asof = dt.date.fromisoformat(market_day)
+        date_str = asof.strftime("%Y/%m/%d")
+        print(f"[ok] 基準日（最終取引日）: {market_day}")
+
+    candidates = l1.find_anomalies(mkt, cfg, require_asof=market_day)
+    print(f"[ok] 異常検知: {len(candidates)} 銘柄 "
+          f"({', '.join(c['ticker'] for c in candidates[:8])})")
+
+    if not candidates:
+        print(f"[ok] {asof} 本日は該当なし（実際に動いた銘柄がない）。画像0枚で正常終了")
+        _write_log(asof, cfg, [], [], note="no_anomaly")
+        prune_old(asof, cfg["output"]["keep_days"])
+        return 0
+
+    # ── レイヤ3：話題性 / レイヤ2：一次情報 ──
+    focus = [c["ticker"] for c in candidates[:8]]
+    buzz = fx.fixture_buzz(asof) if args.fixtures else l3.fetch_buzz(focus)
+    primary = fx.fixture_primary(asof) if args.fixtures else l2.fetch_primary(cfg, asof, focus)
+
+    # ── スコアリング＋同一トピック束ね ──
+    ranked = ranking.score_candidates(candidates, buzz, primary, cfg)
+
+    # ── 生成ゲート → 描画（上限 MAX_CARDS 枚）──
+    max_cards = int(cfg["max_cards"])
+    adopted, skipped = [], []
+    n = 0
+    min_score = cfg["scoring"].get("min_score", 0.0)
+    for cand in ranked:
+        if n >= max_cards:
+            break
+        if cand["score"] < min_score:
+            skipped.append({"ticker": cand["ticker"], "score": cand["score"],
+                            "unmet": [f"スコア{cand['score']:.2f}が閾値{min_score}未満（材料薄）"]})
+            continue
+        story = build_story(cand, market_metrics, primary, cfg, asof)
+        unmet = gate.check(story, cfg)
+        if unmet:
+            skipped.append({"ticker": cand["ticker"], "score": cand["score"],
+                            "unmet": unmet})
+            print(f"[skip] {cand['ticker']}: 未充足 {unmet}")
+            continue
+        png = os.path.join(OUT_DIR, f"{asof.isoformat()}_{n + 1}.png")
+        if not render_card(story, mkt.get(cand["ticker"]), date_str, png, cfg):
+            skipped.append({"ticker": cand["ticker"], "score": cand["score"],
+                            "unmet": ["描画検証NG（短縮しても収まらず）"]})
+            continue
+        txt = os.path.join(OUT_DIR, f"{asof.isoformat()}_{n + 1}.txt")
+        with open(txt, "w", encoding="utf-8") as f:
+            f.write(story["post"] + "\n")
+        adopted.append({**{k: story[k] for k in
+                           ("ticker", "name", "theme", "headline", "conclusion",
+                            "score", "score_parts", "n_media", "sns_heat")},
+                        "numbers": story["numbers"], "files": [png, txt]})
+        n += 1
+        print(f"[ok] カード{n}: {story['headline']} ({cand['ticker']})")
+
+    _write_log(asof, cfg, adopted, skipped)
+
+    if not adopted:
+        print(f"[ok] {asof} 本日は該当なし（ゲート通過0件）。画像0枚で正常終了")
+        # 前日分が latest/ に残って「今日の分」と紛らわしくならないよう空にする
+        for f in os.listdir(latest):
+            os.remove(os.path.join(latest, f))
+        with open(os.path.join(latest, "NOTE.txt"), "w", encoding="utf-8") as f:
+            f.write(f"{asof} 本日は該当なし（生成ゲート通過0件）。空の枠は埋めない方針です。\n")
     else:
-        print("[warn] ニュース取得に失敗 → 原則カードへフォールバック")
+        for f in os.listdir(latest):
+            os.remove(os.path.join(latest, f))
+        for a in adopted:
+            for p in a["files"]:
+                shutil.copy(p, os.path.join(latest, os.path.basename(p)))
+        print(f"[ok] 生成完了: {len(adopted)}枚 → {OUT_DIR}（latest/ にも複製）")
 
-    market = fetch_market_data()   # チャート・統計タイル用（失敗時は{}→話題度バーで代替）
-
-    posts: list[str] = []
-    seed = today.toordinal()
-
-    # 1〜5枚目：すべてニュース深掘り（足りない分は原則カード）
-    for i in range(N_CARDS):
-        png = os.path.join(out_dir, f"{i+1}_news.png")
-        stance = STANCES[(seed + i) % len(STANCES)]
-        if stories and i < len(stories):
-            news_card(i + 1, N_CARDS, stories[i], date_str, png, stance, market)
-            posts.append(template_post(i, stories[i], today))
-        else:
-            idx = (seed + i) % len(EVERGREEN)
-            evergreen_card(idx, i + 1, N_CARDS, date_str, png, stance, market)
-            t = EVERGREEN[idx]
-            posts.append(evergreen_post(idx, t[0], t[1]))
-
-    posts = maybe_llm_upgrade(posts, stories)
-
-    md = [f"# {date_str} の投稿文（画像1〜5に対応）\n"]
-    for i, p in enumerate(posts, 1):
-        md.append(f"## 画像{i}\n```\n{p}\n```\n")
-    with open(os.path.join(out_dir, "posts.md"), "w", encoding="utf-8") as f:
-        f.write("\n".join(md))
-
-    import shutil
-    for f in os.listdir(latest):
-        os.remove(os.path.join(latest, f))
-    for f in os.listdir(out_dir):
-        shutil.copy(os.path.join(out_dir, f), os.path.join(latest, f))
-
-    if stories:
-        with open(os.path.join(out_dir, "stories.json"), "w", encoding="utf-8") as f:
-            json.dump(stories, f, ensure_ascii=False, indent=1)
-
-    prune_old(today)
-    print(f"[ok] 生成完了: {out_dir}（latest/ にも複製）")
+    prune_old(asof, cfg["output"]["keep_days"])
     return 0
+
+
+def _write_log(asof: dt.date, cfg: dict, adopted: list, skipped: list,
+               note: str | None = None):
+    """採用理由・スコア内訳・未充足項目を logs/YYYY-MM-DD.json に残す。"""
+    log = {
+        "date": asof.isoformat(),
+        "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
+        "max_cards": cfg.get("max_cards"),
+        "adopted": adopted,
+        "skipped": skipped,
+    }
+    if note:
+        log["note"] = note
+    path = os.path.join(LOG_DIR, f"{asof.isoformat()}.json")
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(log, f, ensure_ascii=False, indent=1, default=str)
+    print(f"[ok] ログ: {path}")
 
 
 if __name__ == "__main__":

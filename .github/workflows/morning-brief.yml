@@ -39,18 +39,20 @@ jobs:
       - name: Install dependencies
         run: pip install -r morning-brief/requirements.txt
 
-      - name: Generate 5 images + posts
+      - name: Generate deep-dive cards (max 2, may be 0 on thin days)
         env:
-          # 任意：設定すると投稿文をClaudeで自然化（未設定でもテンプレ文で動く）
+          # すべて任意。未設定でも動く（該当取得元だけスキップ）
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
         run: python morning-brief/scripts/main.py
 
       - name: Upload artifact (today's set)
         uses: actions/upload-artifact@v4
         with:
           name: morning-brief-latest
-          path: morning-brief/output/latest/
-          if-no-files-found: error
+          path: morning-brief/out/latest/
+          if-no-files-found: ignore   # 材料薄の日は0枚が正常
 
       - name: Commit outputs
         run: |
@@ -60,7 +62,8 @@ jobs:
           BRANCH="${GITHUB_REF_NAME}"
 
           # このrunの生成物を退避(このrunの成果が常に最新なので他コミットに勝たせる)
-          cp -r morning-brief/output "$RUNNER_TEMP/mb-output-new"
+          cp -r morning-brief/out "$RUNNER_TEMP/mb-out-new"
+          cp -r morning-brief/logs "$RUNNER_TEMP/mb-logs-new"
 
           # rebase/merge を使わず「最新の origin を取り直して生成物を重ねる」方式
           # (daily_report.yml と同一の実績パターン)。画像(バイナリ)は rebase/merge で
@@ -68,12 +71,14 @@ jobs:
           for i in 1 2 3 4 5; do
             git fetch origin "$BRANCH"
             git reset --hard
-            git clean -fd morning-brief/output/
+            git clean -fd morning-brief/out/ morning-brief/logs/
             git checkout -B "$BRANCH" "origin/$BRANCH"
 
-            cp -r "$RUNNER_TEMP/mb-output-new/." morning-brief/output/
+            mkdir -p morning-brief/out morning-brief/logs
+            cp -r "$RUNNER_TEMP/mb-out-new/." morning-brief/out/
+            cp -r "$RUNNER_TEMP/mb-logs-new/." morning-brief/logs/
 
-            git add -A morning-brief/output/
+            git add -A morning-brief/out/ morning-brief/logs/
             if git diff --cached --quiet; then
               echo "変更なし。コミットしません。"
               exit 0
