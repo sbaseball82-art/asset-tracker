@@ -1,0 +1,92 @@
+name: evergreen-content
+
+on:
+  schedule:
+    # 日曜 12:00 UTC (= 21:00 JST)。GitHubのcronは大幅遅延の実績があるため
+    # 予備を1本置く（generate.py側に同日二重生成ガードあり）。
+    - cron: "0 12 * * 0"
+    - cron: "0 14 * * 0"
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: "トピックID指定（例 ev003。空なら自動選択）"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Run tests first
+        run: pip install pytest && python -m pytest tests/ -q
+
+      - name: Sync holdings
+        run: python scripts/sync_holdings_yml.py
+
+      - name: Generate evergreen content
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          TOPIC="${{ github.event.inputs.topic }}"
+          if [ -n "$TOPIC" ]; then
+            python -m src.evergreen.generate --topic "$TOPIC"
+          else
+            python -m src.evergreen.generate
+          fi
+
+      - name: Propose new topics (needs ANTHROPIC_API_KEY)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python -m src.evergreen.propose_topics
+        continue-on-error: true
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: evergreen-content
+          path: output/evergreen/
+          retention-days: 30
+
+      - name: Commit outputs
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          BRANCH="${GITHUB_REF_NAME}"
+
+          # 生成物を退避 → 最新originに重ねてpush（バイナリはrebase不能のため
+          # fetch + checkout -B 方式。fetch.yml と同一の実績パターン）
+          mkdir -p "$RUNNER_TEMP/gen"
+          cp -r output logs data "$RUNNER_TEMP/gen/" 2>/dev/null || true
+
+          for i in 1 2 3 4 5; do
+            git fetch origin "$BRANCH"
+            git reset --hard
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+            cp -r "$RUNNER_TEMP/gen/output/." output/ 2>/dev/null || true
+            cp -r "$RUNNER_TEMP/gen/logs/."   logs/   2>/dev/null || true
+            cp -r "$RUNNER_TEMP/gen/data/."   data/   2>/dev/null || true
+            git add output logs data
+            if git diff --cached --quiet; then
+              echo "変更なし(コミットをスキップ)"; exit 0
+            fi
+            git commit -m "evergreen: $(date -u +%Y-%m-%d)"
+            if git push origin "$BRANCH"; then exit 0; fi
+            echo "::warning::push拒否 (試行 $i)。5秒後に再試行"; sleep 5
+          done
+          echo "::error::5回試行してもpushできませんでした"; exit 1

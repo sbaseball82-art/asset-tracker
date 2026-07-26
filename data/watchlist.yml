@@ -1,0 +1,126 @@
+# =============================================================
+# 決算実況の対象銘柄（機能B）
+# -------------------------------------------------------------
+# 全銘柄は追わない。以下に限定する:
+#   1. 保有比率で効く銘柄: VTI / QQQ / FANG+ の構成上位10社
+#   2. 過去に投稿した銘柄: テスラ、SKハイニックス、マイクロン、
+#      キオクシア、WDC
+#   3. マクロイベント: 雇用統計、CPI、FOMC
+#
+# sp500_weight / qqq_weight は公表ベースの概算(%)。指数寄与の計算に使う。
+# fund_weights は各保有ファンド内のウェイト概算(%)。実効保有比率の計算に使う。
+# 数値の as_of を必ず記録し、古くなったら更新する。
+# =============================================================
+as_of: "2026-07"
+weights_source: 各指数・運用会社の公表データより概算
+
+tickers:
+  MSFT:
+    name_ja: マイクロソフト
+    priority: high
+    sp500_weight: 6.0
+    qqq_weight: 8.0
+    fund_weights: {VTI: 5.2, "89311199": 6.1, QQQ: 8.0, "89311265": 8.0, "29313233": 8.0, "04311181": 10.0}
+    focus: Azure成長率とAI投資のROI
+  NVDA:
+    name_ja: エヌビディア
+    priority: high
+    sp500_weight: 7.0
+    qqq_weight: 9.3
+    fund_weights: {VTI: 6.0, "89311199": 7.0, QQQ: 9.3, "89311265": 9.3, "29313233": 9.3, "04311181": 10.0}
+    focus: データセンター売上と次世代チップの需給
+  AAPL:
+    name_ja: アップル
+    priority: high
+    sp500_weight: 5.9
+    qqq_weight: 7.9
+    fund_weights: {VTI: 5.0, "89311199": 5.9, QQQ: 7.9, "89311265": 7.9, "29313233": 7.9, "04311181": 10.0}
+    focus: iPhone売上とサービス部門の利益率
+  AMZN:
+    name_ja: アマゾン
+    priority: high
+    sp500_weight: 4.0
+    qqq_weight: 5.4
+    fund_weights: {VTI: 3.4, "89311199": 4.0, QQQ: 5.4, "89311265": 5.4, "29313233": 5.4, "04311181": 10.0}
+    focus: AWS成長率と小売マージン
+  GOOGL:
+    name_ja: アルファベット
+    priority: high
+    sp500_weight: 3.8
+    qqq_weight: 4.8
+    fund_weights: {VTI: 3.2, "89311199": 3.8, QQQ: 4.8, "89311265": 4.8, "29313233": 4.8, "04311181": 10.0}
+    focus: 検索広告とクラウドのAI収益化
+  META:
+    name_ja: メタ
+    priority: high
+    sp500_weight: 2.8
+    qqq_weight: 4.0
+    fund_weights: {VTI: 2.4, "89311199": 2.8, QQQ: 4.0, "89311265": 4.0, "29313233": 4.0, "04311181": 10.0}
+    focus: 広告単価とAI設備投資
+  AVGO:
+    name_ja: ブロードコム
+    priority: high
+    sp500_weight: 2.3
+    qqq_weight: 4.5
+    fund_weights: {VTI: 2.0, "89311199": 2.3, QQQ: 4.5, "89311265": 4.5, "29313233": 4.5, "04311181": 10.0, VYM: 1.5}
+    focus: カスタムAIチップ受注とVMwareの収益貢献
+  TSLA:
+    name_ja: テスラ
+    priority: high
+    sp500_weight: 1.8
+    qqq_weight: 2.7
+    fund_weights: {VTI: 1.5, "89311199": 1.8, QQQ: 2.7, "89311265": 2.7, "29313233": 2.7}
+    focus: 粗利率・エナジー事業・ロボタクシー進捗
+  NFLX:
+    name_ja: ネットフリックス
+    priority: mid
+    sp500_weight: 1.1
+    qqq_weight: 2.0
+    fund_weights: {VTI: 0.9, "89311199": 1.1, QQQ: 2.0, "89311265": 2.0, "29313233": 2.0, "04311181": 10.0}
+    focus: 会員純増と広告Tierの収益化
+  MU:
+    name_ja: マイクロン
+    priority: high
+    sp500_weight: 0.7
+    qqq_weight: 2.1
+    fund_weights: {VTI: 0.6, "89311199": 0.7, QQQ: 2.1, "89311265": 2.1, "29313233": 2.1, DRAM: 25.0}
+    focus: HBM出荷とDRAM価格サイクル
+  SKHY:
+    name_ja: SKハイニックス(米ADR)
+    priority: high
+    sp500_weight: 0
+    qqq_weight: 0
+    fund_weights: {DRAM: 25.0}
+    focus: HBMシェアとNAND市況
+  WDC:
+    name_ja: ウエスタンデジタル
+    priority: mid
+    sp500_weight: 0.1
+    qqq_weight: 0
+    fund_weights: {VTI: 0.1, DRAM: 25.0}
+    focus: HDD需要とNAND分社後の構造
+  "285A.T":
+    name_ja: キオクシアHD
+    priority: mid
+    sp500_weight: 0
+    qqq_weight: 0
+    fund_weights: {DRAM: 25.0}
+    focus: NAND価格と設備投資計画
+
+macro_events:
+  NFP:
+    name_ja: 米雇用統計
+    priority: high
+    focus: 非農業部門雇用者数・失業率・平均時給
+  CPI:
+    name_ja: 米CPI
+    priority: high
+    focus: コア前月比と住居費の減速度合い
+  FOMC:
+    name_ja: FOMC
+    priority: high
+    focus: 政策金利とドットチャート・会見のトーン
+  PCE:
+    name_ja: 米PCE
+    priority: mid
+    focus: FRBが最重視するコアPCE前月比

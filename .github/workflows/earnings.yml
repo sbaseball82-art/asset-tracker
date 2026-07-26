@@ -1,0 +1,88 @@
+name: earnings-live-templates
+
+on:
+  schedule:
+    # 平日 毎時（UTC月-金 ≒ JST火-土の決算時間帯をカバー）。
+    # scheduler.py がカレンダーを見て「いま生成すべきタイミング」だけ実行する。
+    - cron: "0 * * * 1-5"
+  workflow_dispatch:
+    inputs:
+      ticker:
+        description: "手動生成: ティッカー（例 MSFT）"
+        required: false
+        default: ""
+      date:
+        description: "手動生成: 米国発表日 YYYY-MM-DD"
+        required: false
+        default: ""
+      phase:
+        description: "手動生成: pre / post / morning"
+        required: false
+        default: "pre"
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies (画像なし・軽量)
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml yfinance requests
+
+      - name: Refresh earnings calendar (needs FINNHUB_API_KEY)
+        env:
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+        run: python -m src.earnings.fetch_calendar
+        continue-on-error: true
+
+      - name: Sync holdings
+        run: python scripts/sync_holdings_yml.py
+
+      - name: Run scheduler / manual generate
+        env:
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          TICKER="${{ github.event.inputs.ticker }}"
+          if [ -n "$TICKER" ]; then
+            python -m src.earnings.generate --ticker "$TICKER" \
+              --date "${{ github.event.inputs.date }}" \
+              --phase "${{ github.event.inputs.phase }}"
+          else
+            python -m src.earnings.scheduler
+          fi
+
+      - name: Commit outputs
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          BRANCH="${GITHUB_REF_NAME}"
+          mkdir -p "$RUNNER_TEMP/gen"
+          cp -r output logs data "$RUNNER_TEMP/gen/" 2>/dev/null || true
+
+          for i in 1 2 3 4 5; do
+            git fetch origin "$BRANCH"
+            git reset --hard
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+            cp -r "$RUNNER_TEMP/gen/output/." output/ 2>/dev/null || true
+            cp -r "$RUNNER_TEMP/gen/logs/."   logs/   2>/dev/null || true
+            cp -r "$RUNNER_TEMP/gen/data/."   data/   2>/dev/null || true
+            git add output logs data
+            if git diff --cached --quiet; then
+              echo "変更なし(コミットをスキップ)"; exit 0
+            fi
+            git commit -m "earnings: $(date -u +%Y-%m-%dT%H:%M)"
+            if git push origin "$BRANCH"; then exit 0; fi
+            echo "::warning::push拒否 (試行 $i)。5秒後に再試行"; sleep 5
+          done
+          echo "::error::5回試行してもpushできませんでした"; exit 1
