@@ -95,11 +95,18 @@ def metrics(series: dict, cfg: dict) -> dict | None:
     }
 
 
-def find_anomalies(market: dict, cfg: dict) -> list[dict]:
-    """z-score・出来高比の閾値を超えた「実際に動いた」銘柄を返す。"""
+def find_anomalies(market: dict, cfg: dict,
+                   require_asof: str | None = None) -> list[dict]:
+    """z-score・出来高比の閾値を超えた「実際に動いた」銘柄を返す。
+
+    require_asof を渡すと、最終バーがその日付でない銘柄（休場・更新遅れの
+    古いデータ）は候補から除外する。週末や祝日に前日分を重複生成しないための安全弁。
+    """
     names = all_tickers(cfg)
     out = []
     for tk, series in market.items():
+        if require_asof and series["dates"][-1] != require_asof:
+            continue
         m = metrics(series, cfg)
         if not m:
             continue

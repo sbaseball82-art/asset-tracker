@@ -78,7 +78,17 @@ def main() -> int:
         if m:
             market_metrics[tk] = m
 
-    candidates = l1.find_anomalies(mkt, cfg)
+    # 「最後に市場が動いた日」を基準日にする。
+    # - cronが数時間遅延して日付をまたいでも、直近の取引日のカードを正しく作る
+    # - 週末・休場日は最終バーが変わらないため、同一内容の再生成（差分なし）になる
+    ref = mkt.get("^GSPC") or max(mkt.values(), key=lambda s: s["dates"][-1])
+    market_day = ref["dates"][-1]
+    if not args.date:
+        asof = dt.date.fromisoformat(market_day)
+        date_str = asof.strftime("%Y/%m/%d")
+        print(f"[ok] 基準日（最終取引日）: {market_day}")
+
+    candidates = l1.find_anomalies(mkt, cfg, require_asof=market_day)
     print(f"[ok] 異常検知: {len(candidates)} 銘柄 "
           f"({', '.join(c['ticker'] for c in candidates[:8])})")
 
@@ -134,6 +144,11 @@ def main() -> int:
 
     if not adopted:
         print(f"[ok] {asof} 本日は該当なし（ゲート通過0件）。画像0枚で正常終了")
+        # 前日分が latest/ に残って「今日の分」と紛らわしくならないよう空にする
+        for f in os.listdir(latest):
+            os.remove(os.path.join(latest, f))
+        with open(os.path.join(latest, "NOTE.txt"), "w", encoding="utf-8") as f:
+            f.write(f"{asof} 本日は該当なし（生成ゲート通過0件）。空の枠は埋めない方針です。\n")
     else:
         for f in os.listdir(latest):
             os.remove(os.path.join(latest, f))
