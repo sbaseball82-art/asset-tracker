@@ -54,6 +54,16 @@ scoring:
   dedup_cosine_threshold: 0.6   # 見出しTF-IDFコサイン類似で同一トピック束ね
   calendar_bonus: 0.10          # 当日が経済カレンダー該当日のとき加点
   min_score: 0.45               # これ未満は「材料薄」としてスキップ（0枚の日を許容）
+  global_bonus: 0.08            # 日英両方の媒体が報じていれば加点（グローバル一致）
+  learn_bonus_cap: 0.2          # 話題タグ学習ボーナスの上限
+
+# フィードバック学習（Views実績 → テンプレ選択・話題タグ加点）
+learning:
+  window_days: 30           # 直近30日の実績のみ使用（過学習防止）
+  epsilon: 0.3              # 探索率（0.3で探索・0.7で活用）
+  epsilon_bootstrap: 0.5    # 全テンプレが min_samples_template 回試されるまでの探索率
+  min_samples_template: 5   # テンプレの初期探索を厚くする閾値
+  min_samples_tag: 5        # これ未満のタグは学習ボーナス0（過学習防止）
 
 gate:
   min_numbers: 3        # 検証済み数値（出典・取得日時つき）の最低数

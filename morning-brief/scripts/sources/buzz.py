@@ -51,6 +51,9 @@ _GN_EN = "https://news.google.com/rss/search?q={q}&hl=en-US&gl=US&ceid=US:en"
 _YF_RSS = "https://feeds.finance.yahoo.com/rss/2.0/headline?s={s}&region=US&lang=en-US"
 
 
+_CJK_RE = re.compile(r"[ぁ-んァ-ヶ一-龠]")
+
+
 def _parse_feed(text: str, source_hint: str) -> list[dict]:
     if not text:
         return []
@@ -65,8 +68,9 @@ def _parse_feed(text: str, source_hint: str) -> list[dict]:
             # Google News の「見出し - 媒体名」から独立媒体名を拾う
             m = re.match(r"^(.*\S)\s+-\s+([^-]{2,45})$", title)
             src = m.group(2).strip() if m else source_hint
-            out.append({"title": (m.group(1) if m else title),
-                        "outlet": src, "url": e.get("link", "")})
+            body = m.group(1) if m else title
+            out.append({"title": body, "outlet": src, "url": e.get("link", ""),
+                        "lang": "ja" if _CJK_RE.search(body) else "en"})
         return out
     except Exception:
         return []

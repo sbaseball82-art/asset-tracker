@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
-"""新レイアウトの描画（1080×1350・ASSET LOGデザイン維持）。
+"""描画基盤：共通部品（キャンバス・ヘッダ・チャート・数字カード・ブロック）と
+ピクセル実測検証、テンプレートへのディスパッチ。
 
-上から: ヘッダ / 自作見出し(≤20字) / 一行結論(≤30字・BLUE) /
-主役チャート(当事者・6ヶ月・イベント日▼) / 数字カード×3(可変ラベル) /
-❶事実 ❷仕組み ❸波及 ❹反証 / 脚注。
+レイアウト本体は templates.py（T1〜T6）にあり、どのテンプレートにも
+同じ story（CardSpec相当の辞書）を流し込める。旧版のスタンス欄・
+同時報道数の表示は廃止したまま。
 
-旧版のスタンス欄・同時報道数の表示は廃止。
 文字あふれは描画後にピクセル実測で検証し、NGなら story_builder.shorten()
 で生成側の文章を短縮して再描画する（フォント縮小や枠外はみ出しに逃げない）。
 """
 from __future__ import annotations
 import datetime as dt
+import re as _re
 import unicodedata
 
 import matplotlib
@@ -32,7 +33,7 @@ _noto = [f.name for f in _fm.fontManager.ttflist if "Noto Sans CJK JP" in f.name
 if _noto:
     plt.rcParams["font.family"] = ["Noto Sans CJK JP"] + list(plt.rcParams["font.family"])
 
-# パレット（仕様指定）
+# パレット（ブランド固定色）
 BG = "#0e1726"; GOLD = "#d8b56a"; BLUE = "#6aa6e8"; INK = "#eef2f8"
 DIM = "#8fa0b8"; GRN = "#5fd0a0"; RED = "#e8807f"; LINE = "#2a3650"
 CARDBG = "#1a2740"; PANEL = "#131f33"
@@ -41,14 +42,15 @@ W, H = 1080, 1350
 PT2PX = 100 / 72
 CJK_ADV = 1.02
 
+# 本文の折返し幅（全角換算ユニット）
+BODY_UNITS = (W - 112 - 84) / (16.5 * PT2PX * CJK_ADV)
+
 
 def _units(s: str) -> float:
     return sum(1.0 if unicodedata.east_asian_width(c) in "FWA" else 0.55 for c in s)
 
 
-import re as _re
-
-# 数値・英字の連なりは1トークンとして扱い、途中で改行しない（「0.」「6%」分断の防止）
+# 数値・英字の連なりは1トークンとして扱い、途中で改行しない
 _TOKEN_RE = _re.compile(r"[0-9A-Za-z.%+\-=&σ]+|.")
 
 
@@ -77,15 +79,15 @@ def _canvas():
     return fig, ax
 
 
-def _header(ax, theme: str, date_str: str):
+def _header(ax, badge: str, date_str: str, accent: str = GOLD):
     ax.text(64, 78, "MORNING BRIEF", color=GOLD, fontsize=30,
             fontweight="bold", va="center")
     ax.text(64, 124, "きょう深掘りする1枚", color=DIM, fontsize=15, va="center")
-    bw = max(120, int(_units(theme) * 22 + 56))
+    bw = max(120, int(_units(badge) * 22 + 56))
     ax.add_patch(FancyBboxPatch((W - 64 - bw, 56), bw, 42,
                  boxstyle="round,pad=0,rounding_size=12",
-                 facecolor=GOLD, alpha=0.16, lw=1.2, edgecolor=GOLD))
-    ax.text(W - 64 - bw / 2, 77, theme, color=GOLD, fontsize=16,
+                 facecolor=accent, alpha=0.16, lw=1.2, edgecolor=accent))
+    ax.text(W - 64 - bw / 2, 77, badge, color=accent, fontsize=16,
             fontweight="bold", ha="center", va="center")
     ax.text(W - 64, 124, date_str, color=DIM, fontsize=14, ha="right", va="center")
     ax.plot([64, W - 64], [150, 150], color=LINE, lw=2)
@@ -99,8 +101,25 @@ def _footer(ax):
             fontweight="bold", ha="right", va="center")
 
 
+def _headline(ax, story: dict, cy: float, text: str | None = None) -> float:
+    lines = _wrap(text or story["headline"], 14)[:2]
+    hfs = 38 if len(lines) == 1 else 33
+    for i, ln in enumerate(lines):
+        t = ax.text(W / 2, cy + i * (hfs * 1.5), ln, color=INK, fontsize=hfs,
+                    fontweight="bold", ha="center", va="center")
+        t.set_gid(f"maxx:{W - 40}")
+    return cy + len(lines) * (hfs * 1.5) + 6
+
+
+def _conclusion(ax, story: dict, cy: float, color: str) -> float:
+    t = ax.text(W / 2, cy, story["conclusion"], color=color, fontsize=19,
+                fontweight="bold", ha="center", va="center")
+    t.set_gid(f"maxx:{W - 40}")
+    return cy + 40
+
+
 def _chart(fig, rect, series: dict, story: dict) -> bool:
-    """主役チャート：当事者の直近6ヶ月＋イベント日▼と変動率注記。"""
+    """主役チャート：当事者の直近6ヶ月＋イベント日▲▼と変動率注記。"""
     if not series or len(series.get("closes", [])) < 30:
         return False
     x, y, w, h = rect
@@ -112,11 +131,11 @@ def _chart(fig, rect, series: dict, story: dict) -> bool:
     ax.plot(dates, closes, color=color, lw=2.4, solid_capstyle="round", zorder=3)
     ax.fill_between(dates, closes, min(closes), color=color, alpha=0.13, zorder=2)
 
-    # イベント日（当日）に▼マーカー＋変動率
     ev_col = RED if story["event_pct"] < 0 else GRN
     marker = "▼" if story["event_pct"] < 0 else "▲"
     ax.annotate(f"{marker} {story.get('event_label') or format(story['event_pct'], '+.1f') + '%'}",
-                xy=(dates[-1], closes[-1]), xytext=(-10, 18 if story["event_pct"] < 0 else -26),
+                xy=(dates[-1], closes[-1]),
+                xytext=(-10, 18 if story["event_pct"] < 0 else -26),
                 textcoords="offset points", ha="right", color=ev_col,
                 fontsize=16, fontweight="bold", zorder=5)
     ax.scatter([dates[-1]], [closes[-1]], s=46, color=ev_col, zorder=4)
@@ -137,8 +156,15 @@ def _chart(fig, rect, series: dict, story: dict) -> bool:
     return True
 
 
+def story_tiles(story: dict) -> list[dict]:
+    return [{"label": n["label"], "value": n["value"], "sub": n.get("sub", ""),
+             "color": (GRN if str(n["value"]).startswith("+") else
+                       RED if str(n["value"]).startswith("-") else INK)}
+            for n in story["numbers"]]
+
+
 def _tiles(ax, cy: float, tiles: list[dict], big: bool = False) -> float:
-    """数字カード。big=True はチャート無し時の2倍サイズ(2×2)。"""
+    """数字カード。big=True は2倍サイズ(2×2)。ラベルは記事ごとに可変。"""
     if big:
         rows = [tiles[:2], tiles[2:4]]
         th, gap = 150, 16
@@ -174,9 +200,9 @@ def _tiles(ax, cy: float, tiles: list[dict], big: bool = False) -> float:
     return cy + th + 16
 
 
-def _block(ax, cy: float, label: str, text: str, line_units: float,
-           max_lines: int, label_color=GOLD) -> float:
-    lines = _wrap(text, line_units)[:max_lines]
+def _block(ax, cy: float, label: str, text: str, max_lines: int,
+           label_color=GOLD, line_units: float | None = None) -> float:
+    lines = _wrap(text, line_units or BODY_UNITS)[:max_lines]
     pad_top, line_h, pad_bot = 40, 30, 12
     h = pad_top + len(lines) * line_h + pad_bot
     ax.add_patch(FancyBboxPatch((56, cy), W - 112, h,
@@ -213,68 +239,25 @@ def _validate(fig) -> list[str]:
     return bad
 
 
-def _build(story: dict, series: dict | None, date_str: str, lim: dict):
-    fig, ax = _canvas()
-    _header(ax, story["theme"], date_str)
-
-    # 見出し（自作・最大2行）
-    cy = 196
-    hl_lines = _wrap(story["headline"], 14)[:2]
-    hfs = 38 if len(hl_lines) == 1 else 33
-    for i, ln in enumerate(hl_lines):
-        t = ax.text(W / 2, cy + i * (hfs * 1.5), ln, color=INK, fontsize=hfs,
-                    fontweight="bold", ha="center", va="center")
-        t.set_gid(f"maxx:{W - 40}")
-    cy += len(hl_lines) * (hfs * 1.5) + 6
-
-    # 一行結論（BLUE）
-    t = ax.text(W / 2, cy, story["conclusion"], color=BLUE, fontsize=19,
-                fontweight="bold", ha="center", va="center")
-    t.set_gid(f"maxx:{W - 40}")
-    cy += 40
-
-    # 主役チャート（無い記事は数字カードを2倍サイズに）
-    nums = story["numbers"]
-    up = story["event_pct"] >= 0
-    tiles = [{"label": n["label"], "value": n["value"], "sub": n.get("sub", ""),
-              "color": (GRN if str(n["value"]).startswith("+") else
-                        RED if str(n["value"]).startswith("-") else INK)}
-             for n in nums]
-    chart_h = 300 if len(hl_lines) == 1 else 258
-    if _chart(fig, (72, cy, W - 144, chart_h), series or {}, story):
-        cy += chart_h + 20
-        cy = _tiles(ax, cy, tiles[:3])
-    else:
-        cy = _tiles(ax, cy, tiles[:4], big=True)
-
-    # ❶〜❹
-    body_units = (W - 112 - 84) / (16.5 * PT2PX * CJK_ADV)   # 右余白を厚めに取る
-    cy = _block(ax, cy, "❶ 事実（What）", story["fact"], body_units,
-                lim["fact_lines"])
-    cy = _block(ax, cy, "❷ 仕組み（Why）", story["why"], body_units,
-                lim["why_lines"], label_color=BLUE)
-    cy = _block(ax, cy, "❸ 波及（So what）", story["sowhat"], body_units,
-                lim["sowhat_lines"])
-    cy = _block(ax, cy, "❹ 反証（外れる条件）", story["counter"], body_units,
-                lim["counter_lines"], label_color=RED)
-    _footer(ax)
-    return fig
-
-
 def render_card(story: dict, series: dict | None, date_str: str,
-                out_png: str, cfg: dict) -> bool:
+                out_png: str, cfg: dict, template_id: str = "T2",
+                theme=None) -> bool:
     """検証つき描画。はみ出しは生成側短縮で解消。3回で直らなければ False（スキップ）。"""
     from story_builder import shorten
+    from templates import BUILDERS
+    from themes import THEMES
+    theme = theme or THEMES["default"]
+    build = BUILDERS.get(template_id, BUILDERS["T2"])
     for level in (0, 1, 2, 3):
         if level:
             story = shorten(story, level, cfg)
-        fig = _build(story, series, date_str, cfg["limits"])
+        fig = build(story, series, date_str, cfg["limits"], theme)
         problems = _validate(fig)
         if not problems:
             fig.savefig(out_png, facecolor=BG)
             plt.close(fig)
             return True
         plt.close(fig)
-        print(f"[warn] はみ出し{len(problems)}件 → 生成側短縮 level={level + 1} で再描画")
+        print(f"[warn] {template_id} はみ出し{len(problems)}件 → 生成側短縮 level={level + 1} で再描画")
     print(f"[error] {out_png}: 短縮しても検証NGのため、この記事はスキップ")
     return False

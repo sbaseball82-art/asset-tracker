@@ -27,11 +27,16 @@ from config_loader import load_config, ROOT                     # noqa: E402
 from sources import market as l1                                # noqa: E402
 from sources import primary as l2                               # noqa: E402
 from sources import buzz as l3                                  # noqa: E402
+from sources import trends as l3t                               # noqa: E402
 from sources import fixtures as fx                              # noqa: E402
 import ranking                                                  # noqa: E402
 import gate                                                     # noqa: E402
+import learner                                                  # noqa: E402
+import report                                                   # noqa: E402
+import themes                                                   # noqa: E402
 from story_builder import build_story                           # noqa: E402
 from render import render_card                                  # noqa: E402
+from templates import ALL_TEMPLATES                             # noqa: E402
 
 OUT_DIR = os.path.join(ROOT, "out")
 LOG_DIR = os.path.join(ROOT, "logs")
@@ -56,6 +61,8 @@ def main() -> int:
     ap.add_argument("--date", default=None, help="YYYY-MM-DD（過去日のドライラン）")
     ap.add_argument("--fixtures", action="store_true",
                     help="外部通信なしの合成データで実行（開発・受け入れテスト用）")
+    ap.add_argument("--template", default=None, choices=ALL_TEMPLATES,
+                    help="テンプレートを固定して検証（例: --template T3）")
     args = ap.parse_args()
 
     cfg = load_config()
@@ -103,14 +110,30 @@ def main() -> int:
     buzz = fx.fixture_buzz(asof) if args.fixtures else l3.fetch_buzz(focus)
     primary = fx.fixture_primary(asof) if args.fixtures else l2.fetch_primary(cfg, asof, focus)
 
-    # ── スコアリング＋同一トピック束ね ──
-    ranked = ranking.score_candidates(candidates, buzz, primary, cfg)
+    # トレンドシグナル（Google Trends / Reddit RSS / HN）を SNS 熱量に合成
+    trend = {} if args.fixtures else l3t.trend_heat()
+    if trend:
+        sns = buzz.setdefault("sns", {})
+        for tk, v in trend.items():
+            sns[tk] = max(sns.get(tk, 0.0), v)
 
-    # ── 生成ゲート → 描画（上限 MAX_CARDS 枚）──
+    # ── フィードバック学習（Views実績）──
+    window = int(cfg.get("learning", {}).get("window_days", 30))
+    fb_rows = learner.load_feedback(asof, window)
+    tag_bonus = learner.topic_bonuses(fb_rows, cfg)
+    if tag_bonus:
+        print(f"[ok] 学習ボーナス（話題タグ）: {tag_bonus}")
+
+    # ── スコアリング＋同一トピック束ね ──
+    ranked = ranking.score_candidates(candidates, buzz, primary, cfg, tag_bonus)
+
+    # ── 生成ゲート → テンプレ選択（ε-greedy）→ 描画（上限 MAX_CARDS 枚）──
     max_cards = int(cfg["max_cards"])
     adopted, skipped = [], []
     n = 0
     min_score = cfg["scoring"].get("min_score", 0.0)
+    recent_tpls = learner.recent_templates(LOG_DIR, asof)   # 直近3日の使用テンプレ
+    today_used: set[str] = set()
     for cand in ranked:
         if n >= max_cards:
             break
@@ -125,22 +148,43 @@ def main() -> int:
                             "unmet": unmet})
             print(f"[skip] {cand['ticker']}: 未充足 {unmet}")
             continue
+
+        tag = cand.get("topic_tag", "other")
+        template_id = args.template or learner.choose_template(
+            tag, n + 1, asof, fb_rows, recent_tpls, today_used, cfg)
+        theme = themes.theme_for_tag(tag)
+
         png = os.path.join(OUT_DIR, f"{asof.isoformat()}_{n + 1}.png")
-        if not render_card(story, mkt.get(cand["ticker"]), date_str, png, cfg):
+        if not render_card(story, mkt.get(cand["ticker"]), date_str, png, cfg,
+                           template_id=template_id, theme=theme):
             skipped.append({"ticker": cand["ticker"], "score": cand["score"],
                             "unmet": ["描画検証NG（短縮しても収まらず）"]})
             continue
+        today_used.add(template_id)
         txt = os.path.join(OUT_DIR, f"{asof.isoformat()}_{n + 1}.txt")
         with open(txt, "w", encoding="utf-8") as f:
             f.write(story["post"] + "\n")
         adopted.append({**{k: story[k] for k in
                            ("ticker", "name", "theme", "headline", "conclusion",
                             "score", "score_parts", "n_media", "sns_heat")},
+                        "slot": n + 1, "template_id": template_id,
+                        "topic_tag": tag,
                         "numbers": story["numbers"], "files": [png, txt]})
         n += 1
-        print(f"[ok] カード{n}: {story['headline']} ({cand['ticker']})")
+        print(f"[ok] カード{n}: {story['headline']} ({cand['ticker']}, "
+              f"{template_id}×{tag})")
 
     _write_log(asof, cfg, adopted, skipped)
+
+    # ── meta.json（record.py がViewsと紐付けるための生成メタ）──
+    if adopted:
+        meta = [{"slot": a["slot"], "template_id": a["template_id"],
+                 "topic_tag": a["topic_tag"], "ticker": a["ticker"],
+                 "score": a["score"], "headline": a["headline"]}
+                for a in adopted]
+        meta_path = os.path.join(OUT_DIR, f"{asof.isoformat()}_meta.json")
+        with open(meta_path, "w", encoding="utf-8") as f:
+            json.dump(meta, f, ensure_ascii=False, indent=1)
 
     if not adopted:
         print(f"[ok] {asof} 本日は該当なし（ゲート通過0件）。画像0枚で正常終了")
@@ -155,7 +199,13 @@ def main() -> int:
         for a in adopted:
             for p in a["files"]:
                 shutil.copy(p, os.path.join(latest, os.path.basename(p)))
+        shutil.copy(os.path.join(OUT_DIR, f"{asof.isoformat()}_meta.json"),
+                    os.path.join(latest, "meta.json"))
         print(f"[ok] 生成完了: {len(adopted)}枚 → {OUT_DIR}（latest/ にも複製）")
+
+    # ── 週次レポート（日曜の実行時のみ。実績データが無い週はスキップ）──
+    if dt.date.today().weekday() == 6 and not args.fixtures:
+        report.generate(dt.date.today())
 
     prune_old(asof, cfg["output"]["keep_days"])
     return 0

@@ -13,8 +13,10 @@ X（旧Twitter）投稿用の「MORNING BRIEF」画像を毎朝自動生成し�
 |---|---|
 | `YYYY-MM-DD_1.png`（〜`_2.png`） | 深掘りカード（最大2枚。`config.yaml` の `max_cards`） |
 | `YYYY-MM-DD_1.txt` | 対応する投稿文（1行目=ポスト文・2行目=リスク併記・末尾=出典） |
+| `YYYY-MM-DD_meta.json` | slot / template_id / topic_tag / score（Views記録の紐付け用） |
 | `logs/YYYY-MM-DD.json` | 採用理由・スコア内訳・スキップ理由（未充足項目） |
 | `out/latest/` | 当日分の複製（スマホのGitHubアプリから見る用） |
+| `out/weekly_report.md` | 週次レポート（日曜実行時・実績データがある週のみ） |
 
 ## しくみ（3レイヤ構成）
 1. **レイヤ1: 市場の実際の動き**（最優先シグナル・キー不要）
@@ -26,7 +28,11 @@ X（旧Twitter）投稿用の「MORNING BRIEF」画像を毎朝自動生成し�
    米財務省イールドカーブXML（キー不要）／経済カレンダー（`config.yaml`）。
 3. **レイヤ3: 報道・話題性**（媒体一致数とSNS熱量の検出のみ）
    Google News RSS（日英）／Yahoo Finance銘柄RSS／Finnhub（`FINNHUB_API_KEY` 任意）／
-   Reddit JSON API／Hacker News Algolia。
+   Reddit JSON API＋公開RSS／Hacker News（Algolia・hnrss）／
+   **Google Trends 日次トレンドRSS（JP/US）**。
+   日英両方で報じられていれば加点（グローバル一致）。X/InstagramのAPIは使わない
+   （無料の話題性シグナルで代替）。1つでも生きていれば動き、リクエスト間隔1秒・
+   User-Agent明示で規約に配慮。
    **画像に載せる数字は必ずレイヤ1・2から取る**（レイヤ3は話題度の入力だけ）。
 
 ### スコアリング（採用順）
@@ -52,6 +58,42 @@ score = 0.35*min(|z|,4)/4 + 0.25*min(出来高比,3)/3
 文字あふれは描画後にピクセル実測で検証し、NGなら**生成側で文章を短縮**して再描画
 （フォント縮小や枠外はみ出しに逃げない）。
 
+## 日替わりテンプレート（6種）と学習
+毎日同じ見た目にならないよう、レイアウトはT1〜T6のローテーション。
+話題タグとの相性表で候補を絞り、**Views実績のε-greedyバンディット**が最終選択する
+（同日重複なし・直近3日使用は優先度低下・未検証テンプレは探索優先）。
+アクセント色は話題タグ（semiconductor/rates/fx/ai/…）で自動的に変わる
+（背景・ゴールドのワードマークなどブランド基調は固定）。
+
+| ID | 名称 | 構成 |
+|---|---|---|
+| T1 | classic | 大型数字カード2×2＋❶❷❸❹ |
+| T2 | stat_deep | チャート＋数字カード×3＋❶❷❸❹（基準形） |
+| T3 | hero_number | 巨大な1つの数字＋補足＋❶❷❸❹ |
+| T4 | contrast | 左右2分割（主役 vs 比較対象） |
+| T5 | timeline | 6ヶ月の経緯を時系列で |
+| T6 | qa | 「なぜ？」→答え→ただし（反証） |
+
+### Views の記録（1日1回・数十秒）
+Xのアナリティクスを見て、画像番号とViewsを並べるだけ:
+```bash
+python scripts/record.py --date 2026-07-28 --views 1 520 2 310
+python scripts/record.py           # 引数なしで対話モード（昨日の分）
+```
+テンプレ・話題タグは `out/YYYY-MM-DD_meta.json` から自動で紐付く。
+記録先は `data/feedback.csv`（**記録後に git commit & push すると翌朝の選択に反映**）。
+
+学習の効き方:
+- テンプレ選択: 直近30日のトリム平均Viewsが高いものを70%で活用、30%で探索
+  （各テンプレ5回試されるまでは探索50%）
+- 話題選定: 伸びたタグにスコア加点（上限+0.2、サンプル5未満は0＝過学習防止）
+- 効き始めの目安: 各テンプレ5回 ≒ **2〜4週間**（1日0〜2枚のため）
+
+### 週次レポート
+日曜の実行時に `out/weekly_report.md` を自動生成（テンプレ別・タグ別の平均Views、
+最も伸びた/伸びなかった組み合わせ、来週への示唆。ルールベースでLLM不要）。
+手動: `python scripts/report.py`
+
 ## 使い方
 ```bash
 cd morning-brief
@@ -59,10 +101,11 @@ pip install -r requirements.txt
 python scripts/main.py                        # 本番（ライブ取得）
 python scripts/main.py --date 2026-07-22      # 過去日のドライラン再現
 python scripts/main.py --date 2026-07-22 --fixtures   # オフライン合成データ
+python scripts/main.py --date 2026-07-22 --fixtures --template T3  # テンプレ固定検証
 python scripts/acceptance.py                  # 受け入れ基準の自動検証
 ```
 各取得モジュールは単体実行も可能:
-`python scripts/sources/market.py` / `primary.py` / `buzz.py`
+`python scripts/sources/market.py` / `primary.py` / `buzz.py` / `trends.py`
 
 ## APIキー（すべて任意・無くても動く）
 `.env`（コミットしない）または Actions の Secrets に設定:
