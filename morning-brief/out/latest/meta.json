@@ -1,10 +1,18 @@
 [
  {
   "slot": 1,
-  "template_id": "T6",
+  "template_id": "T3",
   "topic_tag": "ai",
-  "ticker": "AAPL",
-  "score": 0.5115,
-  "headline": "アップル上昇 +4%"
+  "ticker": "TSLA",
+  "score": 0.6906,
+  "headline": "テスラ急落 -15%"
+ },
+ {
+  "slot": 2,
+  "template_id": "T1",
+  "topic_tag": "macro",
+  "ticker": "^GSPC",
+  "score": 0.606,
+  "headline": "S&P500小幅安 -1%"
  }
 ]

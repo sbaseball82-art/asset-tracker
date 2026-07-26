@@ -1,108 +1,150 @@
 {
  "date": "2026-07-23",
- "generated_at": "2026-07-26T07:40:08",
+ "generated_at": "2026-07-26T22:29:22",
  "max_cards": 2,
  "adopted": [
   {
-   "ticker": "^TNX",
-   "name": "米10年金利",
-   "theme": "金利",
-   "headline": "米10年金利急伸 +16bp",
-   "conclusion": "z=+3.3σは通常の値動きの外。前提が変わった可能性",
-   "score": 0.5202,
+   "ticker": "TSLA",
+   "name": "テスラ",
+   "theme": "ハイテク",
+   "headline": "テスラ急落 -15%",
+   "conclusion": "出来高3.0倍の急落は一時要因でなくシナリオ修正の動き",
+   "score": 0.6906,
    "score_parts": {
-    "z": 0.2902,
-    "volume": 0.0,
-    "media": 0.1,
-    "sns": 0.06,
-    "holdings": 0.07,
+    "z": 0.35,
+    "volume": 0.2473,
+    "media": 0.0333,
+    "sns": 0.0,
+    "holdings": 0.06,
     "calendar": 0.0,
     "global": 0.0,
     "learn": 0.0
    },
-   "n_media": 3,
-   "sns_heat": 0.6,
+   "n_media": 1,
+   "sns_heat": 0.0,
    "slot": 1,
    "template_id": "T3",
-   "topic_tag": "rates",
+   "topic_tag": "ai",
    "numbers": [
     {
-     "label": "米10年金利 日次",
-     "value": "+16bp",
-     "sub": "4.43% / z=+3.3σ",
+     "label": "テスラ 日次",
+     "value": "-14.5%",
+     "sub": "z=-4.8σ",
      "source": "yfinance終値",
      "asof": "2026-07-23"
     },
     {
+     "label": "出来高 20日比",
+     "value": "3.0倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-07-23"
+    },
+    {
      "label": "6ヶ月騰落",
-     "value": "+24.6%",
-     "sub": "米10年金利",
+     "value": "-25.9%",
+     "sub": "テスラ",
      "source": "yfinance終値",
      "asof": "2026-07-23"
     },
     {
      "label": "S&P500 日次",
-     "value": "-0.9%",
+     "value": "-1.2%",
      "sub": "同日",
      "source": "yfinance終値",
      "asof": "2026-07-23"
     },
     {
      "label": "SOX指数 日次",
-     "value": "-0.2%",
-     "sub": "同日",
-     "source": "yfinance終値",
-     "asof": "2026-07-23"
-    },
-    {
-     "label": "ドル円 日次",
-     "value": "+0.8%",
+     "value": "-0.5%",
      "sub": "同日",
      "source": "yfinance終値",
      "asof": "2026-07-23"
     },
     {
      "label": "米10年利回り",
-     "value": "4.46%",
+     "value": "4.71%",
      "sub": "2026-07-23",
      "source": "米財務省",
      "asof": "2026-07-23"
     }
    ],
    "files": [
-    "/home/user/asset-tracker/morning-brief/out/2026-07-23_1.png",
-    "/home/user/asset-tracker/morning-brief/out/2026-07-23_1.txt"
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-07-23_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-07-23_1.txt"
+   ]
+  },
+  {
+   "ticker": "^GSPC",
+   "name": "S&P500",
+   "theme": "指数",
+   "headline": "S&P500小幅安 -1%",
+   "conclusion": "S&P500のz=-1.6σは指数見通しの修正を示唆",
+   "score": 0.606,
+   "score_parts": {
+    "z": 0.1409,
+    "volume": 0.0851,
+    "media": 0.2,
+    "sns": 0.0,
+    "holdings": 0.1,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 7,
+   "sns_heat": 0.0,
+   "slot": 2,
+   "template_id": "T1",
+   "topic_tag": "macro",
+   "numbers": [
+    {
+     "label": "S&P500 日次",
+     "value": "-1.2%",
+     "sub": "z=-1.6σ",
+     "source": "yfinance終値",
+     "asof": "2026-07-23"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.0倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-07-23"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+7.7%",
+     "sub": "S&P500",
+     "source": "yfinance終値",
+     "asof": "2026-07-23"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-0.5%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-07-23"
+    },
+    {
+     "label": "米10年金利 日次",
+     "value": "+1.0%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-07-23"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.71%",
+     "sub": "2026-07-23",
+     "source": "米財務省",
+     "asof": "2026-07-23"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-07-23_2.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-07-23_2.txt"
    ]
   }
  ],
- "skipped": [
-  {
-   "ticker": "MSFT",
-   "score": 0.3419,
-   "unmet": [
-    "スコア0.34が閾値0.45未満（材料薄）"
-   ]
-  },
-  {
-   "ticker": "XLU",
-   "score": 0.3376,
-   "unmet": [
-    "スコア0.34が閾値0.45未満（材料薄）"
-   ]
-  },
-  {
-   "ticker": "XLF",
-   "score": 0.2709,
-   "unmet": [
-    "スコア0.27が閾値0.45未満（材料薄）"
-   ]
-  },
-  {
-   "ticker": "^IXIC",
-   "score": 0.2246,
-   "unmet": [
-    "スコア0.22が閾値0.45未満（材料薄）"
-   ]
-  }
- ]
+ "skipped": []
 }

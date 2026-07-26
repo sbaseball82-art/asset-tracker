@@ -2,9 +2,17 @@
  {
   "slot": 1,
   "template_id": "T3",
-  "topic_tag": "rates",
-  "ticker": "^TNX",
-  "score": 0.5202,
-  "headline": "米10年金利急伸 +16bp"
+  "topic_tag": "ai",
+  "ticker": "TSLA",
+  "score": 0.6906,
+  "headline": "テスラ急落 -15%"
+ },
+ {
+  "slot": 2,
+  "template_id": "T1",
+  "topic_tag": "macro",
+  "ticker": "^GSPC",
+  "score": 0.606,
+  "headline": "S&P500小幅安 -1%"
  }
 ]
