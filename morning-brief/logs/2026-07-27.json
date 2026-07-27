@@ -1,0 +1,150 @@
+{
+ "date": "2026-07-27",
+ "generated_at": "2026-07-27T22:34:05",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "AAPL",
+   "name": "アップル",
+   "theme": "ハイテク",
+   "headline": "アップル大幅高 +5%",
+   "conclusion": "z=+2.5σは通常の値動きの外。前提が変わった可能性",
+   "score": 0.7156,
+   "score_parts": {
+    "z": 0.2204,
+    "volume": 0.0586,
+    "media": 0.2,
+    "sns": 0.0667,
+    "holdings": 0.09,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 6,
+   "sns_heat": 0.667,
+   "slot": 1,
+   "template_id": "T2",
+   "topic_tag": "ai",
+   "numbers": [
+    {
+     "label": "アップル 日次",
+     "value": "+4.7%",
+     "sub": "z=+2.5σ",
+     "source": "yfinance終値",
+     "asof": "2026-07-27"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "0.7倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-07-27"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+35.9%",
+     "sub": "アップル",
+     "source": "yfinance終値",
+     "asof": "2026-07-27"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+0.0%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-07-27"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-2.2%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-07-27"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.65%",
+     "sub": "2026-07-27",
+     "source": "米財務省",
+     "asof": "2026-07-27"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-07-27_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-07-27_1.txt"
+   ]
+  },
+  {
+   "ticker": "NVDA",
+   "name": "エヌビディア",
+   "theme": "半導体",
+   "headline": "エヌビディア大幅安 -5%",
+   "conclusion": "エヌビディアのz=-1.9σは半導体見通しの修正を示唆",
+   "score": 0.6804,
+   "score_parts": {
+    "z": 0.1703,
+    "volume": 0.0968,
+    "media": 0.1333,
+    "sns": 0.1,
+    "holdings": 0.1,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 4,
+   "sns_heat": 1.0,
+   "slot": 2,
+   "template_id": "T3",
+   "topic_tag": "semiconductor",
+   "numbers": [
+    {
+     "label": "エヌビディア 日次",
+     "value": "-5.0%",
+     "sub": "z=-1.9σ",
+     "source": "yfinance終値",
+     "asof": "2026-07-27"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.2倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-07-27"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+4.8%",
+     "sub": "エヌビディア",
+     "source": "yfinance終値",
+     "asof": "2026-07-27"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+0.0%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-07-27"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-2.2%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-07-27"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.65%",
+     "sub": "2026-07-27",
+     "source": "米財務省",
+     "asof": "2026-07-27"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-07-27_2.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-07-27_2.txt"
+   ]
+  }
+ ],
+ "skipped": []
+}
