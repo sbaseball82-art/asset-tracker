@@ -1,0 +1,150 @@
+{
+ "date": "2026-07-31",
+ "generated_at": "2026-07-31T22:33:39",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "AMZN",
+   "name": "アマゾン",
+   "theme": "ハイテク",
+   "headline": "アマゾン急騰 +15%",
+   "conclusion": "出来高3.0倍の急騰は一時要因でなくシナリオ修正の動き",
+   "score": 1.16,
+   "score_parts": {
+    "z": 0.35,
+    "volume": 0.25,
+    "media": 0.2,
+    "sns": 0.1,
+    "holdings": 0.08,
+    "calendar": 0.1,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 13,
+   "sns_heat": 1.0,
+   "slot": 1,
+   "template_id": "T3",
+   "topic_tag": "ai",
+   "numbers": [
+    {
+     "label": "アマゾン 日次",
+     "value": "+15.3%",
+     "sub": "z=+8.2σ",
+     "source": "yfinance終値",
+     "asof": "2026-07-31"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "3.0倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-07-31"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+12.3%",
+     "sub": "アマゾン",
+     "source": "yfinance終値",
+     "asof": "2026-07-31"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+0.7%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-07-31"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "+0.1%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-07-31"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.75%",
+     "sub": "2026-07-31",
+     "source": "米財務省",
+     "asof": "2026-07-31"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-07-31_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-07-31_1.txt"
+   ]
+  },
+  {
+   "ticker": "JPY=X",
+   "name": "ドル円",
+   "theme": "為替",
+   "headline": "ドル円下落 -2%",
+   "conclusion": "z=-9.9σは通常の値動きの外。前提が変わった可能性",
+   "score": 0.69,
+   "score_parts": {
+    "z": 0.35,
+    "volume": 0.0,
+    "media": 0.1,
+    "sns": 0.0,
+    "holdings": 0.06,
+    "calendar": 0.1,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 3,
+   "sns_heat": 0.0,
+   "slot": 2,
+   "template_id": "T2",
+   "topic_tag": "fx",
+   "numbers": [
+    {
+     "label": "ドル円 日次",
+     "value": "-1.9%",
+     "sub": "z=-9.9σ",
+     "source": "yfinance終値",
+     "asof": "2026-07-31"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+2.1%",
+     "sub": "ドル円",
+     "source": "yfinance終値",
+     "asof": "2026-07-31"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+0.7%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-07-31"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "+0.1%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-07-31"
+    },
+    {
+     "label": "米10年金利 日次",
+     "value": "+1.8%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-07-31"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.75%",
+     "sub": "2026-07-31",
+     "source": "米財務省",
+     "asof": "2026-07-31"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-07-31_2.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-07-31_2.txt"
+   ]
+  }
+ ],
+ "skipped": []
+}
