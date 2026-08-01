@@ -1,6 +1,6 @@
 {
  "date": "2026-07-31",
- "generated_at": "2026-07-31T22:33:39",
+ "generated_at": "2026-08-01T22:28:28",
  "max_cards": 2,
  "adopted": [
   {
@@ -8,20 +8,20 @@
    "name": "アマゾン",
    "theme": "ハイテク",
    "headline": "アマゾン急騰 +15%",
-   "conclusion": "出来高3.0倍の急騰は一時要因でなくシナリオ修正の動き",
-   "score": 1.16,
+   "conclusion": "出来高3.1倍の急騰は一時要因でなくシナリオ修正の動き",
+   "score": 0.9939,
    "score_parts": {
     "z": 0.35,
     "volume": 0.25,
-    "media": 0.2,
-    "sns": 0.1,
+    "media": 0.1333,
+    "sns": 0.0006,
     "holdings": 0.08,
     "calendar": 0.1,
     "global": 0.08,
     "learn": 0.0
    },
-   "n_media": 13,
-   "sns_heat": 1.0,
+   "n_media": 4,
+   "sns_heat": 0.006,
    "slot": 1,
    "template_id": "T3",
    "topic_tag": "ai",
@@ -35,7 +35,7 @@
     },
     {
      "label": "出来高 20日比",
-     "value": "3.0倍",
+     "value": "3.1倍",
      "sub": "当日/平均",
      "source": "yfinance出来高",
      "asof": "2026-07-31"
@@ -75,39 +75,46 @@
    ]
   },
   {
-   "ticker": "JPY=X",
-   "name": "ドル円",
-   "theme": "為替",
-   "headline": "ドル円下落 -2%",
-   "conclusion": "z=-9.9σは通常の値動きの外。前提が変わった可能性",
-   "score": 0.69,
+   "ticker": "AAPL",
+   "name": "アップル",
+   "theme": "ハイテク",
+   "headline": "アップル大幅安 -7%",
+   "conclusion": "出来高2.6倍の大幅安は一時要因でなくシナリオ修正の動き",
+   "score": 0.8236,
    "score_parts": {
     "z": 0.35,
-    "volume": 0.0,
-    "media": 0.1,
+    "volume": 0.2169,
+    "media": 0.0667,
     "sns": 0.0,
-    "holdings": 0.06,
+    "holdings": 0.09,
     "calendar": 0.1,
-    "global": 0.08,
+    "global": 0.0,
     "learn": 0.0
    },
-   "n_media": 3,
+   "n_media": 2,
    "sns_heat": 0.0,
    "slot": 2,
    "template_id": "T2",
-   "topic_tag": "fx",
+   "topic_tag": "ai",
    "numbers": [
     {
-     "label": "ドル円 日次",
-     "value": "-1.9%",
-     "sub": "z=-9.9σ",
+     "label": "アップル 日次",
+     "value": "-7.4%",
+     "sub": "z=-4.3σ",
      "source": "yfinance終値",
      "asof": "2026-07-31"
     },
     {
+     "label": "出来高 20日比",
+     "value": "2.6倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-07-31"
+    },
+    {
      "label": "6ヶ月騰落",
-     "value": "+2.1%",
-     "sub": "ドル円",
+     "value": "+19.8%",
+     "sub": "アップル",
      "source": "yfinance終値",
      "asof": "2026-07-31"
     },
@@ -121,13 +128,6 @@
     {
      "label": "SOX指数 日次",
      "value": "+0.1%",
-     "sub": "同日",
-     "source": "yfinance終値",
-     "asof": "2026-07-31"
-    },
-    {
-     "label": "米10年金利 日次",
-     "value": "+1.8%",
      "sub": "同日",
      "source": "yfinance終値",
      "asof": "2026-07-31"
