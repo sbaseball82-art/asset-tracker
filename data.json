@@ -1,41 +1,41 @@
 {
-  "updated_at": "2026-08-02T07:45:07.888484+09:00",
-  "date": "2026-08-02",
-  "usdjpy": 157.4,
-  "total_jpy": 32162517,
-  "day_change_jpy": 31371,
+  "updated_at": "2026-08-03T07:46:11.742284+09:00",
+  "date": "2026-08-03",
+  "usdjpy": 157.27,
+  "total_jpy": 32145252,
+  "day_change_jpy": 33256,
   "day_change_pct": 0.1,
   "comparisons": {
     "day": {
-      "base_date": "2026-08-01",
+      "base_date": "2026-08-02",
       "base_jpy": 32162517,
-      "change_jpy": 0,
-      "change_pct": 0.0,
-      "gross_change_jpy": 0,
+      "change_jpy": -17265,
+      "change_pct": -0.05,
+      "gross_change_jpy": -17265,
       "cash_flow_jpy": 0
     },
     "week": {
-      "base_date": "2026-07-26",
-      "base_jpy": 33071500,
-      "change_jpy": -908983,
-      "change_pct": -2.75,
-      "gross_change_jpy": -908983,
+      "base_date": "2026-07-27",
+      "base_jpy": 33113343,
+      "change_jpy": -968091,
+      "change_pct": -2.92,
+      "gross_change_jpy": -968091,
       "cash_flow_jpy": 0
     },
     "month": {
-      "base_date": "2026-07-03",
-      "base_jpy": 32121576,
-      "change_jpy": -464846,
-      "change_pct": -1.45,
-      "gross_change_jpy": 40941,
+      "base_date": "2026-07-04",
+      "base_jpy": 32160142,
+      "change_jpy": -520677,
+      "change_pct": -1.62,
+      "gross_change_jpy": -14890,
       "cash_flow_jpy": 505787
     },
     "ytd": {
       "base_date": "2026-06-08",
       "base_jpy": 31853815,
-      "change_jpy": -197085,
-      "change_pct": -0.62,
-      "gross_change_jpy": 308702,
+      "change_jpy": -214350,
+      "change_pct": -0.67,
+      "gross_change_jpy": 291437,
       "cash_flow_jpy": 505787
     }
   },
@@ -47,9 +47,9 @@
       "prev_price": 161.96,
       "curr_price": 161.96,
       "change_pct": 0.0,
-      "prev_jpy": 7979154,
-      "curr_jpy": 7979154,
-      "usdjpy": 157.4
+      "prev_jpy": 7972564,
+      "curr_jpy": 7972564,
+      "usdjpy": 157.27
     },
     "VTI": {
       "name": "VTI 全米株式ETF",
@@ -58,9 +58,9 @@
       "prev_price": 366.27,
       "curr_price": 368.21,
       "change_pct": 0.53,
-      "prev_jpy": 11241925,
-      "curr_jpy": 11301470,
-      "usdjpy": 157.4
+      "prev_jpy": 11232640,
+      "curr_jpy": 11292135,
+      "usdjpy": 157.27
     },
     "HDV": {
       "name": "HDV 米国高配当ETF",
@@ -69,9 +69,9 @@
       "prev_price": 28.72,
       "curr_price": 28.73,
       "change_pct": 0.03,
-      "prev_jpy": 2237661,
-      "curr_jpy": 2238440,
-      "usdjpy": 157.4
+      "prev_jpy": 2235813,
+      "curr_jpy": 2236592,
+      "usdjpy": 157.27
     },
     "QQQ": {
       "name": "QQQ ナスダック100ETF",
@@ -80,9 +80,9 @@
       "prev_price": 683.55,
       "curr_price": 687.99,
       "change_pct": 0.65,
-      "prev_jpy": 1721452,
-      "curr_jpy": 1732634,
-      "usdjpy": 157.4
+      "prev_jpy": 1720031,
+      "curr_jpy": 1731203,
+      "usdjpy": 157.27
     },
     "DRAM": {
       "name": "DRAM メモリ半導体ETF",
@@ -91,9 +91,9 @@
       "prev_price": 52.34,
       "curr_price": 50.37,
       "change_pct": -3.76,
-      "prev_jpy": 8238,
-      "curr_jpy": 7928,
-      "usdjpy": 157.4
+      "prev_jpy": 8232,
+      "curr_jpy": 7922,
+      "usdjpy": 157.27
     }
   },
   "fund": {
@@ -2578,14 +2578,17 @@
       "fund_code": "89311265",
       "units": 127966,
       "prev_nav": 9519.0,
-      "curr_nav": 9519.0,
-      "change_pct": null,
+      "curr_nav": 9671.0,
+      "change_pct": 1.6,
       "prev_jpy": 121811,
-      "curr_jpy": 121811,
-      "source": "前日値(取得失敗)",
-      "curr_date": "2026-07-30",
-      "stale": true,
+      "curr_jpy": 123756,
+      "source": "Yahoo!(推定)",
+      "curr_date": "2026-07-31",
       "nav_series": [
+        {
+          "date": "2026-07-31",
+          "jpy": 123756
+        },
         {
           "date": "2026-07-30",
           "jpy": 121811
@@ -2661,10 +2664,6 @@
         {
           "date": "2026-07-03",
           "jpy": 129566
-        },
-        {
-          "date": "2026-07-02",
-          "jpy": 132829
         }
       ]
     }
@@ -2938,6 +2937,12 @@
       "date": "2026-08-02",
       "total_jpy": 32162517,
       "usdjpy": 157.4,
+      "cash_flow_jpy": 0
+    },
+    {
+      "date": "2026-08-03",
+      "total_jpy": 32145252,
+      "usdjpy": 157.27,
       "cash_flow_jpy": 0
     }
   ]
