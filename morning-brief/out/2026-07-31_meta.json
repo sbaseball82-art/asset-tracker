@@ -3,16 +3,16 @@
   "slot": 1,
   "template_id": "T3",
   "topic_tag": "ai",
-  "ticker": "AMZN",
-  "score": 0.9939,
-  "headline": "アマゾン急騰 +15%"
+  "ticker": "AAPL",
+  "score": 1.0369,
+  "headline": "アップル大幅安 -7%"
  },
  {
   "slot": 2,
   "template_id": "T2",
   "topic_tag": "ai",
-  "ticker": "AAPL",
-  "score": 0.8236,
-  "headline": "アップル大幅安 -7%"
+  "ticker": "GOOGL",
+  "score": 0.6319,
+  "headline": "アルファベット大幅高 +7%"
  }
 ]
