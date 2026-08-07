@@ -21,3 +21,4 @@ date,type,topic_id,format,char_count,has_image,posted,views,likes,bookmarks,repl
 2026-07-31,earnings,2026-07-31_PCE,post,80,false,false,,,,,,
 2026-08-01,earnings,2026-07-31_PCE,morning,104,false,false,,,,,,
 2026-08-02,evergreen,ev001,table,170,true,false,,,,,,
+2026-08-07,earnings,2026-08-07_NFP,pre,185,false,false,,,,,,
