@@ -1,16 +1,23 @@
 name: morning-brief
 
-# 毎朝 6:30 JST（= 前日 21:30 UTC）に実行。
-# ※このリポジトリではGitHubのcronが大幅に遅延する実績があるため、
-#   確実な定時起動はClaudeの定時トリガーがworkflow_dispatchで行う。
-#   このcronは「1日1回は必ず動く」ためのバックアップ。
+# 目標: 毎朝 6:30 JST までに更新する。
+# GitHubのcronはこのリポジトリで恒常的に30分〜数時間遅延する実績があるため
+# 2段構えにする（2026-08-07 に適用。単発 21:30 UTC だと 7:20〜10:00 JST に
+# ずれ込み「自動更新されていない」ように見えていた）:
+#   - 20:45 UTC (5:45 JST): 本命。遅延を見込んだ早出し。米市場が万一まだ
+#     場中でも、main.py 側が未確定の当日バーを除外するので安全
+#   - 21:30 UTC (6:30 JST): 予備。両方走った日は同内容の再生成になり
+#     「変更なし」で終わるだけで無害
+# それでも間に合わない朝は Actions タブから workflow_dispatch で即時実行できる。
 on:
   schedule:
+    - cron: "45 20 * * *"
     - cron: "30 21 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: morning-brief
@@ -74,10 +81,31 @@ jobs:
             git clean -fd morning-brief/out/ morning-brief/logs/
             git checkout -B "$BRANCH" "origin/$BRANCH"
 
+            # latest/ は「今日の分」なので完全置き換えにする。
+            # ※以前は上書きコピーのみで、main.py が消した古いカードが
+            #   checkout で復活 → 削除が一度もコミットされず、latest/ に
+            #   1週間分の古いカードと古いNOTE.txtが溜まる不具合があった。
+            rm -rf morning-brief/out/latest
             mkdir -p morning-brief/out morning-brief/logs
             cp -r "$RUNNER_TEMP/mb-out-new/." morning-brief/out/
             cp -r "$RUNNER_TEMP/mb-logs-new/." morning-brief/logs/
 
+            # アーカイブ(out/ と logs/ の日付付きファイル)の30日超を削除。
+            # main.py の prune はこのコミット方式では反映されないため、
+            # コミット直前のツリーに対して行う。
+            python3 - <<'PRUNE'
+          import datetime as dt, os, re
+          limit = dt.date.today() - dt.timedelta(days=30)
+          for d in ("morning-brief/out", "morning-brief/logs"):
+              for name in sorted(os.listdir(d)):
+                  m = re.match(r"(\d{4}-\d{2}-\d{2})", name)
+                  p = os.path.join(d, name)
+                  if m and os.path.isfile(p) and dt.date.fromisoformat(m.group(1)) < limit:
+                      os.remove(p)
+                      print(f"prune: {p}")
+          PRUNE
+
+            # -A で追加・変更に加えて「削除」も確実にステージする
             git add -A morning-brief/out/ morning-brief/logs/
             if git diff --cached --quiet; then
               echo "変更なし。コミットしません。"
@@ -93,3 +121,17 @@ jobs:
           done
           echo "::error::5回試行しても push できませんでした"
           exit 1
+
+      # 失敗はActionsを見ない限り気づけないため、Issueで可視化する
+      - name: Notify failure (create issue)
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create \
+            --title "morning-brief 自動実行が失敗（$(TZ=Asia/Tokyo date +%Y-%m-%d)）" \
+            --body "実行ログ: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          このIssueは morning-brief ワークフローの失敗時に自動作成されています。
+          対処後はクローズしてください。" \
+            || echo "::warning::Issue作成に失敗しました"
