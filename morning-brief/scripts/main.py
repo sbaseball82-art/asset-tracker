@@ -42,6 +42,20 @@ OUT_DIR = os.path.join(ROOT, "out")
 LOG_DIR = os.path.join(ROOT, "logs")
 
 
+def refresh_latest_empty(latest: str, asof: dt.date, reason: str):
+    """カード0枚の日も latest/ を必ず「今日の状態」に更新する。
+
+    以前は該当なしの日に latest/ を触らなかったため、数日前のカードと
+    古いNOTE.txtが残り続け「自動更新が止まった」ように見えていた。
+    毎朝必ず latest/ の中身が入れ替わることで、実行された事実が見える。
+    """
+    for name in os.listdir(latest):
+        os.remove(os.path.join(latest, name))
+    with open(os.path.join(latest, "NOTE.txt"), "w", encoding="utf-8") as f:
+        f.write(f"{asof} {reason}。空の枠は埋めない方針です。\n"
+                f"（この実行: {dt.datetime.now().isoformat(timespec='seconds')}）\n")
+
+
 def prune_old(asof: dt.date, keep_days: int):
     for d in (OUT_DIR, LOG_DIR):
         if not os.path.isdir(d):
@@ -78,6 +92,7 @@ def main() -> int:
     if not mkt:
         print("[error] マーケットデータ全滅。画像は生成せず終了（空の枠は埋めない）")
         _write_log(asof, cfg, [], [], note="market_unavailable")
+        refresh_latest_empty(latest, asof, "マーケットデータ取得に失敗（カードなし）")
         return 0
     market_metrics = {}
     for tk, s in mkt.items():
@@ -102,6 +117,7 @@ def main() -> int:
     if not candidates:
         print(f"[ok] {asof} 本日は該当なし（実際に動いた銘柄がない）。画像0枚で正常終了")
         _write_log(asof, cfg, [], [], note="no_anomaly")
+        refresh_latest_empty(latest, asof, "本日は該当なし（基準を超えて動いた銘柄がない）")
         prune_old(asof, cfg["output"]["keep_days"])
         return 0
 
@@ -188,11 +204,7 @@ def main() -> int:
 
     if not adopted:
         print(f"[ok] {asof} 本日は該当なし（ゲート通過0件）。画像0枚で正常終了")
-        # 前日分が latest/ に残って「今日の分」と紛らわしくならないよう空にする
-        for f in os.listdir(latest):
-            os.remove(os.path.join(latest, f))
-        with open(os.path.join(latest, "NOTE.txt"), "w", encoding="utf-8") as f:
-            f.write(f"{asof} 本日は該当なし（生成ゲート通過0件）。空の枠は埋めない方針です。\n")
+        refresh_latest_empty(latest, asof, "本日は該当なし（生成ゲート通過0件）")
     else:
         for f in os.listdir(latest):
             os.remove(os.path.join(latest, f))

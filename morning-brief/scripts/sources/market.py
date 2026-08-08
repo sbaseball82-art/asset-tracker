@@ -60,6 +60,26 @@ def fetch_market(cfg: dict, asof: dt.date) -> dict:
             }
         except Exception:
             continue
+    # 早出しcron対策: 米国市場の場中に実行された場合、進行中の当日バーを
+    # 除外する（未確定の値でカードを作らない。確定終値のみ使う）。
+    # 引け後の実行では何も起きない。
+    try:
+        from zoneinfo import ZoneInfo
+        now_et = dt.datetime.now(ZoneInfo("America/New_York"))
+        if now_et.time() < dt.time(16, 5):
+            live_day = now_et.date().isoformat()
+            dropped = 0
+            for s in out.values():
+                if s["dates"] and s["dates"][-1] == live_day:
+                    for k in ("dates", "closes", "volumes"):
+                        s[k] = s[k][:-1]
+                    dropped += 1
+            if dropped:
+                print(f"[ok] 場中実行のため未確定の当日バーを除外: {dropped} 銘柄")
+            out = {tk: s for tk, s in out.items() if len(s["dates"]) >= 70}
+    except Exception as e:
+        print(f"[warn] 場中判定をスキップ: {e}")
+
     print(f"[ok] レイヤ1 マーケットデータ: {len(out)}/{len(names)} 銘柄")
     return out
 
