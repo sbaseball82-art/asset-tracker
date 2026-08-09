@@ -37,7 +37,7 @@ topics:
   theme: VTI / VOO / QQQ / FANG+ の上位10社 重複マップ
   format: table
   builder: etf_overlap
-  last_used: null
+  last_used: '2026-08-09'
   params:
     etfs:
     - VTI
