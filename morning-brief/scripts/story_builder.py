@@ -150,6 +150,118 @@ def _counter(sector: str, down: bool) -> str:
     return "翌営業日に出来高を伴う反対方向の動きが出れば、前提の変化は否定される。"
 
 
+# ── 静かな日のカード ─────────────────────────────────────
+# 深掘り基準（|z|>=1.5 等）に届く銘柄が1つも無い日に使う。
+# 「材料が無い」ことを推測で埋めず、yfinance実測の数字だけで示す。
+QUIET_NAMES = {"^GSPC": "S&P500", "^IXIC": "ナスダック", "^DJI": "NYダウ",
+               "JPY=X": "ドル円", "^TNX": "米10年金利", "^SOX": "SOX指数"}
+
+
+def build_quiet_story(market_metrics: dict, cfg: dict, asof: dt.date,
+                      names: dict | None = None,
+                      reason: str = "no_anomaly") -> dict | None:
+    """静かな日のカードを実測値だけで組み立てる（推測ゼロ）。
+
+    材料が無い日に無理やり物語を作らないという方針は維持したまま、
+    「今日は動かなかった」という事実を数字で出す。基準となる指数が
+    取れない日は None を返し、呼び出し側が NOTE.txt に切り替える。
+
+    reason で文面が変わる（取り違えると事実と食い違うため必須）:
+      no_anomaly  … 基準を超えて動いた銘柄が1つも無かった
+      gate_failed … 動いた銘柄はあったが、裏取りできる材料が揃わなかった
+    """
+    lim = cfg["limits"]
+    names = names or {}
+    base = market_metrics.get("^GSPC")
+    if not base:
+        return None
+    asof_s = base["asof"]
+
+    def _disp(tk: str) -> str:
+        return QUIET_NAMES.get(tk, names.get(tk, tk))
+
+    numbers = []
+    for tk in ("^GSPC", "^IXIC", "JPY=X", "^TNX"):
+        m = market_metrics.get(tk)
+        if not m:
+            continue
+        if tk == "^TNX":
+            bp = (m["last"] - m["prev"]) * 100
+            numbers.append({"label": _disp(tk), "value": f"{bp:+.0f}bp",
+                            "sub": f"{m['last']:.2f}%",
+                            "source": "yfinance終値", "asof": asof_s})
+        elif tk == "JPY=X":
+            numbers.append({"label": _disp(tk), "value": f"{m['ret1d_pct']:+.2f}%",
+                            "sub": f"{m['last']:,.2f}円",
+                            "source": "yfinance終値", "asof": asof_s})
+        else:
+            numbers.append({"label": _disp(tk), "value": f"{m['ret1d_pct']:+.2f}%",
+                            "sub": f"{m['last']:,.0f}",
+                            "source": "yfinance終値", "asof": asof_s})
+    if len(numbers) < 3:      # ゲートの検証済み数値3件を満たせない日は作らない
+        return None
+
+    movers = [(tk, m) for tk, m in market_metrics.items()
+              if m.get("ret1d_pct") is not None]
+    top_tk, top_m = max(movers, key=lambda kv: abs(kv[1]["ret1d_pct"]))
+    top_name, top_pct = _disp(top_tk), top_m["ret1d_pct"]
+    max_z = max(abs(m["zscore"]) for _, m in movers)
+    spx = base["ret1d_pct"]
+    n_watch = len(movers)
+
+    def _pair(tk: str) -> str:
+        m = market_metrics.get(tk)
+        return f"{_disp(tk)} {m['ret1d_pct']:+.2f}%、" if m else ""
+
+    fact = fit_units(
+        f"{_pair('^GSPC')}{_pair('^IXIC')}"
+        f"監視{n_watch}銘柄で最も動いたのは{top_name}の{top_pct:+.1f}%。",
+        lim["fact_line"] * lim["fact_lines"])
+    if reason == "gate_failed":
+        # 動いた銘柄はあった。「全銘柄が基準内」と書くと事実と食い違う。
+        headline = f"材料待ち S&P500 {spx:+.2f}%"
+        conclusion = "値動きはあったが裏取りが揃わず見送り"
+        why = (f"{top_name}が{top_pct:+.1f}%（{max_z:.1f}σ）動いたものの、"
+               f"出典つきの数値と一次情報が{cfg['gate']['min_numbers']}件揃わなかったため、"
+               "深掘りカードは作らなかった。")
+    else:
+        headline = f"静かな1日 S&P500 {spx:+.2f}%"
+        conclusion = "深掘りの基準に届いた銘柄はなし"
+        why = (f"監視している{n_watch}銘柄すべてが直近{cfg['anomaly']['z_lookback_days']}日の"
+               f"変動分布で±{cfg['anomaly']['min_abs_z']}σ以内に収まったため、"
+               f"深掘りの対象になる銘柄が無かった。最大でも{max_z:.1f}σ。")
+    why = fit_units(why, lim["why_line"] * lim["why_lines"])
+    sowhat = fit_units(
+        f"S&P500の{spx:+.2f}%は指数の水準を変える幅ではないため、"
+        "積立の判断を動かす要素は出ていないと見ている。",
+        lim["sowhat_line"] * lim["sowhat_lines"])
+    counter = fit_units(
+        f"{top_name}の{top_pct:+.1f}%が数日続けば、テーマとして扱う水準になる。",
+        lim["counter_line"] * lim["counter_lines"])
+
+    lead = ("主要指数は小動き。" if reason != "gate_failed"
+            else "動いた銘柄はあったが裏取りが揃わず。")
+    post = (fit_units(f"{asof.month}/{asof.day} {lead}"
+                      f"S&P500 {spx:+.2f}%、監視{n_watch}銘柄の最大変動は"
+                      f"{top_name} {top_pct:+.1f}%（{max_z:.1f}σ）。",
+                      cfg["limits"]["post"])
+            + "\n動いた日だけ理由を探す。そうでない日は記録だけ残す。"
+            + "\n出典: yfinance(終値実測)")
+
+    return {
+        "ticker": "^GSPC", "name": "S&P500", "sector": "index",
+        "theme": THEME_BADGE["index"],
+        "headline": fit_units(headline, lim["headline"]),
+        "conclusion": fit_units(conclusion, lim["conclusion"]),
+        "fact": fact, "why": why, "sowhat": sowhat, "counter": counter,
+        "numbers": numbers, "post": post,
+        "event_date": asof_s, "event_pct": spx,
+        "event_label": f"{spx:+.2f}%",
+        "quiet_day": True, "quiet_reason": reason,
+        "score": None, "score_parts": None, "n_media": 0, "sns_heat": 0.0,
+    }
+
+
 # ── 本体 ────────────────────────────────────────────────
 def build_story(cand: dict, market_metrics: dict, primary: dict,
                 cfg: dict, asof: dt.date) -> dict:
