@@ -45,6 +45,13 @@ LOG_DIR = os.path.join(ROOT, "logs")
 
 STATE_FILE = "STATE.json"
 
+# 静かな日カードに使ってよいテンプレ。以下は文意が壊れるので使わない:
+#   T3 hero_number … 小さな変動を巨大数字で見せると誇張になる
+#   T4 contrast    … 明暗が割れていない日に主役 vs 比較対象は成立しない
+#   T6 qa          … 「なぜ上昇したのか？」の答えが「基準超えなし」になり
+#                    問いに答えていない文面になる（本番2026-08-09に発生）
+QUIET_TEMPLATES = ["T1", "T2", "T5"]
+
 
 def _write_state(latest: str, market_day: str, cards: int, quiet: bool = False):
     """latest/ が「どの取引日の何枚か」を記録する。
@@ -278,7 +285,7 @@ def main() -> int:
                 png = os.path.join(OUT_DIR, f"{asof.isoformat()}_1.png")
                 txt = os.path.join(OUT_DIR, f"{asof.isoformat()}_1.txt")
                 # 日替わりで見た目を変えつつ、失敗しても T2 で必ず描ける
-                rotated = ALL_TEMPLATES[asof.toordinal() % len(ALL_TEMPLATES)]
+                rotated = QUIET_TEMPLATES[asof.toordinal() % len(QUIET_TEMPLATES)]
                 for tpl in (args.template or rotated, "T2"):
                     if render_card(qstory, mkt.get("^GSPC"), date_str, png, cfg,
                                    template_id=tpl,
