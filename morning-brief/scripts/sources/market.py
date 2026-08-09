@@ -36,13 +36,24 @@ def fetch_market(cfg: dict, asof: dt.date) -> dict:
     一部銘柄の失敗はその銘柄だけ欠落。全滅なら {}。
     """
     names = all_tickers(cfg)
-    try:
-        import yfinance as yf
-        raw = yf.download(tickers=list(names), period="1y", interval="1d",
-                          progress=False, auto_adjust=True, group_by="ticker",
-                          threads=True)
-    except Exception as e:
-        print(f"[warn] yfinance 取得失敗: {e}")
+    # 一時的な取得失敗でその朝のブリーフを落とさないよう3回まで再試行する
+    raw = None
+    for attempt in range(1, 4):
+        try:
+            import yfinance as yf
+            raw = yf.download(tickers=list(names), period="1y", interval="1d",
+                              progress=False, auto_adjust=True, group_by="ticker",
+                              threads=True)
+            if raw is not None and len(raw):
+                break
+            print(f"[warn] yfinance が空を返しました ({attempt}/3)")
+        except Exception as e:
+            print(f"[warn] yfinance 取得失敗 ({attempt}/3): {e}")
+        if attempt < 3:
+            import time
+            time.sleep(5 * attempt)
+    if raw is None or not len(raw):
+        print("[warn] yfinance からデータを取得できませんでした")
         return {}
 
     out = {}
