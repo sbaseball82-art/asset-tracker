@@ -133,9 +133,15 @@ def _chart(fig, rect, series: dict, story: dict) -> bool:
 
     ev_col = RED if story["event_pct"] < 0 else GRN
     marker = "▼" if story["event_pct"] < 0 else "▲"
+    # 注記の上下は「値動きの符号」ではなく「最終点がグラフ内のどこにあるか」で
+    # 決める。高値圏で終えた日に符号だけで上へ置くと、右上の「6ヶ月 ±x%」と
+    # 重なって読めなくなるため（2026-08-07 の本番カードで発生）。
+    lo, hi = min(closes), max(closes)
+    frac = (closes[-1] - lo) / (hi - lo) if hi > lo else 0.5
+    dy = -28 if frac > 0.6 else 20
     ax.annotate(f"{marker} {story.get('event_label') or format(story['event_pct'], '+.1f') + '%'}",
                 xy=(dates[-1], closes[-1]),
-                xytext=(-10, 18 if story["event_pct"] < 0 else -26),
+                xytext=(-10, dy),
                 textcoords="offset points", ha="right", color=ev_col,
                 fontsize=16, fontweight="bold", zorder=5)
     ax.scatter([dates[-1]], [closes[-1]], s=46, color=ev_col, zorder=4)

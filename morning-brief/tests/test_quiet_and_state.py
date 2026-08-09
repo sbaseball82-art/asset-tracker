@@ -196,3 +196,45 @@ class TestMetricsMath:
         s = {"dates": ["2026-01-01"] * 10, "closes": [100.0] * 10,
              "volumes": [1e6] * 10}
         assert l1.metrics(s, CFG) is None
+
+
+class TestQuietTemplates:
+    """静かな日カードに使うテンプレの制限（文意が壊れる型を使わない）。"""
+
+    def test_excludes_incompatible_templates(self):
+        # T6(なぜ〜？) は答えが問いに対応せず、T3(巨大数字)/T4(対比)は
+        # 小さな値動きの日に誇張・不成立になる
+        assert set(mb.QUIET_TEMPLATES).isdisjoint({"T3", "T4", "T6"})
+
+    def test_all_are_real_templates(self):
+        from templates import BUILDERS
+        assert all(t in BUILDERS for t in mb.QUIET_TEMPLATES)
+
+    def test_rotation_is_stable_and_in_range(self):
+        for ordinal in range(400):
+            t = mb.QUIET_TEMPLATES[ordinal % len(mb.QUIET_TEMPLATES)]
+            assert t in mb.QUIET_TEMPLATES
+
+
+class TestChartLabelPlacement:
+    """高値圏で終えた日に、当日注記が右上の「6ヶ月」表記と重ならないこと。"""
+
+    def _render(self, closes):
+        import matplotlib
+        matplotlib.use("Agg")
+        from render import _chart
+        import matplotlib.pyplot as plt
+        fig = plt.figure(figsize=(10.8, 13.5), dpi=100)
+        series = {"dates": [(dt.date(2026, 3, 1) + dt.timedelta(days=i)).isoformat()
+                            for i in range(len(closes))], "closes": closes}
+        story = {"name": "S&P500", "event_pct": 0.62, "event_label": "+0.62%"}
+        assert _chart(fig, (72, 400, 936, 170), series, story)
+        ann = [t for t in fig.axes[-1].texts if "0.62" in t.get_text()][0]
+        plt.close(fig)
+        return ann.get_position()[1]      # y offset (points)
+
+    def test_high_close_places_label_below(self):
+        assert self._render([100.0 + i for i in range(126)]) < 0
+
+    def test_low_close_places_label_above(self):
+        assert self._render([200.0 - i for i in range(126)]) > 0
