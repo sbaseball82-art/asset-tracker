@@ -2,6 +2,11 @@
 
 > **追加機能**: X向けの保存版コンテンツ生成（週1）と決算日連動の実況テンプレは
 > [docs/X_CONTENT_SYSTEM.md](docs/X_CONTENT_SYSTEM.md) を参照。
+>
+> **ルックスルー分解（月1）**: 保有ファンドを個別銘柄まで分解して
+> 「実質どの企業を何円分持っているか」を出す機能は [下記](#ルックスルー分解月1) を参照。
+>
+> 設計方針・守るべきトーン・禁止事項は [CLAUDE.md](CLAUDE.md) にまとめてあります。
 
 保有ETF・投資信託の価格を毎営業日の朝に取得し、資産の推移（前日比・先週比・先月比・年初来）と
 その日の米国株式市場イベント3件を **1枚のスライド画像（1080×1080 / X最適）** にまとめます。
@@ -78,6 +83,88 @@ GitHub リポジトリの **Settings → Actions → General → Workflow permis
 ## X への投稿
 本システムは画像生成までを自動化します。生成された `slide/slide.png` を
 ダウンロードして X に手動投稿してください（X API の自動投稿は後から追加可能です）。
+
+---
+
+---
+
+## ルックスルー分解（月1）
+
+保有している11本のファンドを「中身の個別銘柄」まで分解し、
+**実質的にどの企業を何円分持っているか**と、
+**どのファンド経由で持っているか（経由の内訳）**を出します。
+
+高配当ETFとグロース系の両方に同じ会社が入っている状態を、金額で見えるようにするのが狙いです。
+
+### 実行
+
+```bash
+# 通常（各運用会社の公開データを取得）
+python -m src.lookthrough.generate
+
+# ネットワークを使わず data/cache のキャッシュだけで動かす
+python -m src.lookthrough.generate --offline
+
+# サンプルデータで一通り動かして生成物を見る（実データではありません）
+python -m src.lookthrough.generate --sample
+```
+
+GitHub Actions では **毎月1日 21:00 JST** に自動実行します
+（`.github/workflows/lookthrough.yml`）。生成のみで、投稿はしません。
+
+### 出力（`output/lookthrough/YYYY-MM/`）
+
+| ファイル | 内容 |
+|---|---|
+| `lookthrough.png` | ASSET LOGデザインの画像（1180×1450） |
+| `post_100.txt` / `post_150.txt` / `post_165.txt` | 全角文字数別の投稿文 |
+| `reply.txt` | 画像を添える2投稿目の本文 |
+| `data.json` | 計算結果の生データ（全銘柄・経由の内訳つき） |
+| `notes.md` | 代用したデータ、取得できなかった項目、前月からの変化 |
+
+機能②（指数寄与）が読む `data/lookthrough.json` も同時に更新されます。
+
+### データソース一覧
+
+取得元は `data/fund_map.yml` に宣言してあります。列名の変更などは
+YAMLの修正だけで追随できます。
+
+| ファンド | 取得元 | 代用 |
+|---|---|---|
+| VTI / VYM | Vanguard 公開API | — |
+| HDV | iShares(BlackRock) 公開CSV | — |
+| QQQ | Invesco 公開CSV | — |
+| SBI・V・S&P500 | Vanguard 公開API | **VOO** で代用 |
+| SBI NASDAQ100 / ニッセイNASDAQ100 | Invesco 公開CSV | **QQQ** で代用 |
+| SBI S 米国高配当(年4回) | `data/manual/SCHD.csv` | **SCHD** で代用（手動配置） |
+| iFreeNEXT FANG+ | `fund_map.yml` の `members` | NYSE FANG+ の等ウェイト（**四半期ごとに要確認**） |
+| イノベーションAI | `data/manual/innovation_ai.csv` | 代用先なし（未配置なら未分解） |
+| DRAM メモリ半導体ETF | `data/manual/DRAM.csv` | 代用先なし（未配置なら未分解） |
+
+投信は構成銘柄を公表しないため、連動対象ETFの構成で代用しています。
+**代用したことは画像・`data.json`・`notes.md` に必ず記録されます。**
+
+### 手動CSVの置き方
+
+取得元が無いファンドは、`data/manual/` にCSVを置くと分解対象になります。
+置かなければ「要手動確認」として未分解のまま出力されます（推測では埋めません）。
+
+```csv
+ticker,weight,name
+ABBV,4.30,AbbVie
+HD,4.20,Home Depot
+```
+
+### 取れなかったときの挙動
+
+| 状況 | 挙動 |
+|---|---|
+| 取得失敗・キャッシュあり | キャッシュを使い `stale: true` を画像に明記 |
+| 取得失敗・キャッシュなし | そのファンドを**未分解**にし「要手動確認」と表示 |
+| 上位N銘柄しか取れない | 取れた分だけ按分し、残りは「未カバー」として別枠 |
+| どのファンドも取れない | **生成を中止**（空の投稿文を作らない） |
+
+いずれの場合も、取れなかった値をそれらしい数字で埋めることはしません。
 
 ---
 

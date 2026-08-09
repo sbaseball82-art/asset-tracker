@@ -1,0 +1,140 @@
+# =============================================================
+# fund_map.yml — 保有ファンド → 構成銘柄の取得元
+# -------------------------------------------------------------
+# data/holdings.yml の各 fund.id に対して「構成銘柄をどこから取るか」を宣言する。
+# 投信は構成銘柄を公表しないため、連動対象ETFのデータで代用する。
+# 代用したものは proxy_of に代用先を書く。これは data.json と notes.md に
+# 必ず「代用」として記録され、投稿文にも概算である旨が入る。
+#
+# source の種類:
+#   vanguard    : Vanguard の公開API（url に profile API を指定）
+#   csv         : 公開CSVを取得して列名で読む（url / columns を指定）
+#   manual_csv  : data/manual/<file> に自分で置いたCSVを読む（取得元が無い場合）
+#   equal_weight: members を等ウェイトで配分（指数の公表メソドロジーに基づく場合のみ）
+#   null        : 取得元なし → 分解せず「要手動確認」として出力に明示する
+#
+# ★ 取得できない値を推測で埋めることは絶対にしない。
+#   取れなければ unresolved に落ち、画像・notes.md に「要手動確認」と出る。
+# =============================================================
+
+funds:
+
+  # ---------------- ETF（運用会社の公開データ） ----------------
+  VTI:
+    source: vanguard
+    url: https://investor.vanguard.com/investment-products/etfs/profile/api/VTI/portfolio-holding/stock
+    note: CRSP US Total Market 連動。構成銘柄数が多く、全銘柄取得できると理想
+
+  VYM:
+    source: vanguard
+    url: https://investor.vanguard.com/investment-products/etfs/profile/api/VYM/portfolio-holding/stock
+    note: FTSE High Dividend Yield 連動
+
+  HDV:
+    source: csv
+    url: https://www.ishares.com/us/products/239563/ishares-core-high-dividend-etf/1467271812596.ajax?fileType=csv&fileName=HDV_holdings&dataType=fund
+    columns:
+      ticker: Ticker
+      weight: Weight (%)
+      name: Name
+      sector: Sector
+    skip_until_header: true
+    note: Morningstar Dividend Yield Focus 連動（BlackRock 公開CSV）
+
+  QQQ:
+    source: csv
+    url: https://www.invesco.com/us/financial-products/etfs/holdings/main/holdings/0?audienceType=Investor&action=download&ticker=QQQ
+    columns:
+      ticker: Holding Ticker
+      weight: Weight
+      name: Name
+      sector: Sector
+    skip_until_header: true
+    note: NASDAQ100 連動（Invesco 公開CSV）
+
+  DRAM:
+    source: manual_csv
+    file: DRAM.csv
+    note: >-
+      メモリ半導体ETF。信頼できる公開CSVの取得元が未設定のため、
+      data/manual/DRAM.csv を置いたときだけ分解する。
+      無ければ「要手動確認」として未分解のまま出力する。
+
+  # ---------------- 投信（連動対象ETFで代用） ----------------
+  "89311199":
+    name_hint: SBI・V・S&P500
+    source: vanguard
+    url: https://investor.vanguard.com/investment-products/etfs/profile/api/VOO/portfolio-holding/stock
+    proxy_of: VOO
+    proxy_reason: 投信は構成銘柄を公表しないため、同じS&P500に連動するVOOの構成で代用
+
+  "8931224C":
+    name_hint: SBI S 米国高配当(年4回)
+    source: manual_csv
+    file: SCHD.csv
+    proxy_of: SCHD
+    proxy_reason: 連動対象のSCHD（Schwab）で代用。安定した公開CSVのURLが無いため手動配置
+    note: >-
+      Schwab のサイトから SCHD の保有銘柄CSVを落として data/manual/SCHD.csv に置く。
+      置かれるまでは未分解（要手動確認）のまま。
+
+  "89311265":
+    name_hint: SBI NASDAQ100
+    source: csv
+    url: https://www.invesco.com/us/financial-products/etfs/holdings/main/holdings/0?audienceType=Investor&action=download&ticker=QQQ
+    columns:
+      ticker: Holding Ticker
+      weight: Weight
+      name: Name
+      sector: Sector
+    skip_until_header: true
+    proxy_of: QQQ
+    proxy_reason: NASDAQ100連動のためQQQの構成で代用
+
+  "29313233":
+    name_hint: ニッセイNASDAQ100
+    source: csv
+    url: https://www.invesco.com/us/financial-products/etfs/holdings/main/holdings/0?audienceType=Investor&action=download&ticker=QQQ
+    columns:
+      ticker: Holding Ticker
+      weight: Weight
+      name: Name
+      sector: Sector
+    skip_until_header: true
+    proxy_of: QQQ
+    proxy_reason: NASDAQ100連動のためQQQの構成で代用
+
+  "04311181":
+    name_hint: iFreeNEXT FANG+
+    source: equal_weight
+    proxy_of: NYSE FANG+
+    proxy_reason: >-
+      NYSE FANG+ は10銘柄の等ウェイト指数（四半期リバランス）という公表メソドロジー。
+      それに基づき各10.0%で配分している
+    verify_required: true
+    members_as_of: "2026-07"
+    members_source: 既存 data/cache/etf_constituents.yml から引き継ぎ（未検証）
+    members: [META, AAPL, AMZN, NFLX, NVDA, GOOGL, MSFT, AVGO, CRWD, NOW]
+    note: >-
+      ★構成銘柄は自動取得していない。指数の入替があると古くなるため、
+      四半期ごとに NYSE FANG+ の構成銘柄を確認して members を更新すること。
+      毎回 notes.md の「要手動確認」に出る。
+
+  "79314186":
+    name_hint: イノベーションAI
+    source: manual_csv
+    file: innovation_ai.csv
+    note: >-
+      AI関連のアクティブ投信。連動対象指数が無いため代用できない。
+      月次レポートの組入上位銘柄を data/manual/innovation_ai.csv に
+      （ticker,weight,name の3列で）書き写したときだけ分解する。
+
+
+# 「実質AI・大型ハイテク」サマリーカードの対象銘柄。
+# 分類は主観が入るため、判断基準をここに明示して外から変えられるようにする。
+ai_megatech:
+  label: 実質AI・大型ハイテク
+  criteria: >-
+    AIの需要を業績の主要ドライバーとして自ら説明している大型テック・半導体銘柄を
+    手動で列挙している（セクター分類ではないため、主観が入る点に注意）
+  tickers: [NVDA, MSFT, AAPL, AMZN, GOOGL, GOOG, META, AVGO, TSLA, AMD, NFLX, CRWD, NOW, TSM, MU, ORCL, PLTR]

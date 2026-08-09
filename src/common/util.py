@@ -26,15 +26,19 @@ def today_jst():
     return now_jst().date()
 
 
-def retry(func, tries: int = 3, wait: float = 5.0, label: str = ""):
-    """3回リトライ。全滅なら None（呼び出し側は「要手動入力」で埋める）。"""
+def retry(func, tries: int = 3, wait: float = 5.0, label: str = "",
+          backoff: float = 1.0):
+    """3回リトライ。全滅なら None（呼び出し側は「要手動入力」で埋める）。
+
+    backoff > 1 を渡すと待ち時間を指数的に伸ばす（wait, wait*backoff, ...）。
+    """
     for i in range(tries):
         try:
             return func()
         except Exception as e:  # noqa: BLE001
             print(f"[warn] {label} 失敗 ({i + 1}/{tries}): {e}")
             if i < tries - 1:
-                time.sleep(wait)
+                time.sleep(wait * (backoff ** i))
     return None
 
 

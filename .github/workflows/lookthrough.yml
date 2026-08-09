@@ -1,0 +1,108 @@
+name: lookthrough
+
+# 保有ファンドを個別銘柄まで分解（ルックスルー）して投稿素材を作る。
+# 生成のみ。自動投稿はしない。
+
+on:
+  schedule:
+    # 毎月1日 12:00 UTC (= 21:00 JST)。
+    # GitHubのcronは遅延することがあるため予備を1本置く
+    # （同月の再実行は同じ出力を上書きするだけなので二重生成にはならない）。
+    - cron: "0 12 1 * *"
+    - cron: "0 14 1 * *"
+  workflow_dispatch:
+    inputs:
+      ym:
+        description: "出力月（YYYY-MM。空なら当月）"
+        required: false
+        default: ""
+      offline:
+        description: "公開データを取得せずキャッシュのみ使う"
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Japanese fonts (Noto Sans JP)
+        # 画像の日本語が豆腐(□)になるのを防ぐ。
+        # fonts-noto-cjk が "Noto Sans CJK JP" を入れる。
+        # fonts-noto-color-emoji は ⚠ などの記号用。
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-noto-cjk fonts-noto-color-emoji
+          fc-cache -f
+          echo "--- 入ったフォント ---"
+          fc-list | grep -i "noto.*cjk" | head -3
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Run tests first
+        run: pip install pytest && python -m pytest tests/ -q
+
+      - name: Sync holdings from data.json
+        run: python scripts/sync_holdings_yml.py
+
+      - name: Generate lookthrough
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          ARGS=""
+          if [ -n "${{ github.event.inputs.ym }}" ]; then
+            ARGS="$ARGS --ym ${{ github.event.inputs.ym }}"
+          fi
+          if [ "${{ github.event.inputs.offline }}" = "true" ]; then
+            ARGS="$ARGS --offline"
+          fi
+          python -m src.lookthrough.generate $ARGS
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: lookthrough
+          path: output/lookthrough/
+          retention-days: 90
+
+      - name: Commit outputs
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          BRANCH="${GITHUB_REF_NAME}"
+
+          # 生成物を退避 → 最新originに重ねてpush（バイナリはrebase不能のため
+          # fetch + checkout -B 方式。evergreen.yml と同一の実績パターン）。
+          mkdir -p "$RUNNER_TEMP/gen"
+          cp -r output logs data "$RUNNER_TEMP/gen/" 2>/dev/null || true
+
+          for i in 1 2 3 4 5; do
+            git fetch origin "$BRANCH"
+            git reset --hard
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+            cp -r "$RUNNER_TEMP/gen/output/." output/ 2>/dev/null || true
+            cp -r "$RUNNER_TEMP/gen/logs/."   logs/   2>/dev/null || true
+            cp -r "$RUNNER_TEMP/gen/data/."   data/   2>/dev/null || true
+            git add output logs data
+            if git diff --cached --quiet; then
+              echo "変更なし(コミットをスキップ)"; exit 0
+            fi
+            git commit -m "lookthrough: $(date -u +%Y-%m)"
+            if git push origin "$BRANCH"; then exit 0; fi
+            echo "::warning::push拒否 (試行 $i)。5秒後に再試行"; sleep 5
+          done
+          echo "::error::5回試行してもpushできませんでした"; exit 1
