@@ -1,0 +1,234 @@
+# =============================================================
+# constituents_sample.yml
+# -------------------------------------------------------------
+# ★★ これは動作確認用のサンプルです。実際の構成比ではありません。 ★★
+#
+# `python -m src.lookthrough.generate --sample` からのみ読まれる。
+# 本番の実行（引数なし / --offline）がこのファイルを読むことはない。
+# 出力は output/lookthrough/sample/ に隔離され、画像とnotes.mdに
+# 「サンプルデータ」と明記される。data/lookthrough.json も更新しない。
+#
+# 各ファンドは上位20〜25銘柄を名前つきで載せ、残りは tail: で
+# ダミー銘柄（TVTI0001 形式）に展開して構成比を約100%まで埋めている。
+# 実際のETFは数百〜数千銘柄あるため、上位だけではカバレッジが50%程度に
+# しかならず、カバレッジ閾値ゲートの動作確認ができないため。
+#
+#   tail: {count: 銘柄数, total_weight: 合計構成比, prefix: ダミーの接頭辞}
+#
+# prefix はファンドごとに変えてある。同じにすると裾のダミー銘柄どうしが
+# 全ファンドで一致し、「重複保有◯社」が実態とかけ離れた数字になるため。
+# 重複保有の数字は、上に名前つきで並べた実在ティッカーから出る。
+#
+# DRAM と イノベーションAI は fund_map.yml で coverage_policy: excluded
+# にしてあるので、ここには定義しない（「分解対象外」として扱われる）。
+# =============================================================
+
+as_of: "SAMPLE"
+
+funds:
+
+  VTI:
+    tail: {count: 300, total_weight: 56.4, prefix: TVTI}   # 下位銘柄の裾（ダミー）
+    items:
+      - {ticker: NVDA,  weight_pct: 6.50, name: NVIDIA,            sector: 情報技術}
+      - {ticker: MSFT,  weight_pct: 5.80, name: Microsoft,         sector: 情報技術}
+      - {ticker: AAPL,  weight_pct: 5.20, name: Apple,             sector: 情報技術}
+      - {ticker: AMZN,  weight_pct: 3.60, name: Amazon,            sector: 一般消費財}
+      - {ticker: META,  weight_pct: 2.40, name: Meta Platforms,    sector: コミュニケーション}
+      - {ticker: AVGO,  weight_pct: 2.20, name: Broadcom,          sector: 情報技術}
+      - {ticker: GOOGL, weight_pct: 2.10, name: Alphabet A,        sector: コミュニケーション}
+      - {ticker: BRK.B, weight_pct: 1.60, name: Berkshire B,       sector: 金融}
+      - {ticker: TSLA,  weight_pct: 1.50, name: Tesla,             sector: 一般消費財}
+      - {ticker: JPM,   weight_pct: 1.40, name: JPMorgan Chase,    sector: 金融}
+      - {ticker: LLY,   weight_pct: 1.20, name: Eli Lilly,         sector: ヘルスケア}
+      - {ticker: V,     weight_pct: 0.90, name: Visa,              sector: 金融}
+      - {ticker: XOM,   weight_pct: 0.90, name: Exxon Mobil,       sector: エネルギー}
+      - {ticker: WMT,   weight_pct: 0.80, name: Walmart,           sector: 生活必需品}
+      - {ticker: UNH,   weight_pct: 0.80, name: UnitedHealth,      sector: ヘルスケア}
+      - {ticker: MA,    weight_pct: 0.80, name: Mastercard,        sector: 金融}
+      - {ticker: COST,  weight_pct: 0.80, name: Costco,            sector: 生活必需品}
+      - {ticker: JNJ,   weight_pct: 0.70, name: Johnson & Johnson, sector: ヘルスケア}
+      - {ticker: HD,    weight_pct: 0.70, name: Home Depot,        sector: 一般消費財}
+      - {ticker: PG,    weight_pct: 0.70, name: Procter & Gamble,  sector: 生活必需品}
+      - {ticker: ABBV,  weight_pct: 0.60, name: AbbVie,            sector: ヘルスケア}
+      - {ticker: NFLX,  weight_pct: 0.60, name: Netflix,           sector: コミュニケーション}
+      - {ticker: CRM,   weight_pct: 0.50, name: Salesforce,        sector: 情報技術}
+      - {ticker: BAC,   weight_pct: 0.50, name: Bank of America,   sector: 金融}
+      - {ticker: ORCL,  weight_pct: 0.50, name: Oracle,            sector: 情報技術}
+
+  VYM:
+    tail: {count: 200, total_weight: 60.0, prefix: TVYM}   # 下位銘柄の裾（ダミー）
+    items:
+      - {ticker: AVGO,  weight_pct: 5.20, name: Broadcom,          sector: 情報技術}
+      - {ticker: JPM,   weight_pct: 3.60, name: JPMorgan Chase,    sector: 金融}
+      - {ticker: XOM,   weight_pct: 3.10, name: Exxon Mobil,       sector: エネルギー}
+      - {ticker: HD,    weight_pct: 2.40, name: Home Depot,        sector: 一般消費財}
+      - {ticker: PG,    weight_pct: 2.30, name: Procter & Gamble,  sector: 生活必需品}
+      - {ticker: JNJ,   weight_pct: 2.20, name: Johnson & Johnson, sector: ヘルスケア}
+      - {ticker: ABBV,  weight_pct: 2.10, name: AbbVie,            sector: ヘルスケア}
+      - {ticker: WMT,   weight_pct: 2.00, name: Walmart,           sector: 生活必需品}
+      - {ticker: BAC,   weight_pct: 1.90, name: Bank of America,   sector: 金融}
+      - {ticker: KO,    weight_pct: 1.70, name: Coca-Cola,         sector: 生活必需品}
+      - {ticker: CVX,   weight_pct: 1.70, name: Chevron,           sector: エネルギー}
+      - {ticker: MRK,   weight_pct: 1.50, name: Merck,             sector: ヘルスケア}
+      - {ticker: PEP,   weight_pct: 1.40, name: PepsiCo,           sector: 生活必需品}
+      - {ticker: CSCO,  weight_pct: 1.40, name: Cisco,             sector: 情報技術}
+      - {ticker: WFC,   weight_pct: 1.30, name: Wells Fargo,       sector: 金融}
+      - {ticker: MCD,   weight_pct: 1.20, name: McDonald's,        sector: 一般消費財}
+      - {ticker: PM,    weight_pct: 1.20, name: Philip Morris,     sector: 生活必需品}
+      - {ticker: IBM,   weight_pct: 1.20, name: IBM,               sector: 情報技術}
+      - {ticker: VZ,    weight_pct: 1.10, name: Verizon,           sector: コミュニケーション}
+      - {ticker: TXN,   weight_pct: 1.00, name: Texas Instruments, sector: 情報技術}
+
+  HDV:
+    tail: {count: 55, total_weight: 31.4, prefix: THDV}   # 下位銘柄の裾（ダミー）
+    items:
+      - {ticker: XOM,   weight_pct: 8.50, name: Exxon Mobil,       sector: エネルギー}
+      - {ticker: JNJ,   weight_pct: 6.80, name: Johnson & Johnson, sector: ヘルスケア}
+      - {ticker: ABBV,  weight_pct: 6.40, name: AbbVie,            sector: ヘルスケア}
+      - {ticker: CVX,   weight_pct: 5.90, name: Chevron,           sector: エネルギー}
+      - {ticker: PG,    weight_pct: 4.40, name: Procter & Gamble,  sector: 生活必需品}
+      - {ticker: KO,    weight_pct: 4.10, name: Coca-Cola,         sector: 生活必需品}
+      - {ticker: MO,    weight_pct: 3.40, name: Altria,            sector: 生活必需品}
+      - {ticker: CSCO,  weight_pct: 3.20, name: Cisco,             sector: 情報技術}
+      - {ticker: VZ,    weight_pct: 3.00, name: Verizon,           sector: コミュニケーション}
+      - {ticker: IBM,   weight_pct: 2.90, name: IBM,               sector: 情報技術}
+      - {ticker: PM,    weight_pct: 2.60, name: Philip Morris,     sector: 生活必需品}
+      - {ticker: MRK,   weight_pct: 2.50, name: Merck,             sector: ヘルスケア}
+      - {ticker: PEP,   weight_pct: 2.40, name: PepsiCo,           sector: 生活必需品}
+      - {ticker: T,     weight_pct: 2.20, name: AT&T,              sector: コミュニケーション}
+      - {ticker: GILD,  weight_pct: 2.00, name: Gilead Sciences,   sector: ヘルスケア}
+      - {ticker: LMT,   weight_pct: 1.80, name: Lockheed Martin,   sector: 資本財}
+      - {ticker: DUK,   weight_pct: 1.70, name: Duke Energy,       sector: 公益}
+      - {ticker: SO,    weight_pct: 1.60, name: Southern Co,       sector: 公益}
+      - {ticker: KMI,   weight_pct: 1.50, name: Kinder Morgan,     sector: エネルギー}
+      - {ticker: UPS,   weight_pct: 1.40, name: UPS,               sector: 資本財}
+
+  QQQ:
+    tail: {count: 80, total_weight: 37.4, prefix: TQQQ}   # 下位銘柄の裾（ダミー）
+    items:
+      - {ticker: NVDA,  weight_pct: 9.10, name: NVIDIA,            sector: 情報技術}
+      - {ticker: MSFT,  weight_pct: 8.20, name: Microsoft,         sector: 情報技術}
+      - {ticker: AAPL,  weight_pct: 7.40, name: Apple,             sector: 情報技術}
+      - {ticker: AMZN,  weight_pct: 5.50, name: Amazon,            sector: 一般消費財}
+      - {ticker: AVGO,  weight_pct: 5.00, name: Broadcom,          sector: 情報技術}
+      - {ticker: META,  weight_pct: 3.50, name: Meta Platforms,    sector: コミュニケーション}
+      - {ticker: NFLX,  weight_pct: 2.90, name: Netflix,           sector: コミュニケーション}
+      - {ticker: GOOGL, weight_pct: 2.60, name: Alphabet A,        sector: コミュニケーション}
+      - {ticker: TSLA,  weight_pct: 2.60, name: Tesla,             sector: 一般消費財}
+      - {ticker: COST,  weight_pct: 2.40, name: Costco,            sector: 生活必需品}
+      - {ticker: TMUS,  weight_pct: 1.60, name: T-Mobile US,       sector: コミュニケーション}
+      - {ticker: CSCO,  weight_pct: 1.50, name: Cisco,             sector: 情報技術}
+      - {ticker: AMD,   weight_pct: 1.40, name: AMD,               sector: 情報技術}
+      - {ticker: PEP,   weight_pct: 1.40, name: PepsiCo,           sector: 生活必需品}
+      - {ticker: LIN,   weight_pct: 1.30, name: Linde,             sector: 素材}
+      - {ticker: ADBE,  weight_pct: 1.20, name: Adobe,             sector: 情報技術}
+      - {ticker: QCOM,  weight_pct: 1.20, name: Qualcomm,          sector: 情報技術}
+      - {ticker: TXN,   weight_pct: 1.20, name: Texas Instruments, sector: 情報技術}
+      - {ticker: INTU,  weight_pct: 1.20, name: Intuit,            sector: 情報技術}
+      - {ticker: AMGN,  weight_pct: 1.10, name: Amgen,             sector: ヘルスケア}
+
+  # --- 投信（連動対象ETFで代用） ---
+
+  "89311199":            # SBI・V・S&P500 → VOO
+    proxy_of: VOO
+    proxy_reason: 投信は構成銘柄を公表しないため、同じS&P500に連動するVOOの構成で代用
+    tail: {count: 300, total_weight: 52.5, prefix: TVOO}   # 下位銘柄の裾（ダミー）
+    items:
+      - {ticker: NVDA,  weight_pct: 7.60, name: NVIDIA,            sector: 情報技術}
+      - {ticker: MSFT,  weight_pct: 6.80, name: Microsoft,         sector: 情報技術}
+      - {ticker: AAPL,  weight_pct: 6.10, name: Apple,             sector: 情報技術}
+      - {ticker: AMZN,  weight_pct: 4.20, name: Amazon,            sector: 一般消費財}
+      - {ticker: META,  weight_pct: 2.80, name: Meta Platforms,    sector: コミュニケーション}
+      - {ticker: AVGO,  weight_pct: 2.60, name: Broadcom,          sector: 情報技術}
+      - {ticker: GOOGL, weight_pct: 2.50, name: Alphabet A,        sector: コミュニケーション}
+      - {ticker: BRK.B, weight_pct: 1.80, name: Berkshire B,       sector: 金融}
+      - {ticker: TSLA,  weight_pct: 1.70, name: Tesla,             sector: 一般消費財}
+      - {ticker: JPM,   weight_pct: 1.60, name: JPMorgan Chase,    sector: 金融}
+      - {ticker: LLY,   weight_pct: 1.40, name: Eli Lilly,         sector: ヘルスケア}
+      - {ticker: V,     weight_pct: 1.00, name: Visa,              sector: 金融}
+      - {ticker: XOM,   weight_pct: 1.00, name: Exxon Mobil,       sector: エネルギー}
+      - {ticker: UNH,   weight_pct: 0.90, name: UnitedHealth,      sector: ヘルスケア}
+      - {ticker: MA,    weight_pct: 0.90, name: Mastercard,        sector: 金融}
+      - {ticker: COST,  weight_pct: 0.90, name: Costco,            sector: 生活必需品}
+      - {ticker: WMT,   weight_pct: 0.90, name: Walmart,           sector: 生活必需品}
+      - {ticker: JNJ,   weight_pct: 0.80, name: Johnson & Johnson, sector: ヘルスケア}
+      - {ticker: HD,    weight_pct: 0.80, name: Home Depot,        sector: 一般消費財}
+      - {ticker: PG,    weight_pct: 0.80, name: Procter & Gamble,  sector: 生活必需品}
+
+  "8931224C":            # SBI S 米国高配当(年4回) → SCHD
+    proxy_of: SCHD
+    proxy_reason: 連動対象のSCHD（Schwab）の構成で代用
+    tail: {count: 80, total_weight: 32.9, prefix: TSCH}   # 下位銘柄の裾（ダミー）
+    items:
+      - {ticker: ABBV,  weight_pct: 4.30, name: AbbVie,            sector: ヘルスケア}
+      - {ticker: HD,    weight_pct: 4.20, name: Home Depot,        sector: 一般消費財}
+      - {ticker: CVX,   weight_pct: 4.10, name: Chevron,           sector: エネルギー}
+      - {ticker: KO,    weight_pct: 4.00, name: Coca-Cola,         sector: 生活必需品}
+      - {ticker: CSCO,  weight_pct: 3.90, name: Cisco,             sector: 情報技術}
+      - {ticker: VZ,    weight_pct: 3.80, name: Verizon,           sector: コミュニケーション}
+      - {ticker: AMGN,  weight_pct: 3.70, name: Amgen,             sector: ヘルスケア}
+      - {ticker: PEP,   weight_pct: 3.60, name: PepsiCo,           sector: 生活必需品}
+      - {ticker: TXN,   weight_pct: 3.50, name: Texas Instruments, sector: 情報技術}
+      - {ticker: LMT,   weight_pct: 3.40, name: Lockheed Martin,   sector: 資本財}
+      - {ticker: BMY,   weight_pct: 3.30, name: Bristol-Myers,     sector: ヘルスケア}
+      - {ticker: PFE,   weight_pct: 3.20, name: Pfizer,            sector: ヘルスケア}
+      - {ticker: MO,    weight_pct: 3.10, name: Altria,            sector: 生活必需品}
+      - {ticker: UPS,   weight_pct: 3.00, name: UPS,               sector: 資本財}
+      - {ticker: EOG,   weight_pct: 2.90, name: EOG Resources,     sector: エネルギー}
+      - {ticker: ADP,   weight_pct: 2.80, name: ADP,               sector: 資本財}
+      - {ticker: ITW,   weight_pct: 2.70, name: Illinois Tool Works, sector: 資本財}
+      - {ticker: KMB,   weight_pct: 2.60, name: Kimberly-Clark,    sector: 生活必需品}
+      - {ticker: GIS,   weight_pct: 2.40, name: General Mills,     sector: 生活必需品}
+      - {ticker: MMM,   weight_pct: 2.30, name: 3M,                sector: 資本財}
+
+  "89311265":            # SBI NASDAQ100 → QQQ
+    proxy_of: QQQ
+    proxy_reason: NASDAQ100連動のためQQQの構成で代用
+    tail: {count: 80, total_weight: 49.6, prefix: TNQA}   # 下位銘柄の裾（ダミー）
+    items:
+      - {ticker: NVDA,  weight_pct: 9.10, name: NVIDIA,            sector: 情報技術}
+      - {ticker: MSFT,  weight_pct: 8.20, name: Microsoft,         sector: 情報技術}
+      - {ticker: AAPL,  weight_pct: 7.40, name: Apple,             sector: 情報技術}
+      - {ticker: AMZN,  weight_pct: 5.50, name: Amazon,            sector: 一般消費財}
+      - {ticker: AVGO,  weight_pct: 5.00, name: Broadcom,          sector: 情報技術}
+      - {ticker: META,  weight_pct: 3.50, name: Meta Platforms,    sector: コミュニケーション}
+      - {ticker: NFLX,  weight_pct: 2.90, name: Netflix,           sector: コミュニケーション}
+      - {ticker: GOOGL, weight_pct: 2.60, name: Alphabet A,        sector: コミュニケーション}
+      - {ticker: TSLA,  weight_pct: 2.60, name: Tesla,             sector: 一般消費財}
+      - {ticker: COST,  weight_pct: 2.40, name: Costco,            sector: 生活必需品}
+
+  "29313233":            # ニッセイNASDAQ100 → QQQ
+    proxy_of: QQQ
+    proxy_reason: NASDAQ100連動のためQQQの構成で代用
+    tail: {count: 80, total_weight: 49.6, prefix: TNQB}   # 下位銘柄の裾（ダミー）
+    items:
+      - {ticker: NVDA,  weight_pct: 9.10, name: NVIDIA,            sector: 情報技術}
+      - {ticker: MSFT,  weight_pct: 8.20, name: Microsoft,         sector: 情報技術}
+      - {ticker: AAPL,  weight_pct: 7.40, name: Apple,             sector: 情報技術}
+      - {ticker: AMZN,  weight_pct: 5.50, name: Amazon,            sector: 一般消費財}
+      - {ticker: AVGO,  weight_pct: 5.00, name: Broadcom,          sector: 情報技術}
+      - {ticker: META,  weight_pct: 3.50, name: Meta Platforms,    sector: コミュニケーション}
+      - {ticker: NFLX,  weight_pct: 2.90, name: Netflix,           sector: コミュニケーション}
+      - {ticker: GOOGL, weight_pct: 2.60, name: Alphabet A,        sector: コミュニケーション}
+      - {ticker: TSLA,  weight_pct: 2.60, name: Tesla,             sector: 一般消費財}
+      - {ticker: COST,  weight_pct: 2.40, name: Costco,            sector: 生活必需品}
+
+  "04311181":            # iFreeNEXT FANG+ → NYSE FANG+（10銘柄・等ウェイト）
+    proxy_of: NYSE FANG+
+    proxy_reason: NYSE FANG+ は10銘柄の等ウェイト指数という公表メソドロジーに基づく
+    verify_required: true
+    items:
+      - {ticker: META,  weight_pct: 10.0, name: Meta Platforms,    sector: コミュニケーション}
+      - {ticker: AAPL,  weight_pct: 10.0, name: Apple,             sector: 情報技術}
+      - {ticker: AMZN,  weight_pct: 10.0, name: Amazon,            sector: 一般消費財}
+      - {ticker: NFLX,  weight_pct: 10.0, name: Netflix,           sector: コミュニケーション}
+      - {ticker: NVDA,  weight_pct: 10.0, name: NVIDIA,            sector: 情報技術}
+      - {ticker: GOOGL, weight_pct: 10.0, name: Alphabet A,        sector: コミュニケーション}
+      - {ticker: MSFT,  weight_pct: 10.0, name: Microsoft,         sector: 情報技術}
+      - {ticker: AVGO,  weight_pct: 10.0, name: Broadcom,          sector: 情報技術}
+      - {ticker: CRWD,  weight_pct: 10.0, name: CrowdStrike,       sector: 情報技術}
+      - {ticker: NOW,   weight_pct: 10.0, name: ServiceNow,        sector: 情報技術}
+
+  # DRAM / 79314186（イノベーションAI）は意図的に未定義。
+  # 「要手動確認」として未分解のまま出力されることの確認用。

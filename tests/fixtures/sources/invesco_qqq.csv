@@ -1,0 +1,6 @@
+Fund Ticker,Security Identifier,Holding Ticker,Shares/Par Value,MarketValue,Weight,Name,Class of Shares,Sector,Date
+QQQ,67066G104,NVDA," 45,000,000 "," 8,100,000,000 "," 9.10 ",NVIDIA CORP,COMMON,Information Technology,08/08/2026
+QQQ,594918104,MSFT," 15,000,000 "," 7,300,000,000 "," 8.20 ",MICROSOFT CORP,COMMON,Information Technology,08/08/2026
+QQQ,037833100,AAPL," 30,000,000 "," 6,590,000,000 "," 7.40 ",APPLE INC,COMMON,Information Technology,08/08/2026
+QQQ,023135106,AMZN," 22,000,000 "," 4,900,000,000 "," 5.50 ",AMAZON.COM INC,COMMON,Consumer Discretionary,08/08/2026
+QQQ,CASH,-," 0 "," 1,200,000 "," 0.00 ",CASH,CASH,--,08/08/2026

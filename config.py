@@ -55,7 +55,14 @@ FUND_HOLDINGS = {
 EVENT_MODE = "semi"
 
 # Xアカウント名（@は不要）
-X_ACCOUNT = "your_account"
+# ★ 実体は config.yml の account.x_handle。ここは既存スクリプト
+#   （make_slide.py など）が import してくるための入口として残している。
+try:
+    from src.common.settings import x_handle as _x_handle
+    X_ACCOUNT = _x_handle()
+except Exception as e:  # noqa: BLE001
+    print(f"config.yml 読込失敗: {e} -> 既定のアカウント名で続行")
+    X_ACCOUNT = "your_account"
 
 # ポートフォリオのタイトル
 PORTFOLIO_TITLE = "わたしの資産推移"

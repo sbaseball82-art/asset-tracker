@@ -1,0 +1,60 @@
+# =============================================================
+# config.yml — 運用まわりの設定を1か所に集める
+# -------------------------------------------------------------
+# ここを書き換えればコードを触らずに挙動を変えられる。
+# 銘柄マスタ（名前・ISIN）は config.py、保有数量は holdings.json のまま。
+# =============================================================
+
+account:
+  # X のハンドル。先頭の @ は付けても付けなくてもよい（内部で正規化する）
+  x_handle: "@84m5dm9xdm"
+
+paths:
+  holdings: "data/holdings.yml"
+  fund_map: "data/fund_map.yml"
+  output: "output/"
+  cache: "data/cache/constituents/"
+  manual: "data/manual/"
+  history: "data/history/"
+  reports: "reports/"
+  feed: "data/lookthrough.json"        # 機能②（指数寄与）が読む
+
+coverage:
+  # 分解カバレッジがこれを下回ったら投稿文を作らずに中止する。
+  # 「カバレッジ72%のまま『上位10社で◯%』と書く」ことを防ぐための門。
+  halt_below: 0.90
+  # これを下回ったら警告つきで生成する
+  warn_below: 0.95
+  # excluded 指定のファンドをカバレッジ計算の分母から除くか
+  exclude_declared: true
+  # 機能②が読む data/lookthrough.json を更新する最低カバレッジ
+  feed_min: 0.90
+
+freshness:
+  # キャッシュの経過日数で扱いを変える（ETFの構成比は月次更新のため）
+  ok_days: 35        # 0〜35日: 正常
+  warn_days: 90      # 36〜90日: 警告つきで使う。画像に基準日を強調表示
+  # 91日以上: 取得失敗と同じ扱い。カバレッジから除外する
+
+notification:
+  method: "slack"                  # slack | none
+  webhook_env: "SLACK_WEBHOOK_URL"
+  notify_on:
+    - halt                 # カバレッジ不足などで生成を中止した
+    - stale                # キャッシュが古い状態で生成した
+    - source_degraded      # priority 1 が落ちて下位で拾っている
+    - constituent_change   # 指数の銘柄入替を検出した
+
+schedule:
+  lookthrough: "monthly"     # 毎月1日 21:00 JST
+  source_health: "weekly"    # 毎週日曜 21:00 JST
+
+post:
+  # 生成する投稿文の全角文字数（上限）
+  limits: [100, 150, 165]
+
+source_health:
+  # priority 1 がこの週数だけ連続で失敗したら「要対応」として通知する
+  degraded_after_weeks: 2
+  # 1ソースあたりの取得タイムアウト（秒）
+  timeout_sec: 60

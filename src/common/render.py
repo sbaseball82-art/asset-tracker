@@ -156,8 +156,58 @@ def build_html(title: str, subtitle: str, format_: str, spec: dict,
 </body></html>"""
 
 
-def render_png(html: str, out_png: Path) -> bool:
-    """HTML→PNG。playwright/chromium が無い環境では False を返して続行させる。"""
+def _find_chromium() -> str | None:
+    """すでに入っている Chromium を探す。
+
+    playwright のバージョンと同梱ブラウザのビルド番号がずれている環境
+    （ブラウザが先に用意されたコンテナなど）で、再ダウンロードせずに済ませる。
+    """
+    import glob
+    import os
+    import shutil
+
+    roots = [os.environ.get("PLAYWRIGHT_BROWSERS_PATH", ""),
+             str(Path.home() / ".cache" / "ms-playwright")]
+    patterns = ("chromium-*/chrome-linux/chrome",
+                "chromium_headless_shell-*/chrome-linux/headless_shell",
+                "chromium-*/chrome-mac/Chromium.app/Contents/MacOS/Chromium")
+    for root in roots:
+        if not root:
+            continue
+        for pat in patterns:
+            hits = sorted(glob.glob(str(Path(root) / pat)))
+            if hits:
+                return hits[-1]
+    for name in ("chromium", "chromium-browser", "google-chrome"):
+        found = shutil.which(name)
+        if found:
+            return found
+    return None
+
+
+def _launch_chromium(p):
+    """通常起動を試し、同梱ブラウザが無ければ既存のChromiumで起動する。"""
+    try:
+        return p.chromium.launch(args=["--no-sandbox"])
+    except Exception as e:  # noqa: BLE001
+        exe = _find_chromium()
+        if not exe:
+            raise
+        print(f"[info] 同梱ブラウザが使えないため既存のChromiumを使います: {exe}")
+        return p.chromium.launch(args=["--no-sandbox"], executable_path=exe)
+
+
+def render_png(html: str, out_png: Path, width: int = 1600,
+               height: int = 900, report: dict | None = None) -> bool:
+    """HTML→PNG。playwright/chromium が無い環境では False を返して続行させる。
+
+    width/height はキャンバスサイズ。既定は evergreen の 1600x900、
+    ルックスルーのASSET LOGカードは 1180x1450 を渡す。
+
+    report を渡すと、実際の中身の高さ(scroll_height)と、キャンバスから
+    はみ出したか(overflow_px)を書き込む。行数が増えて表がはみ出しても
+    見た目では気づきにくいため、呼び出し側で検査できるようにしている。
+    """
     out_png = Path(out_png)
     out_png.parent.mkdir(parents=True, exist_ok=True)
     out_html = out_png.with_suffix(".html")
@@ -170,15 +220,22 @@ def render_png(html: str, out_png: Path) -> bool:
         return False
     try:
         with sync_playwright() as p:
-            browser = p.chromium.launch(args=["--no-sandbox"])
-            page = browser.new_page(viewport={"width": 1600, "height": 900},
+            browser = _launch_chromium(p)
+            page = browser.new_page(viewport={"width": width, "height": height},
                                     device_scale_factor=2)
             page.goto(out_html.resolve().as_uri())
             page.wait_for_timeout(1200)  # フォント読込待ち
-            raw = page.screenshot(clip={"x": 0, "y": 0, "width": 1600, "height": 900})
+            if report is not None:
+                scroll_h = page.evaluate(
+                    "Math.max(document.body.scrollHeight,"
+                    " document.documentElement.scrollHeight)")
+                report["scroll_height"] = scroll_h
+                report["overflow_px"] = max(0, int(scroll_h) - height)
+            raw = page.screenshot(clip={"x": 0, "y": 0,
+                                        "width": width, "height": height})
             browser.close()
         Image.open(io.BytesIO(raw)).convert("RGB").resize(
-            (1600, 900), Image.LANCZOS).save(out_png)
+            (width, height), Image.LANCZOS).save(out_png)
         print(f"🖼️  {out_png}")
         return True
     except Exception as e:  # noqa: BLE001
