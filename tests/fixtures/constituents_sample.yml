@@ -8,12 +8,19 @@
 # 出力は output/lookthrough/sample/ に隔離され、画像とnotes.mdに
 # 「サンプルデータ」と明記される。data/lookthrough.json も更新しない。
 #
-# 各ファンドは上位20〜25銘柄だけを載せている。構成比の合計は100%に
-# 満たないため、残りは「未カバー」として按分されず別枠になる。
-# （＝取れていない分を推測で埋めない挙動の確認を兼ねている）
+# 各ファンドは上位20〜25銘柄を名前つきで載せ、残りは tail: で
+# ダミー銘柄（TVTI0001 形式）に展開して構成比を約100%まで埋めている。
+# 実際のETFは数百〜数千銘柄あるため、上位だけではカバレッジが50%程度に
+# しかならず、カバレッジ閾値ゲートの動作確認ができないため。
 #
-# DRAM と イノベーションAI は意図的に未定義。「要手動確認」として
-# 未分解のまま出力されることを確認するため。
+#   tail: {count: 銘柄数, total_weight: 合計構成比, prefix: ダミーの接頭辞}
+#
+# prefix はファンドごとに変えてある。同じにすると裾のダミー銘柄どうしが
+# 全ファンドで一致し、「重複保有◯社」が実態とかけ離れた数字になるため。
+# 重複保有の数字は、上に名前つきで並べた実在ティッカーから出る。
+#
+# DRAM と イノベーションAI は fund_map.yml で coverage_policy: excluded
+# にしてあるので、ここには定義しない（「分解対象外」として扱われる）。
 # =============================================================
 
 as_of: "SAMPLE"
@@ -21,6 +28,7 @@ as_of: "SAMPLE"
 funds:
 
   VTI:
+    tail: {count: 300, total_weight: 56.4, prefix: TVTI}   # 下位銘柄の裾（ダミー）
     items:
       - {ticker: NVDA,  weight_pct: 6.50, name: NVIDIA,            sector: 情報技術}
       - {ticker: MSFT,  weight_pct: 5.80, name: Microsoft,         sector: 情報技術}
@@ -49,6 +57,7 @@ funds:
       - {ticker: ORCL,  weight_pct: 0.50, name: Oracle,            sector: 情報技術}
 
   VYM:
+    tail: {count: 200, total_weight: 60.0, prefix: TVYM}   # 下位銘柄の裾（ダミー）
     items:
       - {ticker: AVGO,  weight_pct: 5.20, name: Broadcom,          sector: 情報技術}
       - {ticker: JPM,   weight_pct: 3.60, name: JPMorgan Chase,    sector: 金融}
@@ -72,6 +81,7 @@ funds:
       - {ticker: TXN,   weight_pct: 1.00, name: Texas Instruments, sector: 情報技術}
 
   HDV:
+    tail: {count: 55, total_weight: 31.4, prefix: THDV}   # 下位銘柄の裾（ダミー）
     items:
       - {ticker: XOM,   weight_pct: 8.50, name: Exxon Mobil,       sector: エネルギー}
       - {ticker: JNJ,   weight_pct: 6.80, name: Johnson & Johnson, sector: ヘルスケア}
@@ -95,6 +105,7 @@ funds:
       - {ticker: UPS,   weight_pct: 1.40, name: UPS,               sector: 資本財}
 
   QQQ:
+    tail: {count: 80, total_weight: 37.4, prefix: TQQQ}   # 下位銘柄の裾（ダミー）
     items:
       - {ticker: NVDA,  weight_pct: 9.10, name: NVIDIA,            sector: 情報技術}
       - {ticker: MSFT,  weight_pct: 8.20, name: Microsoft,         sector: 情報技術}
@@ -122,6 +133,7 @@ funds:
   "89311199":            # SBI・V・S&P500 → VOO
     proxy_of: VOO
     proxy_reason: 投信は構成銘柄を公表しないため、同じS&P500に連動するVOOの構成で代用
+    tail: {count: 300, total_weight: 52.5, prefix: TVOO}   # 下位銘柄の裾（ダミー）
     items:
       - {ticker: NVDA,  weight_pct: 7.60, name: NVIDIA,            sector: 情報技術}
       - {ticker: MSFT,  weight_pct: 6.80, name: Microsoft,         sector: 情報技術}
@@ -147,6 +159,7 @@ funds:
   "8931224C":            # SBI S 米国高配当(年4回) → SCHD
     proxy_of: SCHD
     proxy_reason: 連動対象のSCHD（Schwab）の構成で代用
+    tail: {count: 80, total_weight: 32.9, prefix: TSCH}   # 下位銘柄の裾（ダミー）
     items:
       - {ticker: ABBV,  weight_pct: 4.30, name: AbbVie,            sector: ヘルスケア}
       - {ticker: HD,    weight_pct: 4.20, name: Home Depot,        sector: 一般消費財}
@@ -172,6 +185,7 @@ funds:
   "89311265":            # SBI NASDAQ100 → QQQ
     proxy_of: QQQ
     proxy_reason: NASDAQ100連動のためQQQの構成で代用
+    tail: {count: 80, total_weight: 49.6, prefix: TNQA}   # 下位銘柄の裾（ダミー）
     items:
       - {ticker: NVDA,  weight_pct: 9.10, name: NVIDIA,            sector: 情報技術}
       - {ticker: MSFT,  weight_pct: 8.20, name: Microsoft,         sector: 情報技術}
@@ -187,6 +201,7 @@ funds:
   "29313233":            # ニッセイNASDAQ100 → QQQ
     proxy_of: QQQ
     proxy_reason: NASDAQ100連動のためQQQの構成で代用
+    tail: {count: 80, total_weight: 49.6, prefix: TNQB}   # 下位銘柄の裾（ダミー）
     items:
       - {ticker: NVDA,  weight_pct: 9.10, name: NVIDIA,            sector: 情報技術}
       - {ticker: MSFT,  weight_pct: 8.20, name: Microsoft,         sector: 情報技術}

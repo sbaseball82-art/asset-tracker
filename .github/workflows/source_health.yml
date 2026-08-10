@@ -1,0 +1,75 @@
+name: source-health
+
+# 週1で全sourceに取得テストだけを実行する。
+# 「実際に壊れてから気づく」のを避けるための予兆検知。
+# 分解も投稿文の生成もしない。
+
+on:
+  schedule:
+    # 毎週日曜 12:00 UTC (= 21:00 JST)
+    - cron: "0 12 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Probe all sources
+        id: probe
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        # 要対応があると終了コード2。レポートは残したいので continue-on-error。
+        continue-on-error: true
+        run: python scripts/source_health.py
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-health
+          path: reports/
+          retention-days: 180
+
+      - name: Commit report
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          BRANCH="${GITHUB_REF_NAME}"
+
+          mkdir -p "$RUNNER_TEMP/gen"
+          cp -r reports "$RUNNER_TEMP/gen/" 2>/dev/null || true
+
+          for i in 1 2 3 4 5; do
+            git fetch origin "$BRANCH"
+            git reset --hard
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+            cp -r "$RUNNER_TEMP/gen/reports/." reports/ 2>/dev/null || true
+            git add reports
+            if git diff --cached --quiet; then
+              echo "変更なし(コミットをスキップ)"; exit 0
+            fi
+            git commit -m "source-health: $(date -u +%Y-W%V)"
+            if git push origin "$BRANCH"; then exit 0; fi
+            echo "::warning::push拒否 (試行 $i)。5秒後に再試行"; sleep 5
+          done
+          echo "::error::5回試行してもpushできませんでした"; exit 1
+
+      - name: Fail if sources need attention
+        if: steps.probe.outcome == 'failure'
+        run: |
+          echo "::error::要対応の source があります。reports/ を確認してください"
+          exit 1

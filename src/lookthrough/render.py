@@ -53,6 +53,9 @@ header {{ display:flex; justify-content:space-between; align-items:flex-start; }
 .t-value {{ font-size:64px; font-weight:700; line-height:1.0; margin-top:6px; }}
 .t-right {{ text-align:right; }}
 .t-cov {{ font-size:30px; font-weight:700; margin-top:6px; line-height:1.1; }}
+/* 構成比の基準日は常に出す。古いときは金色で強調する。 */
+.t-asof {{ font-size:15px; color:#8B96AB; margin-top:5px; line-height:1.3; }}
+.t-asof.old {{ color:#E0B45C; font-weight:700; }}
 
 /* 警告と凡例は最大2行に抑える（表の行数を圧迫させないため） */
 .warn {{ margin-top:11px; font-size:15px; color:#E0B45C; line-height:1.4;
@@ -174,6 +177,8 @@ def build_html(ctx: dict) -> str:
     <div class="t-right">
       <div class="t-label">個別銘柄まで分解できた割合</div>
       <div class="t-cov num">{_esc(ctx["coverage"])}</div>
+      <div class="t-asof{' old' if ctx.get('asof_warn') else ''}">
+        {_esc(ctx.get("asof", ""))}</div>
     </div>
   </div>
   {warn}
@@ -201,7 +206,8 @@ def build_html(ctx: dict) -> str:
 def collect_texts(ctx: dict) -> list[str]:
     """豆腐チェックの対象になる、画像に描く文字列をすべて集める。"""
     texts = [ctx["title"], ctx["subtitle"], ctx["account"], ctx["total"],
-             ctx["coverage"], ctx.get("warning") or "", ctx["footer_note"],
+             ctx["coverage"], ctx.get("asof") or "", ctx.get("warning") or "",
+             ctx["footer_note"],
              "総資産", "個別銘柄まで分解できた割合", "銘柄", "経由",
              "実質比率", "実質金額", "ASSET LOG"]
     for f in ctx["legend"]:

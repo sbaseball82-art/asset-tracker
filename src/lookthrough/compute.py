@@ -69,6 +69,36 @@ class Constituent:
     sector: str | None = None
 
 
+#
+# coverage_policy: 「取れなかった」と「取らないと決めた」を区別する
+#
+POLICY_REQUIRED = "required"        # 取れなければ生成を中止する
+POLICY_BEST_EFFORT = "best_effort"  # 取れなくても続行し、notes.md に残す
+POLICY_EXCLUDED = "excluded"        # 意図的に分解しない。警告にも出さない
+POLICIES = (POLICY_REQUIRED, POLICY_BEST_EFFORT, POLICY_EXCLUDED)
+
+
+@dataclass(frozen=True)
+class SourceAttempt:
+    """1つの source を試した記録（成否・件数・所要時間）。"""
+
+    id: str
+    kind: str
+    priority: int
+    ok: bool
+    count: int = 0
+    elapsed_ms: int = 0
+    error: str | None = None
+    problems: tuple[str, ...] = ()
+
+    @property
+    def summary(self) -> str:
+        if self.ok:
+            return f"{self.id}(p{self.priority}) OK {self.count}件 {self.elapsed_ms}ms"
+        why = self.error or "; ".join(self.problems) or "失敗"
+        return f"{self.id}(p{self.priority}) NG {why}"
+
+
 @dataclass(frozen=True)
 class FundConstituents:
     """あるファンドの構成銘柄一式と、その出所（代用したかどうかを含む）。"""
@@ -77,16 +107,27 @@ class FundConstituents:
     items: tuple[Constituent, ...] = ()
     as_of: str | None = None
     source: str | None = None
+    # どの source から取れたか（fund_map.yml の sources[].id）
+    source_id: str | None = None
     # 連動対象ETFで代用した場合、その代用先シンボル（例 SBI・V・S&P500 → "VOO"）
     proxy_of: str | None = None
     proxy_reason: str | None = None
     stale: bool = False          # 取得失敗でキャッシュを使った
+    age_days: int | None = None  # キャッシュの経過日数（当日取得なら0）
     verify_required: bool = False  # 手動メンテのため要目視確認
     error: str | None = None     # 取得できなかった理由（あれば unresolved 扱い）
+    policy: str = POLICY_REQUIRED
+    excluded_reason: str | None = None
+    attempts: tuple[SourceAttempt, ...] = ()
+    change_note: str | None = None   # 指数の銘柄入替を検出したときの記録
 
     @property
     def ok(self) -> bool:
         return self.error is None and bool(self.items)
+
+    @property
+    def is_excluded(self) -> bool:
+        return self.policy == POLICY_EXCLUDED
 
     @property
     def coverage_pct(self) -> float:
@@ -133,6 +174,22 @@ class Unresolved:
     fund_name: str
     value_jpy: float
     reason: str
+    policy: str = POLICY_REQUIRED
+
+    @property
+    def is_required(self) -> bool:
+        """required なのに取れなかった＝生成を止めるべきもの。"""
+        return self.policy == POLICY_REQUIRED
+
+
+@dataclass
+class Excluded:
+    """意図的に分解しないと決めたファンド。エラーではない。"""
+
+    fund_id: str
+    fund_name: str
+    value_jpy: float
+    reason: str
 
 
 @dataclass
@@ -145,6 +202,9 @@ class LookThroughResult:
     proxies: list[dict]                  # 代用の記録
     stale_funds: list[str]
     verify_funds: list[str]
+    excluded: list[Excluded] = field(default_factory=list)
+    sources: dict[str, str] = field(default_factory=dict)   # fund_id -> source_id
+    changes: list[dict] = field(default_factory=list)       # 銘柄入替の検出
 
     @property
     def attributed_jpy(self) -> float:
@@ -155,11 +215,32 @@ class LookThroughResult:
         return sum(u.value_jpy for u in self.unresolved)
 
     @property
+    def excluded_jpy(self) -> float:
+        return sum(e.value_jpy for e in self.excluded)
+
+    @property
+    def missing_required(self) -> list[Unresolved]:
+        """required なのに取れなかったファンド（あれば生成を中止する）。"""
+        return [u for u in self.unresolved if u.is_required]
+
+    @property
     def coverage_pct(self) -> float:
         """総資産のうち、個別銘柄まで分解できた割合(%)。"""
         if self.total_jpy <= 0:
             return 0.0
         return self.attributed_jpy / self.total_jpy * 100.0
+
+    def effective_coverage_pct(self, exclude_declared: bool = True) -> float:
+        """分解対象に対するカバレッジ(%)。
+
+        exclude_declared=True なら、意図的に対象外にしたファンドを
+        分母から除く。「取らないと決めたもの」でカバレッジが下がって
+        生成が止まるのを防ぐため。
+        """
+        denom = self.total_jpy - (self.excluded_jpy if exclude_declared else 0.0)
+        if denom <= 0:
+            return 0.0
+        return self.attributed_jpy / denom * 100.0
 
 
 class ReconciliationError(ValueError):
@@ -186,19 +267,33 @@ def look_through(
     """
     acc: dict[str, Position] = {}
     unresolved: list[Unresolved] = []
+    excluded: list[Excluded] = []
     uncovered_jpy = 0.0
     fund_coverage: dict[str, float] = {}
     proxies: list[dict] = []
     stale_funds: list[str] = []
     verify_funds: list[str] = []
+    sources: dict[str, str] = {}
+    changes: list[dict] = []
 
     for fund in funds:
         fc = constituents.get(fund.id)
 
+        # 意図的に分解しないと決めたファンドは、未取得ではなく「対象外」。
+        # 警告にもエラーにも出さず、未カバー枠として別に持つ。
+        if fc is not None and fc.is_excluded:
+            excluded.append(Excluded(
+                fund.id, fund.name, fund.value_jpy,
+                fc.excluded_reason or "分解対象外に指定されています"))
+            fund_coverage[fund.id] = 0.0
+            continue
+
         if fc is None or not fc.ok:
             reason = (fc.error if fc is not None and fc.error
                       else "構成銘柄データなし")
-            unresolved.append(Unresolved(fund.id, fund.name, fund.value_jpy, reason))
+            policy = fc.policy if fc is not None else POLICY_REQUIRED
+            unresolved.append(Unresolved(fund.id, fund.name, fund.value_jpy,
+                                         reason, policy))
             fund_coverage[fund.id] = 0.0
             continue
 
@@ -221,6 +316,11 @@ def look_through(
             stale_funds.append(fund.id)
         if fc.verify_required:
             verify_funds.append(fund.id)
+        if fc.source_id:
+            sources[fund.id] = fc.source_id
+        if fc.change_note:
+            changes.append({"fund_id": fund.id, "fund_name": fund.name,
+                            "note": fc.change_note})
 
         for c in fc.items:
             amount = fund.value_jpy * c.weight_pct / 100.0
@@ -256,6 +356,9 @@ def look_through(
         proxies=proxies,
         stale_funds=stale_funds,
         verify_funds=verify_funds,
+        excluded=excluded,
+        sources=sources,
+        changes=changes,
     )
 
     _reconcile(result, funds, tolerance_pct)
@@ -279,12 +382,13 @@ def _reconcile(result: LookThroughResult, funds: list[Fund],
         )
 
     accounted = (result.attributed_jpy + result.uncovered_jpy
-                 + result.unresolved_jpy)
+                 + result.unresolved_jpy + result.excluded_jpy)
     diff_pct = abs(accounted - fund_sum) / fund_sum * 100.0
     if diff_pct > tolerance_pct:
         raise ReconciliationError(
             f"按分の突合に失敗: 按分{result.attributed_jpy:,.0f} + "
             f"未カバー{result.uncovered_jpy:,.0f} + 未分解{result.unresolved_jpy:,.0f} "
+            f"+ 対象外{result.excluded_jpy:,.0f} "
             f"= {accounted:,.0f}円 が {fund_sum:,.0f}円 と {diff_pct:.2f}% ずれています"
         )
 

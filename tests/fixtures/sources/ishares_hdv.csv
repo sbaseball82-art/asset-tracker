@@ -1,0 +1,13 @@
+iShares Core High Dividend ETF
+Fund Holdings as of,"Aug 08, 2026"
+Inception Date,"Mar 29, 2011"
+Shares Outstanding,"46,500,000.00"
+Stock,-,-
+ 
+Ticker,Name,Sector,Asset Class,Market Value,Weight (%),Notional Value,Shares,CUSIP,ISIN,SEDOL,Price,Location,Exchange,Currency,FX Rate,Market Currency
+"XOM","EXXON MOBIL CORP","Energy","Equity","1,234,567.89","8.50","1,234,567.89","10,000","30231G102","US30231G1022","2326618","123.45","United States","NASDAQ","USD","1.00","USD"
+"JNJ","JOHNSON & JOHNSON","Health Care","Equity","987,654.32","6.80","987,654.32","6,000","478160104","US4781601046","2475833","164.61","United States","New York Stock Exchange","USD","1.00","USD"
+"ABBV","ABBVIE INC","Health Care","Equity","929,000.00","6.40","929,000.00","5,000","00287Y109","US00287Y1091","B92SR70","185.80","United States","New York Stock Exchange","USD","1.00","USD"
+"CVX","CHEVRON CORP","Energy","Equity","856,500.00","5.90","856,500.00","5,500","166764100","US1667641005","2838555","155.73","United States","New York Stock Exchange","USD","1.00","USD"
+"XTSLA","BLK CSH FND TREASURY SL AGENCY","Cash and/or Derivatives","Money Market","10,000.00","0.07","10,000.00","10,000","-","-","-","1.00","United States","-","USD","1.00","USD"
+"USD","USD CASH","Cash and/or Derivatives","Cash","-500.00","-0.00","-500.00","-500","-","-","-","1.00","United States","-","USD","1.00","USD"

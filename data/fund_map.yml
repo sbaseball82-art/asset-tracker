@@ -1,133 +1,270 @@
 # =============================================================
 # fund_map.yml — 保有ファンド → 構成銘柄の取得元
 # -------------------------------------------------------------
-# data/holdings.yml の各 fund.id に対して「構成銘柄をどこから取るか」を宣言する。
-# 投信は構成銘柄を公表しないため、連動対象ETFのデータで代用する。
-# 代用したものは proxy_of に代用先を書く。これは data.json と notes.md に
-# 必ず「代用」として記録され、投稿文にも概算である旨が入る。
+# data/holdings.yml の各 fund.id に対して、取得元を **優先順位つきのリスト**
+# で宣言する。priority の小さい順に試し、最初に成功したものを採用する。
+# どの source から取れたかは data.json と notes.md に必ず記録される。
 #
-# source の種類:
-#   vanguard    : Vanguard の公開API（url に profile API を指定）
-#   csv         : 公開CSVを取得して列名で読む（url / columns を指定）
-#   manual_csv  : data/manual/<file> に自分で置いたCSVを読む（取得元が無い場合）
-#   equal_weight: members を等ウェイトで配分（指数の公表メソドロジーに基づく場合のみ）
-#   null        : 取得元なし → 分解せず「要手動確認」として出力に明示する
+# source の kind:
+#   json       … JSONを取得して構成銘柄を抜く（キー名は自動推定）
+#   csv        … 公開CSVを取得。columns で列名を指定
+#   local_csv  … data/manual/ に自分で置いたCSVを読む
+#   equal_weight … members を等ウェイトで配分（指数の公表メソドロジーに従う場合）
 #
-# ★ 取得できない値を推測で埋めることは絶対にしない。
-#   取れなければ unresolved に落ち、画像・notes.md に「要手動確認」と出る。
+# coverage_policy（「取れなかった」と「取らないと決めた」を分ける）:
+#   required     … 必ず分解する。取れなければ生成を中止する
+#   best_effort  … 取れたら分解する。取れなくても続行し notes.md に残す
+#   excluded     … 意図的に分解しない。未カバー枠に入れ、エラー扱いにしない
+#
+# min_constituents:
+#   取得件数がこれを下回ったらそのsourceは失敗とみなし、次のpriorityへ進む。
+#   「10銘柄しか返ってこないVTI」のような壊れたレスポンスを掴まないため。
+#
+# ★ verified: false のURLは、まだ実アクセスで確認できていないもの。
+#   scripts/verify_live.py を1回流すと reports/live_verification.md に
+#   どれが生きているかが出る。確認できたら true にする。
 # =============================================================
 
 funds:
 
-  # ---------------- ETF（運用会社の公開データ） ----------------
+  # ---------------------------------------------------------------
+  # ETF（運用会社の公開データ）
+  # ---------------------------------------------------------------
+
   VTI:
-    source: vanguard
-    url: https://investor.vanguard.com/investment-products/etfs/profile/api/VTI/portfolio-holding/stock
-    note: CRSP US Total Market 連動。構成銘柄数が多く、全銘柄取得できると理想
+    type: etf
+    proxy_for: null
+    coverage_policy: required
+    min_constituents: 1000        # 実際は約3,600銘柄
+    sources:
+      - id: vanguard_api
+        kind: json
+        priority: 1
+        verified: false
+        url: "https://investor.vanguard.com/investment-products/etfs/profile/api/VTI/portfolio-holding/stock"
+      - id: vanguard_api_alt
+        kind: json
+        priority: 2
+        verified: false
+        url: "https://investor.vanguard.com/investment-products/etfs/profile/api/VTI/portfolio-holding/bond"
+      - id: manual
+        kind: local_csv
+        priority: 99
+        path: "data/manual/VTI.csv"
 
   VYM:
-    source: vanguard
-    url: https://investor.vanguard.com/investment-products/etfs/profile/api/VYM/portfolio-holding/stock
-    note: FTSE High Dividend Yield 連動
+    type: etf
+    proxy_for: null
+    coverage_policy: required
+    min_constituents: 400         # 実際は約550銘柄
+    sources:
+      - id: vanguard_api
+        kind: json
+        priority: 1
+        verified: false
+        url: "https://investor.vanguard.com/investment-products/etfs/profile/api/VYM/portfolio-holding/stock"
+      - id: manual
+        kind: local_csv
+        priority: 99
+        path: "data/manual/VYM.csv"
 
   HDV:
-    source: csv
-    url: https://www.ishares.com/us/products/239563/ishares-core-high-dividend-etf/1467271812596.ajax?fileType=csv&fileName=HDV_holdings&dataType=fund
-    columns:
-      ticker: Ticker
-      weight: Weight (%)
-      name: Name
-      sector: Sector
-    skip_until_header: true
-    note: Morningstar Dividend Yield Focus 連動（BlackRock 公開CSV）
+    type: etf
+    proxy_for: null
+    coverage_policy: required
+    min_constituents: 60          # 実際は約75銘柄
+    sources:
+      - id: ishares_csv
+        kind: csv
+        priority: 1
+        verified: false
+        url: "https://www.ishares.com/us/products/239563/ishares-core-high-dividend-etf/1467271812596.ajax?fileType=csv&fileName=HDV_holdings&dataType=fund"
+        skip_until_header: true
+        columns:
+          ticker: "Ticker"
+          weight: "Weight (%)"
+          name: "Name"
+          sector: "Sector"
+      - id: manual
+        kind: local_csv
+        priority: 99
+        path: "data/manual/HDV.csv"
 
   QQQ:
-    source: csv
-    url: https://www.invesco.com/us/financial-products/etfs/holdings/main/holdings/0?audienceType=Investor&action=download&ticker=QQQ
-    columns:
-      ticker: Holding Ticker
-      weight: Weight
-      name: Name
-      sector: Sector
-    skip_until_header: true
-    note: NASDAQ100 連動（Invesco 公開CSV）
+    type: etf
+    proxy_for: null
+    coverage_policy: required
+    min_constituents: 90          # NASDAQ100 なので約100銘柄
+    sources:
+      - id: invesco_csv
+        kind: csv
+        priority: 1
+        verified: false
+        url: "https://www.invesco.com/us/financial-products/etfs/holdings/main/holdings/0?audienceType=Investor&action=download&ticker=QQQ"
+        skip_until_header: true
+        columns:
+          ticker: "Holding Ticker"
+          weight: "Weight"
+          name: "Name"
+          sector: "Sector"
+      - id: manual
+        kind: local_csv
+        priority: 99
+        path: "data/manual/QQQ.csv"
 
-  DRAM:
-    source: manual_csv
-    file: DRAM.csv
-    note: >-
-      メモリ半導体ETF。信頼できる公開CSVの取得元が未設定のため、
-      data/manual/DRAM.csv を置いたときだけ分解する。
-      無ければ「要手動確認」として未分解のまま出力する。
+  # ---------------------------------------------------------------
+  # 投信（連動対象ETF・指数の構成で代用）
+  # ---------------------------------------------------------------
 
-  # ---------------- 投信（連動対象ETFで代用） ----------------
   "89311199":
     name_hint: SBI・V・S&P500
-    source: vanguard
-    url: https://investor.vanguard.com/investment-products/etfs/profile/api/VOO/portfolio-holding/stock
-    proxy_of: VOO
+    type: fund
+    proxy_for: VOO
     proxy_reason: 投信は構成銘柄を公表しないため、同じS&P500に連動するVOOの構成で代用
+    coverage_policy: required
+    min_constituents: 400         # S&P500 なので約500銘柄
+    sources:
+      - id: vanguard_api_voo
+        kind: json
+        priority: 1
+        verified: false
+        url: "https://investor.vanguard.com/investment-products/etfs/profile/api/VOO/portfolio-holding/stock"
+      - id: manual
+        kind: local_csv
+        priority: 99
+        path: "data/manual/VOO.csv"
 
   "8931224C":
     name_hint: SBI S 米国高配当(年4回)
-    source: manual_csv
-    file: SCHD.csv
-    proxy_of: SCHD
-    proxy_reason: 連動対象のSCHD（Schwab）で代用。安定した公開CSVのURLが無いため手動配置
-    note: >-
-      Schwab のサイトから SCHD の保有銘柄CSVを落として data/manual/SCHD.csv に置く。
-      置かれるまでは未分解（要手動確認）のまま。
+    type: fund
+    proxy_for: SCHD
+    proxy_reason: 連動対象のSCHD（Dow Jones U.S. Dividend 100連動）の構成で代用
+    coverage_policy: required
+    min_constituents: 90          # SCHDは概ね100銘柄
+    sources:
+      - id: schwab_csv
+        kind: csv
+        priority: 1
+        verified: false
+        url: "https://www.schwabassetmanagement.com/data/SCHD_holdings.csv"
+        skip_until_header: true
+        columns:
+          ticker: "Symbol"
+          weight: "Weight"
+          name: "Name"
+      - id: schwab_fund_page
+        kind: csv
+        priority: 2
+        verified: false
+        url: "https://www.schwabassetmanagement.com/sites/g/files/eyrktu361/files/SCHD_Holdings.csv"
+        skip_until_header: true
+        columns:
+          ticker: "Ticker"
+          weight: "Weight (%)"
+          name: "Security Name"
+      - id: manual
+        kind: local_csv
+        priority: 99
+        path: "data/manual/SCHD.csv"
 
   "89311265":
     name_hint: SBI NASDAQ100
-    source: csv
-    url: https://www.invesco.com/us/financial-products/etfs/holdings/main/holdings/0?audienceType=Investor&action=download&ticker=QQQ
-    columns:
-      ticker: Holding Ticker
-      weight: Weight
-      name: Name
-      sector: Sector
-    skip_until_header: true
-    proxy_of: QQQ
+    type: fund
+    proxy_for: QQQ
     proxy_reason: NASDAQ100連動のためQQQの構成で代用
+    coverage_policy: required
+    min_constituents: 90
+    # QQQ と同じ取得結果を使い回す（同じURLを2度叩かない）
+    reuse_from: QQQ
 
   "29313233":
     name_hint: ニッセイNASDAQ100
-    source: csv
-    url: https://www.invesco.com/us/financial-products/etfs/holdings/main/holdings/0?audienceType=Investor&action=download&ticker=QQQ
-    columns:
-      ticker: Holding Ticker
-      weight: Weight
-      name: Name
-      sector: Sector
-    skip_until_header: true
-    proxy_of: QQQ
+    type: fund
+    proxy_for: QQQ
     proxy_reason: NASDAQ100連動のためQQQの構成で代用
+    coverage_policy: required
+    min_constituents: 90
+    reuse_from: QQQ
 
   "04311181":
     name_hint: iFreeNEXT FANG+
-    source: equal_weight
-    proxy_of: NYSE FANG+
+    type: fund
+    proxy_for: NYSE FANG+
     proxy_reason: >-
-      NYSE FANG+ は10銘柄の等ウェイト指数（四半期リバランス）という公表メソドロジー。
-      それに基づき各10.0%で配分している
-    verify_required: true
-    members_as_of: "2026-07"
-    members_source: 既存 data/cache/etf_constituents.yml から引き継ぎ（未検証）
-    members: [META, AAPL, AMZN, NFLX, NVDA, GOOGL, MSFT, AVGO, CRWD, NOW]
-    note: >-
-      ★構成銘柄は自動取得していない。指数の入替があると古くなるため、
-      四半期ごとに NYSE FANG+ の構成銘柄を確認して members を更新すること。
-      毎回 notes.md の「要手動確認」に出る。
+      NYSE FANG+ は10銘柄の等ウェイト指数（四半期リバランス）という
+      公表メソドロジーに基づき、各10.0%で配分している
+    coverage_policy: required
+    min_constituents: 10
+    # 取得結果は必ず下の validation を通す。通らなければ次のpriorityへ。
+    validation:
+      exact_count: 10               # ちょうど10銘柄
+      weight_range: [8.0, 12.0]     # 概ね等ウェイト
+      max_member_diff: 2            # 前回から2銘柄以内の入替まで許容
+    sources:
+      - id: ice_index_page
+        kind: json
+        priority: 1
+        verified: false
+        url: "https://www.ice.com/api/productguide/info/nyse-fang-plus/constituents"
+      - id: fngs_etn
+        kind: csv
+        priority: 2
+        verified: false
+        url: "https://www.microsectors.com/api/holdings/FNGS.csv"
+        skip_until_header: true
+        columns:
+          ticker: "Ticker"
+          weight: "Weight"
+          name: "Name"
+      - id: manual
+        kind: local_csv
+        priority: 3
+        path: "data/manual/FANGPLUS.csv"
+      # 上が全滅したときの最後の拠り所。等ウェイトのメソドロジーに基づく宣言。
+      # ここが使われた場合は「要目視確認」として notes.md に必ず出る。
+      - id: declared_equal_weight
+        kind: equal_weight
+        priority: 90
+        verify_required: true
+        members_as_of: "2026-07"
+        members: [META, AAPL, AMZN, NFLX, NVDA, GOOGL, MSFT, AVGO, CRWD, NOW]
+
+  # ---------------------------------------------------------------
+  # 意図的に分解しない（excluded）
+  # -------------------------------------------------------------
+  # 保有比率が小さく、専用スクレイパーを書くと壊れやすさのほうが
+  # コストになるため、恒久的に分解対象外とする。
+  # 「取れなかった」ではなく「取らないと決めた」ので警告には出さない。
+  # 画像には「分解対象外」として合計比率だけ注記する。
+  # ---------------------------------------------------------------
 
   "79314186":
     name_hint: イノベーションAI
-    source: manual_csv
-    file: innovation_ai.csv
-    note: >-
-      AI関連のアクティブ投信。連動対象指数が無いため代用できない。
-      月次レポートの組入上位銘柄を data/manual/innovation_ai.csv に
-      （ticker,weight,name の3列で）書き写したときだけ分解する。
+    type: fund
+    proxy_for: null
+    coverage_policy: excluded
+    excluded_reason: >-
+      連動指数の無いアクティブ投信で代用先が作れず、保有比率も約0.4%のため
+      分解対象外とする。分解したくなったら月次レポートの組入上位を
+      data/manual/innovation_ai.csv に置き、coverage_policy を best_effort にする
+    sources:
+      - id: manual
+        kind: local_csv
+        priority: 99
+        path: "data/manual/innovation_ai.csv"
+
+  DRAM:
+    type: etf
+    proxy_for: null
+    coverage_policy: excluded
+    excluded_reason: >-
+      保有比率が約0.02%（1株）で、安定した公開データの取得元も無いため分解対象外。
+      分解したくなったら data/manual/DRAM.csv を置き best_effort にする
+    sources:
+      - id: manual
+        kind: local_csv
+        priority: 99
+        path: "data/manual/DRAM.csv"
 
 
 # 「実質AI・大型ハイテク」サマリーカードの対象銘柄。

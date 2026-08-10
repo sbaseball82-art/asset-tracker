@@ -21,6 +21,9 @@ header { display:flex; justify-content:space-between; align-items:flex-start; }
 .t-value { font-size:64px; font-weight:700; line-height:1.0; margin-top:6px; }
 .t-right { text-align:right; }
 .t-cov { font-size:30px; font-weight:700; margin-top:6px; line-height:1.1; }
+/* 構成比の基準日は常に出す。古いときは金色で強調する。 */
+.t-asof { font-size:15px; color:#8B96AB; margin-top:5px; line-height:1.3; }
+.t-asof.old { color:#E0B45C; font-weight:700; }
 
 /* 警告と凡例は最大2行に抑える（表の行数を圧迫させないため） */
 .warn { margin-top:11px; font-size:15px; color:#E0B45C; line-height:1.4;
@@ -73,7 +76,7 @@ footer { margin-top:auto; padding-top:12px; display:flex;
       <div class="h-title">わたしの資産推移｜中身の分解</div>
       <div class="h-sub">2026年8月 時点 ・ ルックスルー分析（サンプルデータ）</div>
     </div>
-    <div class="h-acct">@your_account</div>
+    <div class="h-acct">@84m5dm9xdm</div>
   </header>
   <div class="rule"></div>
 
@@ -84,10 +87,12 @@ footer { margin-top:auto; padding-top:12px; display:flex;
     </div>
     <div class="t-right">
       <div class="t-label">個別銘柄まで分解できた割合</div>
-      <div class="t-cov num">51.9%</div>
+      <div class="t-cov num">99.7%</div>
+      <div class="t-asof">
+        構成比基準日 SAMPLE</div>
     </div>
   </div>
-  <div class="warn">⚠ サンプルデータ（実際の構成比ではありません）　/　未分解＝要手動確認: イノベーションAI・DRAM メモリ半導体ETF　/　構成銘柄が手動メンテ: iFreeNEXT FANG+</div>
+  <div class="warn">⚠ サンプルデータ（実際の構成比ではありません）　/　分解対象外：イノベーションAI・DRAM（合計0.5%）　/　構成銘柄が手動メンテ: iFreeNEXT FANG+</div>
 
   <div class="legend"><span><i class="dot" style="background:#4A9EFF"></i>VTI 全米株式ETF</span><span><i class="dot" style="background:#E0B45C"></i>iFreeNEXT F…</span><span><i class="dot" style="background:#6EE7A8"></i>SBI・V・S&amp;P500</span><span><i class="dot" style="background:#F08A8A"></i>QQQ ナスダック10…</span><span><i class="dot" style="background:#B79BFF"></i>SBI NASDAQ1…</span><span><i class="dot" style="background:#7FD4C1"></i>ニッセイNASDAQ1…</span><span><i class="dot" style="background:#F5A97F"></i>VYM 米国高配当ETF</span><span><i class="dot" style="background:#9FB3D9"></i>HDV 米国高配当ETF</span><span><i class="dot" style="background:#D98BC4"></i>SBI S 米国高配当…</span></div>
 

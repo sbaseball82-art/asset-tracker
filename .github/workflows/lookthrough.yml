@@ -21,6 +21,11 @@ on:
         type: boolean
         required: false
         default: false
+      dry_run:
+        description: "投稿文と画像を作らず、取得状況とカバレッジだけ出す"
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: write
@@ -70,6 +75,9 @@ jobs:
           if [ "${{ github.event.inputs.offline }}" = "true" ]; then
             ARGS="$ARGS --offline"
           fi
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
           python -m src.lookthrough.generate $ARGS
 
       - name: Upload artifacts
@@ -88,16 +96,17 @@ jobs:
           # 生成物を退避 → 最新originに重ねてpush（バイナリはrebase不能のため
           # fetch + checkout -B 方式。evergreen.yml と同一の実績パターン）。
           mkdir -p "$RUNNER_TEMP/gen"
-          cp -r output logs data "$RUNNER_TEMP/gen/" 2>/dev/null || true
+          cp -r output logs data reports "$RUNNER_TEMP/gen/" 2>/dev/null || true
 
           for i in 1 2 3 4 5; do
             git fetch origin "$BRANCH"
             git reset --hard
             git checkout -B "$BRANCH" "origin/$BRANCH"
-            cp -r "$RUNNER_TEMP/gen/output/." output/ 2>/dev/null || true
-            cp -r "$RUNNER_TEMP/gen/logs/."   logs/   2>/dev/null || true
-            cp -r "$RUNNER_TEMP/gen/data/."   data/   2>/dev/null || true
-            git add output logs data
+            cp -r "$RUNNER_TEMP/gen/output/."  output/  2>/dev/null || true
+            cp -r "$RUNNER_TEMP/gen/logs/."    logs/    2>/dev/null || true
+            cp -r "$RUNNER_TEMP/gen/data/."    data/    2>/dev/null || true
+            cp -r "$RUNNER_TEMP/gen/reports/." reports/ 2>/dev/null || true
+            git add output logs data reports
             if git diff --cached --quiet; then
               echo "変更なし(コミットをスキップ)"; exit 0
             fi

@@ -22,6 +22,25 @@ Xアカウント「外資系営業マンの金融資産推移」の投稿素材�
 投稿する数字は自分の資産の話なので、それらしく埋めた瞬間に価値が消える。
 「分からない」と書ける仕組みのほうが、埋まっている数字より大事。
 
+**カバレッジが足りないまま投稿文を作らない。**
+`config.yml` の `coverage.halt_below`（既定90%）を下回ったら生成を中止する。
+「カバレッジ72%のまま『上位10社で◯%』と書く」のが最も避けたい失敗。
+
+### 1-2. 「取れなかった」と「取らないと決めた」を区別する
+
+`data/fund_map.yml` の `coverage_policy` で3つに分ける。
+
+| 値 | 意味 | 取れなかったとき |
+|---|---|---|
+| `required` | 必ず分解する | **生成を中止** |
+| `best_effort` | 取れたら分解する | 続行。notes.md に記録 |
+| `excluded` | 意図的に分解しない | 未カバー枠。**警告に出さない** |
+
+`excluded` は「取りに行って失敗した」のではなく「取りに行かないと決めた」もの。
+保有0.4%のファンドのために壊れやすいスクレイパーを持つほうが高くつく、
+という判断を明示的に書き残すための区分。毎回警告に出すとノイズになるので、
+画像には「分解対象外：◯◯（合計0.4%）」と小さく注記するだけにする。
+
 ### 2. 自動投稿しない
 
 生成物（画像・本文）は必ず人間が読んでから投稿する。
@@ -77,24 +96,34 @@ X APIへの投稿処理をこのリポジトリに入れない。
 ## ディレクトリ
 
 ```
-config.py               銘柄マスタ（名前・ISIN）。X_ACCOUNT もここ
+config.yml              運用設定（アカウント・闾値・通知・パス）★ここが唯一の設定
+config.py               銘柄マスタ（名前・ISIN）。X_ACCOUNT は config.yml を読む
 holdings.json           保有数量（買い増したらここだけ編集）
 data.json               毎朝の価格取得結果と履歴
 
 data/
   holdings.yml          総資産とファンド別評価額（data.json から生成）
-  fund_map.yml          ファンド → 構成銘柄の取得元。代用の宣言もここ
+  fund_map.yml          ファンド → 構成銘柄の取得元（多段）。代用と方針の宣言もここ
   cache/constituents/   構成銘柄のキャッシュ（取得失敗時に stale として使う）
   manual/               取得元が無いファンドのCSVを手で置く場所
   history/              月次スナップショット（前月比の算出に使う）
   lookthrough.json      機能②が読むルックスルー結果
 
 src/
-  common/               textcheck / render / fontcheck / util / notify / postlog
+  common/               textcheck / render / fontcheck / util / notify / postlog / settings
   lookthrough/          ← 機能①：保有を個別銘柄まで分解する
+    compute.py          按分計算（純粋関数のみ）
+    validation.py       構成銘柄の検証（純粋関数のみ）
+    constituents.py     多段フォールバック取得とキャッシュ
+    health.py           source の生存確認
   earnings/  evergreen/  report/
 
+scripts/
+  verify_live.py        全sourceに実アクセスして確認（本番投入前に1回）
+  source_health.py      週1のヘルスチェック（予兆検知）
+
 output/lookthrough/YYYY-MM/   画像・投稿文・data.json・notes.md
+reports/                      source_health_YYYY-WW.md / live_verification.md
 logs/posts.csv                生成物の記録（views等は週1で手入力）
 ```
 
@@ -109,6 +138,10 @@ logs/posts.csv                生成物の記録（views等は週1で手入力�
 python -m src.lookthrough.generate            # 通常（公開データを取得）
 python -m src.lookthrough.generate --offline  # キャッシュのみ
 python -m src.lookthrough.generate --sample   # サンプルで動作確認
+python -m src.lookthrough.generate --dry-run  # 取得状況とカバレッジだけ見る
+
+python scripts/verify_live.py                 # 全sourceに実アクセスして確認
+python scripts/source_health.py               # 週次ヘルスチェック
 ```
 
 計算の中心は `src/lookthrough/compute.py`。
@@ -128,13 +161,57 @@ python -m src.lookthrough.generate --sample   # サンプルで動作確認
 Σ実質保有額 + uncovered_jpy + unresolved合計 = 総資産
 ```
 
+### 取得は多段フォールバック
+
+`data/fund_map.yml` の `sources` を priority の小さい順に試し、
+最初に成功したものを採用する。**どの source で取れたかは必ず記録する**
+（`data.json` の `sources` と `notes.md` の取得状況表）。
+
+各段で「成功」と認めるには次を全部満たす必要がある。
+
+1. パースできて1件以上ある
+2. `min_constituents` 以上ある … 「10銘柄しか返らないVTI」を掴まないため
+3. `validation` のルールを通る … FANG+ の等ウェイト検証など
+
+全滅したらキャッシュを使い `stale: true` と経過日数を記録する。
+
+新しい取得元を足すときは **YAMLだけ**を編集する。パーサは
+`kind: json / csv / local_csv / equal_weight` の4つで足りるようにしてあり、
+列名は `columns:` で指定する。コードを触るのは新しい `kind` が要るときだけ。
+
+### データの鮮度
+
+| 経過 | 扱い |
+|---|---|
+| 0〜35日 | 正常（ETFの構成比は月次更新のため） |
+| 36〜90日 | 警告。画像の基準日を金色で強調 |
+| 91日〜 | **取得失敗と同じ扱い**。カバレッジから除外する |
+
+画像には常に「構成比基準日」を出す。
+
 ### 代用（proxy）の扱い
 
 投信は構成銘柄を公表しないため、連動対象ETFの構成で代用する
 （SBI・V・S&P500 → VOO、SBI S 米国高配当 → SCHD、NASDAQ100投信 → QQQ）。
 
-代用は `data/fund_map.yml` に `proxy_of` として**宣言的に**書く。
+代用は `data/fund_map.yml` に `proxy_for` として**宣言的に**書く。
 コードに埋め込まない。代用したことは `data.json` と `notes.md` の両方に必ず残る。
+
+同じデータを使う複数の投信は `reuse_from: QQQ` と書けば、
+同じURLを何度も叩かずに結果を使い回す。
+
+### FANG+ の検証（例外的に厳しくしている理由）
+
+NYSE FANG+ は10銘柄の等ウェイト指数なので、取得結果が正しいかを
+機械的に確かめられる。`validation` に3つ書いてある。
+
+- `exact_count: 10` … ちょうど10銘柄
+- `weight_range: [8.0, 12.0]` … 概ね等ウェイト
+- `max_member_diff: 2` … 前回から2銘柄以内の入替
+
+**入替 1〜2銘柄は正常**（四半期リバランス）。中止せず「入替を検出」として
+notes.md に残し、通知を出す。3銘柄以上入れ替わっていたら取得ミスを疑って
+そのsourceを不採用にし、次のpriorityへ進む。
 
 ### サンプル実行の隔離
 
@@ -188,9 +265,27 @@ python -m pytest tests/ -q
 
 ---
 
+## 「完全自動」の範囲
+
+自動化するのは **データ取得から投稿文・画像の生成まで**。
+投稿ボタンを押すのは人間。ここは動かさない。
+
+| 自動 | 手動 |
+|---|---|
+| 構成銘柄の取得（多段フォールバック） | 生成物の目視確認 |
+| 分解・集計・前月比 | X への投稿 |
+| 画像・投稿文の生成と検査 | `data/manual/` のCSV更新（必要時） |
+| source のヘルスチェック（週1） | 壊れた source のURL修正 |
+| 中止・劣化の通知 | `excluded` にするかの判断 |
+
+---
+
 ## やらないこと
 
-- X への自動投稿
+- X への自動投稿（`tests/test_settings.py` が投稿系コードの不在を検査している）
 - 取得できなかった数値の穴埋め（推定・補完・前月値の流用）
+- カバレッジ不足のまま投稿文を作ること
 - 投資判断・推奨の文言を出力に含めること
-- `compute.py` にネットワークやファイル読み書きを入れること
+- `compute.py` / `validation.py` にネットワークやファイル読み書きを入れること
+- 保有比率の小さいファンドのために壊れやすいスクレイパーを書くこと
+  （`excluded` にして、必要なら手動CSVで足す）

@@ -1,0 +1,51 @@
+{
+  "fund": {
+    "entity": [
+      {
+        "asOfDate": "2026-08-08",
+        "ticker": "NVDA",
+        "longName": "NVIDIA Corp.",
+        "sector": "Information Technology",
+        "percentWeight": "6.50",
+        "sharesHeld": "120000000",
+        "marketValue": "21000000000"
+      },
+      {
+        "asOfDate": "2026-08-08",
+        "ticker": "MSFT",
+        "longName": "Microsoft Corp.",
+        "sector": "Information Technology",
+        "percentWeight": "5.80",
+        "sharesHeld": "40000000",
+        "marketValue": "18700000000"
+      },
+      {
+        "asOfDate": "2026-08-08",
+        "ticker": "AAPL",
+        "longName": "Apple Inc.",
+        "sector": "Information Technology",
+        "percentWeight": "5.20",
+        "sharesHeld": "76000000",
+        "marketValue": "16800000000"
+      },
+      {
+        "asOfDate": "2026-08-08",
+        "ticker": "BRK.B",
+        "longName": "Berkshire Hathaway Inc. Class B",
+        "sector": "Financials",
+        "percentWeight": "1.60",
+        "sharesHeld": "11000000",
+        "marketValue": "5100000000"
+      },
+      {
+        "asOfDate": "2026-08-08",
+        "ticker": "CASH",
+        "longName": "Cash",
+        "sector": "",
+        "percentWeight": "0.00",
+        "sharesHeld": "0",
+        "marketValue": "0"
+      }
+    ]
+  }
+}
