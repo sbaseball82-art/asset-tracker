@@ -1,0 +1,79 @@
+{
+ "date": "2026-08-10",
+ "generated_at": "2026-08-10T21:28:06",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "XLE",
+   "name": "XLE(エネルギー)",
+   "theme": "エネルギー",
+   "headline": "XLE(エネルギー)大幅高 +5%",
+   "conclusion": "z=+3.2σは通常の値動きの外。前提が変わった可能性",
+   "score": 0.6535,
+   "score_parts": {
+    "z": 0.2833,
+    "volume": 0.0935,
+    "media": 0.1667,
+    "sns": 0.0,
+    "holdings": 0.03,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 5,
+   "sns_heat": 0.0,
+   "slot": 1,
+   "template_id": "T1",
+   "topic_tag": "other",
+   "numbers": [
+    {
+     "label": "XLE(エネルギー) 日次",
+     "value": "+4.7%",
+     "sub": "z=+3.2σ",
+     "source": "yfinance終値",
+     "asof": "2026-08-10"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.1倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-08-10"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+14.6%",
+     "sub": "XLE(エネルギー)",
+     "source": "yfinance終値",
+     "asof": "2026-08-10"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "-0.1%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-08-10"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-2.9%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-08-10"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.72%",
+     "sub": "2026-08-10",
+     "source": "米財務省",
+     "asof": "2026-08-10"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-08-10_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-08-10_1.txt"
+   ]
+  }
+ ],
+ "skipped": []
+}
