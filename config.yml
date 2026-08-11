@@ -46,8 +46,12 @@ notification:
     - constituent_change   # 指数の銘柄入替を検出した
 
 schedule:
-  lookthrough: "monthly"     # 毎月1日 21:00 JST
-  source_health: "weekly"    # 毎週日曜 21:00 JST
+  # weekly … 毎週日曜 21:00 JST。output/lookthrough/2026-W33/ に出す
+  # monthly … 毎月1日 21:00 JST。output/lookthrough/2026-08/ に出す
+  # ここを変えると出力先・履歴の粒度・「前週比／前月比」の表記が揃って変わる。
+  # ワークフロー側の cron も合わせて直すこと（.github/workflows/lookthrough.yml）。
+  lookthrough: "weekly"
+  source_health: "weekly"    # 毎週日曜 19:00 JST（生成の2時間前）
 
 post:
   # 生成する投稿文の全角文字数（上限）

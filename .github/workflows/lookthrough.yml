@@ -5,15 +5,17 @@ name: lookthrough
 
 on:
   schedule:
-    # 毎月1日 12:00 UTC (= 21:00 JST)。
+    # 毎週日曜 12:00 UTC (= 21:00 JST)。
+    # source-health（同日 10:00 UTC）が先に走るので、source が壊れていれば
+    # 生成の前に気づける。
     # GitHubのcronは遅延することがあるため予備を1本置く
-    # （同月の再実行は同じ出力を上書きするだけなので二重生成にはならない）。
-    - cron: "0 12 1 * *"
-    - cron: "0 14 1 * *"
+    # （同じ週の再実行は同じ出力を上書きするだけなので二重生成にはならない）。
+    - cron: "0 12 * * 0"
+    - cron: "0 14 * * 0"
   workflow_dispatch:
     inputs:
-      ym:
-        description: "出力月（YYYY-MM。空なら当月）"
+      period:
+        description: "出力period（週次なら 2026-W33、月次なら 2026-08。空なら今週）"
         required: false
         default: ""
       offline:
@@ -69,8 +71,8 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
           ARGS=""
-          if [ -n "${{ github.event.inputs.ym }}" ]; then
-            ARGS="$ARGS --ym ${{ github.event.inputs.ym }}"
+          if [ -n "${{ github.event.inputs.period }}" ]; then
+            ARGS="$ARGS --period ${{ github.event.inputs.period }}"
           fi
           if [ "${{ github.event.inputs.offline }}" = "true" ]; then
             ARGS="$ARGS --offline"
@@ -110,7 +112,7 @@ jobs:
             if git diff --cached --quiet; then
               echo "変更なし(コミットをスキップ)"; exit 0
             fi
-            git commit -m "lookthrough: $(date -u +%Y-%m)"
+            git commit -m "lookthrough: $(date -u +%Y-W%V)"
             if git push origin "$BRANCH"; then exit 0; fi
             echo "::warning::push拒否 (試行 $i)。5秒後に再試行"; sleep 5
           done

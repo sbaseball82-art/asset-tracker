@@ -268,6 +268,8 @@ def _fetch_source(src: dict, kind: str) -> tuple[Constituent, ...]:
     if raw is None:
         return ()
 
+    _reject_html(raw, url)
+
     if kind == "json":
         return _parse_json(raw.decode("utf-8", "replace"))
     if kind == "csv":
@@ -275,6 +277,22 @@ def _fetch_source(src: dict, kind: str) -> tuple[Constituent, ...]:
                           src.get("columns") or {},
                           skip_until_header=bool(src.get("skip_until_header")))
     return ()
+
+
+def _reject_html(raw: bytes, url: str) -> None:
+    """HTMLが返ってきたら、その場で分かる形で失敗させる。
+
+    運用会社のダウンロードURLは、仕様変更で「CSVの代わりに商品ページの
+    HTMLを返す」状態になることがある。そのままCSVとして読もうとすると
+    「ヘッダ行が見つかりません」という分かりにくいエラーになるため、
+    ここで切り分けておく。
+    """
+    head = raw[:400].lstrip().lower()
+    if head.startswith(b"<!doctype html") or head.startswith(b"<html") \
+            or b"<!doctype html" in head:
+        raise ValueError(
+            f"CSV/JSONではなくHTMLが返ってきました（{len(raw):,}バイト）。"
+            "ダウンロードURLの仕様が変わった可能性があります: " + url[:80])
 
 
 def _http_get(url: str) -> bytes | None:

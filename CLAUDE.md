@@ -106,7 +106,7 @@ data/
   fund_map.yml          ファンド → 構成銘柄の取得元（多段）。代用と方針の宣言もここ
   cache/constituents/   構成銘柄のキャッシュ（取得失敗時に stale として使う）
   manual/               取得元が無いファンドのCSVを手で置く場所
-  history/              月次スナップショット（前月比の算出に使う）
+  history/              period別スナップショット（前週比／前月比の算出に使う）
   lookthrough.json      機能②が読むルックスルー結果
 
 src/
@@ -122,7 +122,8 @@ scripts/
   verify_live.py        全sourceに実アクセスして確認（本番投入前に1回）
   source_health.py      週1のヘルスチェック（予兆検知）
 
-output/lookthrough/YYYY-MM/   画像・投稿文・data.json・notes.md
+output/lookthrough/<period>/  画像・投稿文・data.json・notes.md
+                              period は 2026-W33（週次）/ 2026-08（月次）
 reports/                      source_health_YYYY-WW.md / live_verification.md
 logs/posts.csv                生成物の記録（views等は週1で手入力）
 ```
@@ -133,6 +134,9 @@ logs/posts.csv                生成物の記録（views等は週1で手入力�
 
 保有ファンドを「中身の個別銘柄」まで分解し、実質的にどの企業を何円分
 持っているかを出す。**このアカウントの一番の差別化点。**
+
+実行の間隔は `config.yml` の `schedule.lookthrough`（既定 `weekly`）。
+ここを変えると、出力先・履歴の粒度・「前週比／前月比」の表記が揃って変わる。
 
 ```bash
 python -m src.lookthrough.generate            # 通常（公開データを取得）
@@ -158,7 +162,7 @@ python scripts/source_health.py               # 週次ヘルスチェック
 必ず成り立つ恒等式（`_reconcile` が検算し、1%超ずれたら止まる）：
 
 ```
-Σ実質保有額 + uncovered_jpy + unresolved合計 = 総資産
+Σ実質保有額 + uncovered_jpy + unresolved合計 + excluded合計 = 総資産
 ```
 
 ### 取得は多段フォールバック
@@ -273,7 +277,7 @@ python -m pytest tests/ -q
 | 自動 | 手動 |
 |---|---|
 | 構成銘柄の取得（多段フォールバック） | 生成物の目視確認 |
-| 分解・集計・前月比 | X への投稿 |
+| 分解・集計・前週比 | X への投稿 |
 | 画像・投稿文の生成と検査 | `data/manual/` のCSV更新（必要時） |
 | source のヘルスチェック（週1） | 壊れた source のURL修正 |
 | 中止・劣化の通知 | `excluded` にするかの判断 |

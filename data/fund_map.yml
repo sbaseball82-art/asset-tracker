@@ -20,9 +20,19 @@
 #   取得件数がこれを下回ったらそのsourceは失敗とみなし、次のpriorityへ進む。
 #   「10銘柄しか返ってこないVTI」のような壊れたレスポンスを掴まないため。
 #
-# ★ verified: false のURLは、まだ実アクセスで確認できていないもの。
-#   scripts/verify_live.py を1回流すと reports/live_verification.md に
-#   どれが生きているかが出る。確認できたら true にする。
+# ★ verified: の意味
+#   true  … 実アクセスで取得できたことを確認済み（日付をコメントに書く）
+#   false … 未確認、または確認して失敗したもの（失敗の内容をコメントに書く）
+#   scripts/verify_live.py を流すと reports/live_verification.md に結果が出る。
+#   --dump を付けると、失敗したsourceの生レスポンス先頭が
+#   reports/source_dumps/ に残るので、何が返っているのかを確認できる。
+#
+# ★ 2026-08-10 時点の状況
+#   動いている  : Vanguard（VTI / VYM / VOO）、FANG+の等ウェイト宣言
+#   動いていない: iShares(HDV) / Invesco(QQQ) / Schwab(SCHD) / ICE(FANG+)
+#   → HDV・QQQ・SCHD は data/manual/ にCSVを置くまで分解できない。
+#     3本で保有の約20%を占めるため、カバレッジ闾値（90%）に届かず
+#     生成は中止される。詳しくは data/manual/README.md を参照。
 # =============================================================
 
 funds:
@@ -73,10 +83,14 @@ funds:
     coverage_policy: required
     min_constituents: 60          # 実際は約75銘柄
     sources:
+      # ★ 2026-08-10 の実アクセス検証で、このURLはCSVではなく商品ページの
+      #   HTML（約1.4MB）を返すことが分かった。ダウンロードURLの仕様が
+      #   変わったとみられる。正しいURLが分かるまでは data/manual/HDV.csv
+      #   を置いて運用する。
       - id: ishares_csv
         kind: csv
         priority: 1
-        verified: false
+        verified: false   # NG: HTMLが返る（2026-08-10）
         url: "https://www.ishares.com/us/products/239563/ishares-core-high-dividend-etf/1467271812596.ajax?fileType=csv&fileName=HDV_holdings&dataType=fund"
         skip_until_header: true
         columns:
@@ -95,10 +109,13 @@ funds:
     coverage_policy: required
     min_constituents: 90          # NASDAQ100 なので約100銘柄
     sources:
+      # ★ 2026-08-10 の実アクセス検証で、このURLはCSVではなくSPAの
+      #   HTML（約385KB）を返すことが分かった。正しいURLが分かるまでは
+      #   data/manual/QQQ.csv を置いて運用する。
       - id: invesco_csv
         kind: csv
         priority: 1
-        verified: false
+        verified: false   # NG: HTMLが返る（2026-08-10）
         url: "https://www.invesco.com/us/financial-products/etfs/holdings/main/holdings/0?audienceType=Investor&action=download&ticker=QQQ"
         skip_until_header: true
         columns:
@@ -141,10 +158,12 @@ funds:
     coverage_policy: required
     min_constituents: 90          # SCHDは概ね100銘柄
     sources:
+      # ★ 2026-08-10 の実アクセス検証で、下の2つはどちらも応答が無かった
+      #   （URLが存在しない）。data/manual/SCHD.csv を置いて運用する。
       - id: schwab_csv
         kind: csv
         priority: 1
-        verified: false
+        verified: false   # NG: 応答なし（2026-08-10）
         url: "https://www.schwabassetmanagement.com/data/SCHD_holdings.csv"
         skip_until_header: true
         columns:
@@ -154,7 +173,7 @@ funds:
       - id: schwab_fund_page
         kind: csv
         priority: 2
-        verified: false
+        verified: false   # NG: 応答なし（2026-08-10）
         url: "https://www.schwabassetmanagement.com/sites/g/files/eyrktu361/files/SCHD_Holdings.csv"
         skip_until_header: true
         columns:
@@ -200,15 +219,19 @@ funds:
       weight_range: [8.0, 12.0]     # 概ね等ウェイト
       max_member_diff: 2            # 前回から2銘柄以内の入替まで許容
     sources:
+      # ★ 2026-08-10 の実アクセス検証で、下の2つはどちらも応答が無かった。
+      #   現状は最下段の declared_equal_weight（等ウェイトの宣言）で動いている。
+      #   構成銘柄の入替は自動検知できないため、四半期ごとに members を
+      #   確認すること（notes.md の「要手動確認」に毎回出る）。
       - id: ice_index_page
         kind: json
         priority: 1
-        verified: false
+        verified: false   # NG: 応答なし（2026-08-10）
         url: "https://www.ice.com/api/productguide/info/nyse-fang-plus/constituents"
       - id: fngs_etn
         kind: csv
         priority: 2
-        verified: false
+        verified: false   # NG: 応答なし（2026-08-10）
         url: "https://www.microsectors.com/api/holdings/FNGS.csv"
         skip_until_header: true
         columns:

@@ -9,7 +9,7 @@ generate.py
     python -m src.lookthrough.generate --sample     # サンプルデータで動作確認
     python -m src.lookthrough.generate --dry-run    # 取得状況とカバレッジだけ見る
 
-出力先: ``output/lookthrough/YYYY-MM/``
+出力先: ``output/lookthrough/<period>/``（週次なら 2026-W33、月次なら 2026-08）
   lookthrough.png / post_100.txt / post_150.txt / post_165.txt
   reply.txt / data.json / notes.md
 
@@ -56,12 +56,15 @@ def main(argv=None) -> int:
                     help="サンプル構成データで通しの動作確認をする（実データではない）")
     ap.add_argument("--dry-run", action="store_true",
                     help="投稿文と画像を作らず、取得状況とカバレッジだけ出す")
-    ap.add_argument("--ym", default=None, help="出力月（既定は当月 YYYY-MM）")
+    ap.add_argument("--period", "--ym", dest="period", default=None,
+                    help="出力するperiod。既定は config.yml の schedule.lookthrough "
+                         "に従う（weekly なら 2026-W33、monthly なら 2026-08）")
     ap.add_argument("--allow-tofu", action="store_true",
                     help="豆腐（□）が出ても失敗にしない")
     args = ap.parse_args(argv)
 
-    ym = args.ym or now_jst().strftime("%Y-%m")
+    mode = settings.get("schedule", "lookthrough", "monthly")
+    ym = args.period or history.current_period(mode, now_jst().date())
     funds, total_jpy, holdings_asof = load_holdings()
     fmap = load_fund_map()
 
@@ -175,7 +178,7 @@ def main(argv=None) -> int:
                ok_png, names, status, sample=args.sample),
         encoding="utf-8")
 
-    # ---- 月次スナップショット（サンプル実行では汚さない） ----------------
+    # ---- スナップショット（サンプル実行では汚さない） --------------------
     if not args.sample:
         history.save_snapshot(ym, result)
         postlog.append_row(date.today().isoformat(), "ルックスルー", f"lt-{ym}",
@@ -324,7 +327,7 @@ def _metrics(result, funds, fmap, ym) -> dict:
         "fund_count": len(funds) - len(result.excluded),
         "top1": ({"ticker": top1.ticker, "pct": top1.pct_of_total,
                   "via_text": _via_text(top1)} if top1 else None),
-        "rank_note": _rank_note(changes, prev_ym_used),
+        "rank_note": _rank_note(changes, prev_ym_used, ym),
         "dup_examples": dup_examples,
         "proxy_note": _proxy_note(result),
         "manual_note": _manual_note(result),
@@ -361,7 +364,7 @@ def _via_line(pos) -> str:
     return f"{pos.ticker}は{via}の重なりで、合わせて{compose.pct(pos.pct_of_total)}"
 
 
-def _rank_note(changes, prev_ym_used) -> str | None:
+def _rank_note(changes, prev_ym_used, period) -> str | None:
     if not prev_ym_used:
         return None
     moved = [c for c in changes[:10]
@@ -370,8 +373,8 @@ def _rank_note(changes, prev_ym_used) -> str | None:
         return None
     c = max(moved, key=lambda x: abs(x.delta))
     direction = "上がって" if c.delta > 0 else "下がって"
-    return (f"前月と比べると{c.ticker}が{abs(c.delta)}つ{direction}"
-            f"{c.rank}位になっていました。")
+    return (f"{history.prev_label(period)}と比べると{c.ticker}が"
+            f"{abs(c.delta)}つ{direction}{c.rank}位になっていました。")
 
 
 #
@@ -407,8 +410,7 @@ def _coverage_note(result) -> str | None:
 # --------------------------------------------------------------------------
 
 def _render_ctx(result, metrics, ym, names, cons, eff_cov, sample=False) -> dict:
-    y, m = ym.split("-")
-    subtitle = f"{y}年{int(m)}月 時点 ・ ルックスルー分析"
+    subtitle = f"{history.period_label(ym)} ・ ルックスルー分析"
     if sample:
         subtitle += "（サンプルデータ）"
 
@@ -440,7 +442,7 @@ def _render_ctx(result, metrics, ym, names, cons, eff_cov, sample=False) -> dict
     top10_tone, top10_note = "flat", None
     if metrics["prev_top10_pct"] is not None:
         d = metrics["top10_pct"] - metrics["prev_top10_pct"]
-        top10_note = f"前月比 {d:+.1f}pt"
+        top10_note = f"{history.comparison_label(ym)} {d:+.1f}pt"
         top10_tone = "up" if d > 0 else ("down" if d < 0 else "flat")
 
     summary = [
@@ -662,9 +664,11 @@ def _notes(result, metrics, cons, ym, violations, tofu_chars, font_used,
     L += [status, ""]
 
     # 前月比
-    L += [f"## 前月比（{metrics['prev_ym'] or '前月データなし'}）", ""]
+    cmp_label = history.comparison_label(ym)
+    L += [f"## {cmp_label}（{metrics['prev_ym'] or 'データなし'}）", ""]
     if metrics["prev_ym"]:
-        L += ["| 順位 | 銘柄 | 前月 | 変動 | 実質比率 | 前月差 |",
+        L += [f"| 順位 | 銘柄 | {history.prev_label(ym)} | 変動 | 実質比率 "
+              f"| {history.prev_label(ym)}差 |",
               "|---:|---|---:|---:|---:|---:|"]
         for c in metrics["changes"]:
             L.append(f"| {c.rank} | {c.ticker} | "
@@ -672,7 +676,8 @@ def _notes(result, metrics, cons, ym, violations, tofu_chars, font_used,
                      f"{history.arrow(c.delta)} | {c.pct:.2f}% | "
                      f"{f'{c.pct_delta:+.2f}pt' if c.pct_delta is not None else '—'} |")
     else:
-        L.append("- 前月のスナップショットがないため比較していません（初回）。")
+        L.append(f"- {history.prev_label(ym)}のスナップショットがないため"
+                 "比較していません（初回）。")
     L.append("")
 
     # 重複保有の内訳

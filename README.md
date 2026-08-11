@@ -3,8 +3,8 @@
 > **追加機能**: X向けの保存版コンテンツ生成（週1）と決算日連動の実況テンプレは
 > [docs/X_CONTENT_SYSTEM.md](docs/X_CONTENT_SYSTEM.md) を参照。
 >
-> **ルックスルー分解（月1）**: 保有ファンドを個別銘柄まで分解して
-> 「実質どの企業を何円分持っているか」を出す機能は [下記](#ルックスルー分解月1) を参照。
+> **ルックスルー分解（週1）**: 保有ファンドを個別銘柄まで分解して
+> 「実質どの企業を何円分持っているか」を出す機能は [下記](#ルックスルー分解週1) を参照。
 >
 > 設計方針・守るべきトーン・禁止事項は [CLAUDE.md](CLAUDE.md) にまとめてあります。
 
@@ -88,7 +88,7 @@ GitHub リポジトリの **Settings → Actions → General → Workflow permis
 
 ---
 
-## ルックスルー分解（月1）
+## ルックスルー分解（週1）
 
 保有している11本のファンドを「中身の個別銘柄」まで分解し、
 **実質的にどの企業を何円分持っているか**と、
@@ -112,8 +112,13 @@ python -m src.lookthrough.generate --offline
 python -m src.lookthrough.generate --sample
 ```
 
-GitHub Actions では **毎月1日 21:00 JST** に自動実行します
+GitHub Actions では **毎週日曜 21:00 JST** に自動実行します
 （`.github/workflows/lookthrough.yml`）。生成のみで、投稿はしません。
+
+実行の間隔は `config.yml` の `schedule.lookthrough` で決まります。
+`weekly` なら出力先が `output/lookthrough/2026-W33/` になり、比較は「前週比」。
+`monthly` にすると `output/lookthrough/2026-08/` と「前月比」に揃って変わります
+（ワークフローの cron も合わせて直してください）。
 
 ### 初回セットアップ（本番投入まで）
 
@@ -128,7 +133,7 @@ GitHub Actions では **毎月1日 21:00 JST** に自動実行します
 4. 生きていた source は `data/fund_map.yml` の `verified: false` を
    `true` に変えておくと、後から見て分かりやすくなります。
 
-### 出力（`output/lookthrough/YYYY-MM/`）
+### 出力（`output/lookthrough/<period>/`）
 
 | ファイル | 内容 |
 |---|---|
@@ -136,7 +141,7 @@ GitHub Actions では **毎月1日 21:00 JST** に自動実行します
 | `post_100.txt` / `post_150.txt` / `post_165.txt` | 全角文字数別の投稿文 |
 | `reply.txt` | 画像を添える2投稿目の本文 |
 | `data.json` | 計算結果の生データ（全銘柄・経由の内訳つき） |
-| `notes.md` | 代用したデータ、取得できなかった項目、前月からの変化 |
+| `notes.md` | 代用したデータ、取得できなかった項目、前週からの変化 |
 
 機能②（指数寄与）が読む `data/lookthrough.json` も同時に更新されます。
 
@@ -146,20 +151,27 @@ GitHub Actions では **毎月1日 21:00 JST** に自動実行します
 priority の小さい順に試し、最初に成功したものを採用します。
 URLや列名の変更は YAML の修正だけで追随できます（コード変更は不要）。
 
-| ファンド | 方針 | priority 1 | 代用 |
-|---|---|---|---|
-| VTI / VYM | required | Vanguard 公開API | — |
-| HDV | required | iShares(BlackRock) 公開CSV | — |
-| QQQ | required | Invesco 公開CSV | — |
-| SBI・V・S&P500 | required | Vanguard 公開API(VOO) | **VOO** |
-| SBI NASDAQ100 / ニッセイNASDAQ100 | required | QQQ の結果を流用 | **QQQ** |
-| SBI S 米国高配当(年4回) | required | Schwab 公開CSV | **SCHD** |
-| iFreeNEXT FANG+ | required | ICE 指数ページ → FNGS → 手動CSV → 等ウェイト宣言 | **NYSE FANG+** |
-| イノベーションAI | **excluded** | — | 分解対象外（約0.4%） |
-| DRAM メモリ半導体ETF | **excluded** | — | 分解対象外（約0.02%） |
+**2026-08-10 の実アクセス検証（`reports/live_verification.md`）の結果**を
+状態欄に入れています。
+
+| ファンド | 方針 | priority 1 | 代用 | 状態 |
+|---|---|---|---|---|
+| VTI | required | Vanguard 公開API | — | ✅ 499件（APIは上位500件まで） |
+| VYM | required | Vanguard 公開API | — | ✅ 499件 |
+| SBI・V・S&P500 | required | Vanguard 公開API(VOO) | **VOO** | ✅ 498件 |
+| iFreeNEXT FANG+ | required | ICE → FNGS → 手動CSV → 等ウェイト宣言 | **NYSE FANG+** | ⚠ 等ウェイト宣言で稼働（自動取得はNG） |
+| HDV | required | iShares 公開CSV | — | ❌ HTMLが返る → 手動CSVが要る |
+| QQQ | required | Invesco 公開CSV | — | ❌ HTMLが返る → 手動CSVが要る |
+| SBI NASDAQ100 / ニッセイNASDAQ100 | required | QQQ の結果を流用 | **QQQ** | ❌ QQQ次第 |
+| SBI S 米国高配当(年4回) | required | Schwab 公開CSV | **SCHD** | ❌ URLが無い → 手動CSVが要る |
+| イノベーションAI | **excluded** | — | 分解対象外（約0.4%） | — |
+| DRAM メモリ半導体ETF | **excluded** | — | 分解対象外（約0.02%） | — |
 
 どのファンドも最後の priority に `data/manual/*.csv` を置いてあるので、
 自動取得が全滅してもCSVを置けば動きます。
+**HDV・QQQ・SCHD の3本で保有の約20%を占めるため、CSVを置くまでは
+カバレッジが90%に届かず生成は中止されます。**
+置き方は [data/manual/README.md](data/manual/README.md) を参照してください。
 
 ### coverage_policy（「取れなかった」と「取らないと決めた」を分ける）
 
@@ -209,8 +221,9 @@ URLや列名の変更は YAML の修正だけで追随できます（コード�
 
 ### source のヘルスチェック（週1）
 
-毎週日曜 21:00 JST に全 source の取得テストだけを実行します
-（`.github/workflows/source_health.yml`）。
+毎週日曜 **19:00 JST**（生成の2時間前）に全 source の取得テストだけを実行します
+（`.github/workflows/source_health.yml`）。source が壊れていれば、
+生成が中止される前に気づけるようにしています。
 
 `reports/source_health_YYYY-WW.md` に、各 source の成否・応答時間・
 取得件数と前週差・priority 1 が落ちて下位で拾っている項目が出ます。

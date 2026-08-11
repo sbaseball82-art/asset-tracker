@@ -139,3 +139,39 @@ def test_構成比がゼロや負の行は落とす():
     csv_text = "ticker,weight\nAAPL,3.0\nZERO,0\nNEG,-1.2\n"
     items = _parse_csv(csv_text, {"ticker": "ticker", "weight": "weight"})
     assert [c.ticker for c in items] == ["AAPL"]
+
+
+# --------------------------------------------------------------------------
+# HTMLが返ってきたときの切り分け
+# --------------------------------------------------------------------------
+# 運用会社のダウンロードURLは、仕様変更で商品ページのHTMLを返すようになる
+# ことがある（2026-08-10 の実アクセス検証で iShares / Invesco が該当した）。
+# そのままCSVとして読むと「ヘッダ行が見つかりません」という分かりにくい
+# エラーになるため、HTMLだと分かる形で失敗させる。
+
+from src.lookthrough.constituents import _reject_html  # noqa: E402
+
+
+def test_HTMLが返ってきたら分かる形で失敗する():
+    body = b"<!DOCTYPE html>\n<html lang=\"en-US\">\n<head>...</head>"
+    with pytest.raises(ValueError, match="HTML"):
+        _reject_html(body, "https://example.com/holdings.csv")
+
+
+def test_先頭に空白があるHTMLも検出する():
+    with pytest.raises(ValueError, match="HTML"):
+        _reject_html(b"\n\n  <html><body>x</body></html>", "https://x/y.csv")
+
+
+def test_バイト数がエラーに出る():
+    body = b"<!DOCTYPE html>" + b"x" * 5000
+    with pytest.raises(ValueError, match="5,015"):
+        _reject_html(body, "https://x/y.csv")
+
+
+def test_通常のCSVは通す():
+    _reject_html(b"Ticker,Weight\nAAPL,3.0\n", "https://x/y.csv")
+
+
+def test_通常のJSONは通す():
+    _reject_html(b'{"fund": {"entity": []}}', "https://x/y.json")
