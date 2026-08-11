@@ -1,0 +1,3 @@
+URL: https://www.microsectors.com/api/holdings/FNGS.csv
+
+（レスポンスを取得できませんでした）

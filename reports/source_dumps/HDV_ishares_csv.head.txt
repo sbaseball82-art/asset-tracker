@@ -1,0 +1,55 @@
+URL: https://www.ishares.com/us/products/239563/ishares-core-high-dividend-etf/1467271812596.ajax?fileType=csv&fileName=HDV_holdings&dataType=fund
+bytes: 1378046
+------------------------------------------------------------
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" prefix="og: http://ogp.me/ns#" lang="en-US" xml:lang="en-US">
+<head>
+<link rel="preload" href="/blk-one02-c-assets/include/bundles/minified-e22383023ccb0ea203c9b5cb5ba23054.css" as="style" />
+<link rel="preload" href="/blk-one02-c-assets/include/bundles/minified-73979107c769c30c7850449347d87fd5.css" as="style" />
+<link rel="preload" href="/blk-one02-c-assets/include/bundles/minified-612e6387635a20b497d10515c1292733.css" as="style" />
+<link rel="preload" href="/blk-one02-c-assets/include/bundles/minified-742ad63f2754080431f696580012dee0.css" as="style" />
+<link rel="preload" href="/blk-one02-c-assets/include/bundles/minified-669c5216549a4fc874e21eb7a4cbb05b.css" as="style" />
+<link rel="preload" href="/blk-one02-c-assets/include/bundles/minified-5007c08135ab9ccf08b20bf5b0bbe29c.css" as="style" />
+<link rel="preload" href="/blk-one02-c-assets/include/bundles/minified-c80c62628b8f6b5754337a273ecb1a88.css" as="style" />
+<link rel="preload" href="/blk-one02-c-assets/include/bundles/minified-bcc17d66ca66b2742f8c240497925528.css" as="style" />
+<link rel="preload" href="/blk-one02-c-assets/include/bundles/minified-4cced4411f074d7b4b560775a83b4ed8.css" as="style" />
+<link rel="preload" href="/blk-one02-c-assets/include/bundles/minified-ef4d8b80201ce82daa9c807be02797f3.css" as="style" />
+<script nonce="2qOSpPt7MhoW6fE0lVXEZg==">
+//<![CDATA[
+var vice= { config: { viceAccountId: 'blackrock', viceSiteId: 'isharesprod', viceZoneId: '', viceSectionId: '' } }
+//]]>
+</script>
+<script src="//sourcedefense.blackrock.com/cdncch/vice_loader/blackrock/isharesprod"></script>
+<link type="image/x-icon" href="/blk-one02-c-assets/ishares-favicon.ico" rel="shortcut icon"/>
+<script nonce="2qOSpPt7MhoW6fE0lVXEZg==">
+//<![CDATA[
+var ASSET_PREFIX_PATH='/blk-one02-c-assets/';
+window['adrum-start-time'] = new Date().getTime();
+var BLK = { deferredFunctions: [], ready: function(f) { BLK.deferredFunctions.push(f); } };
+/* Returns the nonce. */
+BLK.getScriptNonce = function () {
+var script = document.querySelector && document.querySelector('script[nonce]');
+if (script) {
+var nonce = script['nonce'] || script.getAttribute('nonce');
+return nonce;
+}
+return '';
+};
+//]]>
+</script>
+<script nonce="2qOSpPt7MhoW6fE0lVXEZg==">
+//<![CDATA[
+(function(){
+if (typeof BLK === "undefined" || !BLK) {
+window.BLK = {};
+}
+BLK["isAtmos"] = true;
+})();
+//]]>
+</script>
+<link rel="stylesheet" href="/blk-one02-c-assets/include/bundles/minified-e22383023ccb0ea203c9b5cb5ba23054.css" />
+<link rel="stylesheet" href="/blk-one02-c-assets/include/bundles/minified-73979107c769c30c7850449347d87fd5.css" />
+<link rel="stylesheet" href="/blk-one02-c-assets/include/bundles/minified-612e6387635a20b497d10515c1292733.css" />
+<link rel="stylesheet" href="/blk-one02-c-assets/include/bundles/minified-742ad63f2754080431f696580012dee0.css" />
+<link rel="stylesheet" href="/blk-one02-c-assets/include/bundles/minified-669c5216549a4fc874e21eb7a4cbb05b.css" />
+<link rel="styl
