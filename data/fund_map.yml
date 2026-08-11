@@ -35,18 +35,17 @@ funds:
     type: etf
     proxy_for: null
     coverage_policy: required
-    min_constituents: 1000        # 実際は約3,600銘柄
+    # ★ VTI の実際の構成銘柄は約3,600だが、Vanguard のAPIは上位500件までしか
+    #   返さないことが実アクセス検証で分かった（2026-08-10 / 499件）。
+    #   全部は取れないので、取れた分だけ按分し、残りは「未カバー」枠に入る。
+    #   上位500件でVTIの時価の8割強を占めるため、カバレッジはその分だけ下がる。
+    min_constituents: 450
     sources:
       - id: vanguard_api
         kind: json
         priority: 1
-        verified: false
+        verified: true          # 2026-08-10 実アクセス確認（499件）
         url: "https://investor.vanguard.com/investment-products/etfs/profile/api/VTI/portfolio-holding/stock"
-      - id: vanguard_api_alt
-        kind: json
-        priority: 2
-        verified: false
-        url: "https://investor.vanguard.com/investment-products/etfs/profile/api/VTI/portfolio-holding/bond"
       - id: manual
         kind: local_csv
         priority: 99
@@ -61,7 +60,7 @@ funds:
       - id: vanguard_api
         kind: json
         priority: 1
-        verified: false
+        verified: true          # 2026-08-10 実アクセス確認（499件）
         url: "https://investor.vanguard.com/investment-products/etfs/profile/api/VYM/portfolio-holding/stock"
       - id: manual
         kind: local_csv
@@ -127,7 +126,7 @@ funds:
       - id: vanguard_api_voo
         kind: json
         priority: 1
-        verified: false
+        verified: true          # 2026-08-10 実アクセス確認（498件）
         url: "https://investor.vanguard.com/investment-products/etfs/profile/api/VOO/portfolio-holding/stock"
       - id: manual
         kind: local_csv

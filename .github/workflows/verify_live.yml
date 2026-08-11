@@ -16,6 +16,11 @@ on:
         type: boolean
         required: false
         default: false
+      dump:
+        description: "失敗したsourceの生レスポンスを保存する（形式調査用）"
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: write
@@ -46,6 +51,9 @@ jobs:
           fi
           if [ "${{ github.event.inputs.include_excluded }}" = "true" ]; then
             ARGS="$ARGS --include-excluded"
+          fi
+          if [ "${{ github.event.inputs.dump }}" = "true" ]; then
+            ARGS="$ARGS --dump"
           fi
           python scripts/verify_live.py $ARGS
 

@@ -33,6 +33,9 @@ def main(argv=None) -> int:
     ap.add_argument("--fund", default=None, help="このファンドIDだけ試す")
     ap.add_argument("--include-excluded", action="store_true",
                     help="coverage_policy: excluded のファンドも試す")
+    ap.add_argument("--dump", action="store_true",
+                    help="失敗したsourceの生レスポンス先頭を reports/source_dumps/ に保存する"
+                         "（何が返ってきているのか調べるため）")
     args = ap.parse_args(argv)
 
     fmap = load_fund_map()
@@ -49,9 +52,15 @@ def main(argv=None) -> int:
             return 1
         fmap = {"funds": {args.fund: spec}}
 
+    dump_dir = None
+    if args.dump:
+        dump_dir = settings.path_of("reports") / "source_dumps"
+        print(f"失敗したsourceの生レスポンスを {dump_dir} に保存します")
+
     print("各sourceに実アクセスします（1本ずつ、リトライ3回）…\n")
     results = health.probe_all(fmap, names=names,
-                               include_excluded=args.include_excluded)
+                               include_excluded=args.include_excluded,
+                               dump_dir=dump_dir)
 
     for r in results:
         mark = "✅" if r.ok else "❌"

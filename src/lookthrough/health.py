@@ -60,9 +60,13 @@ class ProbeResult:
         return self.error or "; ".join(self.problems) or "失敗"
 
 
-def probe_source(fund_id: str, fund_name: str, spec: dict,
-                 src: dict) -> ProbeResult:
-    """1つの source を試す。分解はしない。"""
+def probe_source(fund_id: str, fund_name: str, spec: dict, src: dict,
+                 dump_dir: Path | None = None) -> ProbeResult:
+    """1つの source を試す。分解はしない。
+
+    dump_dir を渡すと、失敗した source の生レスポンスの先頭を保存する。
+    「パースできなかった」ときに何が返ってきていたのかを見るため。
+    """
     kind = str(src.get("kind") or "")
     priority = int(src.get("priority", 50))
     started = time.monotonic()
@@ -72,6 +76,9 @@ def probe_source(fund_id: str, fund_name: str, spec: dict,
     except Exception as e:  # noqa: BLE001
         error = f"{type(e).__name__}: {e}"
     elapsed = int((time.monotonic() - started) * 1000)
+
+    if dump_dir is not None and not items:
+        _dump_raw(dump_dir, fund_id, src, kind)
 
     problems: list[str] = []
     ok = bool(items) and error is None
@@ -94,8 +101,33 @@ def probe_source(fund_id: str, fund_name: str, spec: dict,
         policy=str(spec.get("coverage_policy") or "required"))
 
 
+def _dump_raw(dump_dir: Path, fund_id: str, src: dict, kind: str,
+              limit: int = 3000) -> None:
+    """失敗した source の生レスポンス先頭を保存する（形式調査用）。"""
+    url = src.get("url")
+    if not url or kind not in ("json", "csv"):
+        return
+    try:
+        raw = C._http_get(url)
+    except Exception:  # noqa: BLE001
+        raw = None
+
+    dump_dir.mkdir(parents=True, exist_ok=True)
+    safe = f"{fund_id}_{src.get('id')}".replace("/", "_")
+    path = dump_dir / f"{safe}.head.txt"
+    if raw is None:
+        path.write_text(f"URL: {url}\n\n（レスポンスを取得できませんでした）\n",
+                        encoding="utf-8")
+        return
+    text = raw[:limit].decode("utf-8", "replace")
+    path.write_text(
+        f"URL: {url}\nbytes: {len(raw)}\n"
+        f"{'-' * 60}\n{text}\n", encoding="utf-8")
+
+
 def probe_all(fund_map: dict, names: dict | None = None,
-              include_excluded: bool = False) -> list[ProbeResult]:
+              include_excluded: bool = False,
+              dump_dir: Path | None = None) -> list[ProbeResult]:
     """全ファンドの全sourceを priority 順に試す。"""
     names = names or {}
     out: list[ProbeResult] = []
@@ -109,7 +141,8 @@ def probe_all(fund_map: dict, names: dict | None = None,
         fname = names.get(fund_id) or spec.get("name_hint") or fund_id
         for src in sorted(spec.get("sources") or [],
                           key=lambda s: int(s.get("priority", 50))):
-            out.append(probe_source(fund_id, fname, spec, src))
+            out.append(probe_source(fund_id, fname, spec, src,
+                                    dump_dir=dump_dir))
     return out
 
 
