@@ -25,3 +25,4 @@ date,type,topic_id,format,char_count,has_image,posted,views,likes,bookmarks,repl
 2026-08-07,earnings,2026-08-07_NFP,post,83,false,false,,,,,,
 2026-08-08,earnings,2026-08-07_NFP,morning,107,false,false,,,,,,
 2026-08-09,evergreen,ev002,table,179,true,false,,,,,,
+2026-08-12,earnings,2026-08-12_CPI,pre,179,false,false,,,,,,
