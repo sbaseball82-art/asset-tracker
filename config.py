@@ -43,7 +43,7 @@ _FUND_META = {
     "04311181":     ("iFreeNEXT FANG+",            "JP90C000FZD4"),
     "8931224C":     ("SBI S 米国高配当(年4回)",    "JP90C000REE2"),
     "79314186":     ("イノベーションAI", "JP90C000GK01"),
-    "89311265":     ("SBI NASDAQ100",              None),  # ISIN未特定→Yahoo!フォールバック
+    "89311265":     ("SBI NASDAQ100",              "JP90C000PVT8"),
 }
 FUND_HOLDINGS = {
     code: (name, _FUND_QTY.get(code, 0), isin)
