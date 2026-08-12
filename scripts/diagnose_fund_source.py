@@ -33,15 +33,34 @@ from fetch_prices import (  # noqa: E402
 ISIN_RE = re.compile(r"\bJP[0-9A-Z]{10}\b")
 
 
-def probe(url: str) -> tuple[int | None, int, str]:
-    """URLを叩いて (ステータス, バイト数, 先頭の抜粋) を返す。"""
+def probe(url: str, encoding: str = "shift_jis") -> tuple[int | None, int, str, str]:
+    """URLを叩いて (ステータス, バイト数, 先頭の抜粋, 全文) を返す。"""
     try:
         res = requests.get(url, headers={"User-Agent": UA, "Accept-Language": "ja"},
                            timeout=20)
     except Exception as e:  # noqa: BLE001
-        return None, 0, f"{type(e).__name__}: {e}"
-    body = res.content.decode("shift_jis", errors="replace")[:300]
-    return res.status_code, len(res.content), body.replace("\n", " ⏎ ")
+        return None, 0, f"{type(e).__name__}: {e}", ""
+    full = res.content.decode(encoding, errors="replace")
+    return res.status_code, len(res.content), full[:300].replace("\n", " ⏎ "), full
+
+
+def find_isin(*bodies: str) -> list[str]:
+    """レスポンス本文から ISIN らしき文字列(JP+英数10桁)を拾う。
+
+    見つかっても『それがこのファンドのISINである』確証にはならないので、
+    候補として出すだけにする。config.py へ書き込む前に必ず協会CSVで検証すること。
+    """
+    found: list[str] = []
+    for body in bodies:
+        for m in ISIN_RE.findall(body):
+            if m not in found:
+                found.append(m)
+    return found
+
+
+def verify_isin(code: str, isin: str) -> bool:
+    """候補のISINで協会CSVが引けるかを実際に確かめる。"""
+    return fetch_fund_nav_toushin(code, isin) is not None
 
 
 def diagnose(code: str, name: str, isin: str | None) -> bool:
@@ -49,17 +68,15 @@ def diagnose(code: str, name: str, isin: str | None) -> bool:
 
     # 1. 協会CSV: 協会コード単独
     url = f"{TOUSHIN_CSV}?associFundCd={code}"
-    status, size, head = probe(url)
+    status, size, head, _ = probe(url)
     print(f"\n  [1] 協会CSV (協会コードのみ)  {url}")
     print(f"      status={status} size={size}")
     print(f"      body: {head[:200]}")
-    for found in set(ISIN_RE.findall(head)):
-        print(f"      ★ 本文内に ISIN らしき文字列: {found}")
 
     # 2. 協会CSV: ISIN 併用(設定されていれば)
     if isin:
         url2 = f"{TOUSHIN_CSV}?isinCd={isin}&associFundCd={code}"
-        status2, size2, head2 = probe(url2)
+        status2, size2, head2, _ = probe(url2)
         print(f"\n  [2] 協会CSV (ISIN併用)  status={status2} size={size2}")
         print(f"      body: {head2[:200]}")
     else:
@@ -67,9 +84,22 @@ def diagnose(code: str, name: str, isin: str | None) -> bool:
 
     # 3. Yahoo!ファイナンスJP
     yurl = f"https://finance.yahoo.co.jp/quote/{code}/history"
-    status3, size3, head3 = probe(yurl)
+    status3, size3, _head3, ybody = probe(yurl, encoding="utf-8")
     print(f"\n  [3] Yahoo!JP  {yurl}")
     print(f"      status={status3} size={size3}")
+
+    # 3b. ISIN未設定なら候補を探して、実際に協会CSVが引けるか検証する
+    if not isin:
+        _s, _z, _h, top = probe(f"https://finance.yahoo.co.jp/quote/{code}",
+                                encoding="utf-8")
+        candidates = find_isin(ybody, top)
+        print(f"\n  [3b] ISIN候補(ページ本文から抽出): {candidates or 'なし'}")
+        for cand in candidates:
+            ok = verify_isin(code, cand)
+            print(f"       {cand} で協会CSV: {'引ける ★これが正' if ok else '引けない'}")
+            if ok:
+                print(f"       => config.py の {code} に ISIN {cand} を設定すれば直る")
+                break
 
     # 4. 本番と同じ関数で最終判定
     t = fetch_fund_nav_toushin(code, isin)
