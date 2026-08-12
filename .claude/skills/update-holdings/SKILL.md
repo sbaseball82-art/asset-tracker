@@ -47,7 +47,12 @@ description: 既存の保有銘柄の買い増し・売却を holdings.json に�
 ```bash
 python3 -c "import json; json.load(open('holdings.json'))"          # valid JSON
 python3 -c "import config; print(config.ETF_HOLDINGS); print(config.FUND_HOLDINGS)"  # 新数量が表示される
+python3 -m pytest tests/test_holdings_sync.py -q                    # 銘柄・数量の整合性
 ```
+
+`test_data_jsonの口数がholdingsと一致する` は**この時点では落ちる**。
+編集した口数がまだ日次生成物に反映されていないという意味なので、これは正常。
+翌朝の daily-asset-slide が走れば緑に戻る。それ以外のテストが落ちたら編集を見直す。
 
 ### 5. コミットする
 
@@ -60,6 +65,22 @@ Modify etf '<シンボル>' value(buy <株数> shares of <表示名>) in holding
 ```
 
 売却なら `buy` を `sell` にする。口数指定の実績例: commit 5b3b921。
+
+### 6. main に入れる（ここまでやらないと反映されない）
+
+**daily-asset-slide（`.github/workflows/fetch.yml`）は main を checkout する。**
+作業ブランチに置いたままだと、翌朝の自動実行もその次の日も**永久に反映されない**。
+
+作業ブランチで作業した場合は、PRを出してマージするところまでを完了とする。
+マージし忘れたまま「反映されました」と報告しない。
+
+```bash
+git log origin/main --oneline -1 -- holdings.json   # 自分の変更が main にあるか
+git show origin/main:holdings.json                  # main 側の数量を目視
+```
+
+当日中に反映したいなら、マージ後に Actions タブ → daily-asset-slide →
+Run workflow（workflow_dispatch）で手動実行する。スケジュールを待つ場合は翌朝 JST 7:00。
 
 ## 例
 

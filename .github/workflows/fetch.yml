@@ -32,6 +32,14 @@ jobs:
       - name: Fetch prices
         run: python fetch_prices.py
 
+      # 生成した data.json が holdings.json の保有数量を反映しているかを確認する。
+      # fetch_prices.py が黙って古い data.json を残した場合(取得全滅・例外)に、
+      # 古い口数のままスライドを作ってコミットするのを防ぐ。
+      - name: Verify holdings are reflected in data.json
+        run: |
+          pip install -q pytest
+          python -m pytest tests/test_holdings_sync.py -q
+
       - name: Fetch market events
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
