@@ -1,0 +1,45 @@
+name: tests
+
+# push / PR のたびにテストを回す。
+#
+# 目的のひとつは「holdings.json を編集したのに日次生成物に反映されていない」状態の検出。
+# daily-asset-slide は main を checkout するため、買い増しを作業ブランチに置いたまま
+# マージし忘れると永久に反映されない。tests/test_holdings_sync.py がこれを落とす。
+#
+# 買い増しを main にマージしてから翌朝の daily-asset-slide が走るまでの間は、
+# main の data.json がまだ古い口数なので、このワークフローは意図的に赤になる。
+# 「投稿に使う数字が今の保有と違う」ことを示す正しい状態で、翌朝の実行で自動的に緑に戻る。
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run tests
+        run: python -m pytest tests/ -q
