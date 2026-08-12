@@ -12,6 +12,10 @@ on:
         description: "協会コード(空なら全銘柄)"
         required: false
         default: ""
+      isin:
+        description: "検証したいISIN(config.pyに書き込む前の確認用。fund_code を1つ指定すること)"
+        required: false
+        default: ""
 
 permissions:
   contents: read
@@ -34,4 +38,6 @@ jobs:
           pip install -r requirements.txt
 
       - name: Diagnose fund sources
-        run: python scripts/diagnose_fund_source.py ${{ inputs.fund_code }}
+        run: |
+          python scripts/diagnose_fund_source.py ${{ inputs.fund_code }} \
+            ${{ inputs.isin && format('--isin {0}', inputs.isin) || '' }}

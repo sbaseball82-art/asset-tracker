@@ -117,7 +117,22 @@ def diagnose(code: str, name: str, isin: str | None) -> bool:
 
 
 def main() -> int:
-    codes = sys.argv[1:] or list(FUND_HOLDINGS)
+    # --isin は config.py に書き込む前の候補検証用。
+    # 「教わったISINをまず confg.py に入れて動かしてみる」をやると、
+    # 誤りだった場合に別ファンドの基準価額が自分の資産として記録される。
+    # 先にここで引けることを確かめてから config.py に入れる。
+    args = sys.argv[1:]
+    isin_override = None
+    if "--isin" in args:
+        i = args.index("--isin")
+        isin_override = args[i + 1]
+        del args[i:i + 2]
+
+    codes = args or list(FUND_HOLDINGS)
+    if isin_override and len(codes) != 1:
+        print("--isin は協会コードを1つだけ指定して使う")
+        return 2
+
     ng = []
     for code in codes:
         if code not in FUND_HOLDINGS:
@@ -125,6 +140,9 @@ def main() -> int:
             ng.append(code)
             continue
         name, _units, isin = FUND_HOLDINGS[code]
+        if isin_override:
+            print(f"\n※ config.py の値ではなく指定された ISIN {isin_override} で検証します")
+            isin = isin_override
         if not diagnose(code, name, isin):
             ng.append(code)
 
