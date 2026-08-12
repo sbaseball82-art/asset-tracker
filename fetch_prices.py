@@ -162,15 +162,30 @@ def fetch_fund_nav_yahoo(assoc_code: str) -> dict | None:
     ページ全体から数値を無差別に拾うと純資産総額(桁が大きい)を基準価額と誤認する。
     そこで『日付の直後に来る最初の数値』だけを基準価額として拾い、基準価額として
     妥当な範囲(500〜200,000円/万口)に収まるものだけ採用する。
+
+    協会CSVが使えない銘柄はこのフォールバックしか取得手段が無いため、
+    一時的な5xxで1日分を落とさないよう数回リトライする。ステータスを見ずに
+    本文をパースするとエラーページを基準価額として読みかけるので、
+    2xx以外は本文を捨てる。
     """
     url = f"https://finance.yahoo.co.jp/quote/{assoc_code}/history"
-    try:
-        res = requests.get(
-            url, headers={"User-Agent": UA, "Accept-Language": "ja"},
-            timeout=20,
-        )
-        text = res.text
-    except Exception:
+    text = None
+    for attempt in range(3):
+        if attempt:
+            time.sleep(2 ** attempt)   # 2秒 → 4秒
+        try:
+            res = requests.get(
+                url, headers={"User-Agent": UA, "Accept-Language": "ja"},
+                timeout=20,
+            )
+        except Exception as e:  # noqa: BLE001
+            print(f"  ⚠️  {assoc_code} [Yahoo! {attempt + 1}回目]: {type(e).__name__}")
+            continue
+        if res.status_code == 200:
+            text = res.text
+            break
+        print(f"  ⚠️  {assoc_code} [Yahoo! {attempt + 1}回目]: HTTP {res.status_code}")
+    if text is None:
         return None
 
     # 日付(YYYY/M/D or YYYY年M月D日)ごとに、その直後の最初の数値を基準価額とみなす

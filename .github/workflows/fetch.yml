@@ -40,6 +40,11 @@ jobs:
           pip install -q pytest
           python -m pytest tests/test_holdings_sync.py -q
 
+      # 取得元が劣化した銘柄を実行ページの警告として出す。
+      # data.json の source 文字列に残るだけでは何日も気づけないため。
+      - name: Report degraded price sources
+        run: python scripts/report_fund_sources.py
+
       - name: Fetch market events
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
