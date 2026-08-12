@@ -19,9 +19,11 @@ today = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).st
 def check(label, ok, detail=""):
     print(f'{"PASS" if ok else "FAIL"}: {label} {detail}')
 
+from config import ETF_HOLDINGS, FUND_HOLDINGS   # 銘柄数はマスタから取る(増減しても陳腐化しない)
+
 check("date が今日", d["date"] == today, f'(date={d["date"]}, today={today})')
-check("ETFが4銘柄", len(d["etf"]) == 4, f'(actual={list(d["etf"])})')
-check("投信が4銘柄", len(d["fund"]) == 4, f'(actual={list(d["fund"])})')
+check(f"ETFが{len(ETF_HOLDINGS)}銘柄", len(d["etf"]) == len(ETF_HOLDINGS), f'(actual={list(d["etf"])})')
+check(f"投信が{len(FUND_HOLDINGS)}銘柄", len(d["fund"]) == len(FUND_HOLDINGS), f'(actual={list(d["fund"])})')
 check("USD/JPYがフォールバック値でない", d["usdjpy"] != 150.0, f'(usdjpy={d["usdjpy"]})')
 check("全投信が協会CSV", all(v["source"] == "協会CSV" for v in d["fund"].values()),
       str({k: v["source"] for k, v in d["fund"].items()}))

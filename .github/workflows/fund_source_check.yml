@@ -1,0 +1,37 @@
+name: fund-source-check
+
+# 投信の基準価額の取得元を1件ずつ叩いて切り分ける手動ワークフロー。
+# data.json の source が「前日値(取得失敗)」「Yahoo!(推定)」になった銘柄を調べるときに使う。
+# ローカル環境からは金融サイトへ接続できないことがあるため、ここから実行する。
+# 何も書き込まない(読み取りのみ)。
+
+on:
+  workflow_dispatch:
+    inputs:
+      fund_code:
+        description: "協会コード(空なら全銘柄)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Diagnose fund sources
+        run: python scripts/diagnose_fund_source.py ${{ inputs.fund_code }}
