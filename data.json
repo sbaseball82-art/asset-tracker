@@ -1,41 +1,41 @@
 {
-  "updated_at": "2026-08-12T11:00:57.240570+09:00",
-  "date": "2026-08-12",
-  "usdjpy": 159.34,
-  "total_jpy": 34319950,
-  "day_change_jpy": 29495,
-  "day_change_pct": 0.09,
+  "updated_at": "2026-08-13T07:31:34.131151+09:00",
+  "date": "2026-08-13",
+  "usdjpy": 159.42,
+  "total_jpy": 34484131,
+  "day_change_jpy": 152008,
+  "day_change_pct": 0.44,
   "comparisons": {
     "day": {
-      "base_date": "2026-08-11",
-      "base_jpy": 33486971,
-      "change_jpy": -18496,
-      "change_pct": -0.06,
-      "gross_change_jpy": 832979,
-      "cash_flow_jpy": 851475
+      "base_date": "2026-08-12",
+      "base_jpy": 34319950,
+      "change_jpy": 164181,
+      "change_pct": 0.48,
+      "gross_change_jpy": 164181,
+      "cash_flow_jpy": 0
     },
     "week": {
-      "base_date": "2026-08-05",
-      "base_jpy": 32881210,
-      "change_jpy": 587265,
-      "change_pct": 1.79,
-      "gross_change_jpy": 1438740,
+      "base_date": "2026-08-06",
+      "base_jpy": 33038930,
+      "change_jpy": 593726,
+      "change_pct": 1.8,
+      "gross_change_jpy": 1445201,
       "cash_flow_jpy": 851475
     },
     "month": {
-      "base_date": "2026-07-13",
-      "base_jpy": 33003871,
-      "change_jpy": 364279,
-      "change_pct": 1.1,
-      "gross_change_jpy": 1316079,
+      "base_date": "2026-07-14",
+      "base_jpy": 32982574,
+      "change_jpy": 549757,
+      "change_pct": 1.67,
+      "gross_change_jpy": 1501557,
       "cash_flow_jpy": 951800
     },
     "ytd": {
       "base_date": "2026-06-08",
       "base_jpy": 31853815,
-      "change_jpy": 1108873,
-      "change_pct": 3.48,
-      "gross_change_jpy": 2466135,
+      "change_jpy": 1273054,
+      "change_pct": 4.0,
+      "gross_change_jpy": 2630316,
       "cash_flow_jpy": 1357262
     }
   },
@@ -44,56 +44,56 @@
       "name": "VYM 米国高配当ETF",
       "type": "ETF",
       "shares": 313,
-      "prev_price": 166.06,
-      "curr_price": 166.14,
-      "change_pct": 0.05,
-      "prev_jpy": 8281980,
-      "curr_jpy": 8285970,
-      "usdjpy": 159.34
+      "prev_price": 166.14,
+      "curr_price": 166.67,
+      "change_pct": 0.32,
+      "prev_jpy": 8290130,
+      "curr_jpy": 8316576,
+      "usdjpy": 159.42
     },
     "VTI": {
       "name": "VTI 全米株式ETF",
       "type": "ETF",
       "shares": 195,
-      "prev_price": 381.63,
-      "curr_price": 380.65,
-      "change_pct": -0.26,
-      "prev_jpy": 11857740,
-      "curr_jpy": 11827290,
-      "usdjpy": 159.34
+      "prev_price": 380.65,
+      "curr_price": 381.83,
+      "change_pct": 0.31,
+      "prev_jpy": 11833228,
+      "curr_jpy": 11869911,
+      "usdjpy": 159.42
     },
     "HDV": {
       "name": "HDV 米国高配当ETF",
       "type": "ETF",
       "shares": 495,
-      "prev_price": 28.99,
+      "prev_price": 29.07,
       "curr_price": 29.07,
-      "change_pct": 0.28,
-      "prev_jpy": 2286537,
-      "curr_jpy": 2292847,
-      "usdjpy": 159.34
+      "change_pct": 0.0,
+      "prev_jpy": 2293998,
+      "curr_jpy": 2293998,
+      "usdjpy": 159.42
     },
     "QQQ": {
       "name": "QQQ ナスダック100ETF",
       "type": "ETF",
       "shares": 16,
-      "prev_price": 720.87,
-      "curr_price": 718.45,
-      "change_pct": -0.34,
-      "prev_jpy": 1837815,
-      "curr_jpy": 1831645,
-      "usdjpy": 159.34
+      "prev_price": 718.45,
+      "curr_price": 723.7,
+      "change_pct": 0.73,
+      "prev_jpy": 1832565,
+      "curr_jpy": 1845956,
+      "usdjpy": 159.42
     },
     "DRAM": {
       "name": "DRAM メモリ半導体ETF",
       "type": "ETF",
       "shares": 1,
-      "prev_price": 49.6,
-      "curr_price": 50.89,
-      "change_pct": 2.6,
-      "prev_jpy": 7903,
-      "curr_jpy": 8109,
-      "usdjpy": 159.34
+      "prev_price": 50.89,
+      "curr_price": 54.8,
+      "change_pct": 7.68,
+      "prev_jpy": 8113,
+      "curr_jpy": 8736,
+      "usdjpy": 159.42
     }
   },
   "fund": {
@@ -102,14 +102,18 @@
       "type": "投資信託",
       "fund_code": "29313233",
       "units": 36374,
-      "prev_nav": 27787.0,
-      "curr_nav": 28000.0,
-      "change_pct": 0.77,
-      "prev_jpy": 101072,
-      "curr_jpy": 101847,
+      "prev_nav": 28000.0,
+      "curr_nav": 28064.0,
+      "change_pct": 0.23,
+      "prev_jpy": 101847,
+      "curr_jpy": 102080,
       "source": "協会CSV",
-      "curr_date": "2026-08-10",
+      "curr_date": "2026-08-12",
       "nav_series": [
+        {
+          "date": "2026-08-12",
+          "jpy": 102080
+        },
         {
           "date": "2026-08-10",
           "jpy": 101847
@@ -585,10 +589,6 @@
         {
           "date": "2026-02-16",
           "jpy": 81994
-        },
-        {
-          "date": "2026-02-13",
-          "jpy": 81761
         }
       ]
     },
@@ -597,14 +597,18 @@
       "type": "投資信託",
       "fund_code": "89311199",
       "units": 850904,
-      "prev_nav": 41092.0,
-      "curr_nav": 41170.0,
-      "change_pct": 0.19,
-      "prev_jpy": 3496535,
-      "curr_jpy": 3503172,
+      "prev_nav": 41170.0,
+      "curr_nav": 41402.0,
+      "change_pct": 0.56,
+      "prev_jpy": 3503172,
+      "curr_jpy": 3522913,
       "source": "協会CSV",
-      "curr_date": "2026-08-10",
+      "curr_date": "2026-08-12",
       "nav_series": [
+        {
+          "date": "2026-08-12",
+          "jpy": 3522913
+        },
         {
           "date": "2026-08-10",
           "jpy": 3503172
@@ -1080,10 +1084,6 @@
         {
           "date": "2026-02-16",
           "jpy": 2980461
-        },
-        {
-          "date": "2026-02-13",
-          "jpy": 2975952
         }
       ]
     },
@@ -1092,14 +1092,18 @@
       "type": "投資信託",
       "fund_code": "04311181",
       "units": 327750,
-      "prev_nav": 98332.0,
-      "curr_nav": 99524.0,
-      "change_pct": 1.21,
-      "prev_jpy": 3222831,
-      "curr_jpy": 3261899,
+      "prev_nav": 99524.0,
+      "curr_nav": 99640.0,
+      "change_pct": 0.12,
+      "prev_jpy": 3261899,
+      "curr_jpy": 3265701,
       "source": "協会CSV",
-      "curr_date": "2026-08-10",
+      "curr_date": "2026-08-12",
       "nav_series": [
+        {
+          "date": "2026-08-12",
+          "jpy": 3265701
+        },
         {
           "date": "2026-08-10",
           "jpy": 3261899
@@ -1575,10 +1579,6 @@
         {
           "date": "2026-02-16",
           "jpy": 2405554
-        },
-        {
-          "date": "2026-02-13",
-          "jpy": 2412338
         }
       ]
     },
@@ -1587,14 +1587,18 @@
       "type": "投資信託",
       "fund_code": "8931224C",
       "units": 1969774,
-      "prev_nav": 12579.0,
-      "curr_nav": 12601.0,
-      "change_pct": 0.17,
-      "prev_jpy": 2477779,
-      "curr_jpy": 2482112,
+      "prev_nav": 12601.0,
+      "curr_nav": 12850.0,
+      "change_pct": 1.98,
+      "prev_jpy": 2482112,
+      "curr_jpy": 2531160,
       "source": "協会CSV",
-      "curr_date": "2026-08-10",
+      "curr_date": "2026-08-12",
       "nav_series": [
+        {
+          "date": "2026-08-12",
+          "jpy": 2531160
+        },
         {
           "date": "2026-08-10",
           "jpy": 2482112
@@ -2070,10 +2074,6 @@
         {
           "date": "2026-02-16",
           "jpy": 2247315
-        },
-        {
-          "date": "2026-02-13",
-          "jpy": 2226239
         }
       ]
     },
@@ -2082,14 +2082,18 @@
       "type": "投資信託",
       "fund_code": "79314186",
       "units": 36240,
-      "prev_nav": 67687.0,
-      "curr_nav": 67999.0,
-      "change_pct": 0.46,
-      "prev_jpy": 245298,
-      "curr_jpy": 246428,
+      "prev_nav": 67999.0,
+      "curr_nav": 68260.0,
+      "change_pct": 0.38,
+      "prev_jpy": 246428,
+      "curr_jpy": 247374,
       "source": "協会CSV",
-      "curr_date": "2026-08-10",
+      "curr_date": "2026-08-12",
       "nav_series": [
+        {
+          "date": "2026-08-12",
+          "jpy": 247374
+        },
         {
           "date": "2026-08-10",
           "jpy": 246428
@@ -2565,10 +2569,6 @@
         {
           "date": "2026-02-16",
           "jpy": 181280
-        },
-        {
-          "date": "2026-02-13",
-          "jpy": 180997
         }
       ]
     },
@@ -2577,14 +2577,18 @@
       "type": "投資信託",
       "fund_code": "89311265",
       "units": 476155,
-      "prev_nav": 9975.0,
-      "curr_nav": 10052.0,
-      "change_pct": 0.77,
-      "prev_jpy": 474965,
-      "curr_jpy": 478631,
+      "prev_nav": 10052.0,
+      "curr_nav": 10075.0,
+      "change_pct": 0.23,
+      "prev_jpy": 478631,
+      "curr_jpy": 479726,
       "source": "協会CSV",
-      "curr_date": "2026-08-10",
+      "curr_date": "2026-08-12",
       "nav_series": [
+        {
+          "date": "2026-08-12",
+          "jpy": 479726
+        },
         {
           "date": "2026-08-10",
           "jpy": 478631
@@ -3146,6 +3150,12 @@
       "total_jpy": 34319950,
       "usdjpy": 159.34,
       "cash_flow_jpy": 851475
+    },
+    {
+      "date": "2026-08-13",
+      "total_jpy": 34484131,
+      "usdjpy": 159.42,
+      "cash_flow_jpy": 0
     }
   ]
 }
