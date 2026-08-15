@@ -1,21 +1,21 @@
 {
-  "updated_at": "2026-08-15T07:13:33.927092+09:00",
-  "date": "2026-08-15",
+  "updated_at": "2026-08-16T07:11:43.137936+09:00",
+  "date": "2026-08-16",
   "usdjpy": 159.3,
   "total_jpy": 34673804,
   "day_change_jpy": 78581,
   "day_change_pct": 0.23,
   "comparisons": {
     "day": {
-      "base_date": "2026-08-14",
-      "base_jpy": 34627453,
-      "change_jpy": 46351,
-      "change_pct": 0.13,
-      "gross_change_jpy": 46351,
+      "base_date": "2026-08-15",
+      "base_jpy": 34673804,
+      "change_jpy": 0,
+      "change_pct": 0.0,
+      "gross_change_jpy": 0,
       "cash_flow_jpy": 0
     },
     "week": {
-      "base_date": "2026-08-08",
+      "base_date": "2026-08-09",
       "base_jpy": 33175799,
       "change_jpy": 646530,
       "change_pct": 1.95,
@@ -23,12 +23,12 @@
       "cash_flow_jpy": 851475
     },
     "month": {
-      "base_date": "2026-07-16",
-      "base_jpy": 32955209,
-      "change_jpy": 766795,
-      "change_pct": 2.33,
-      "gross_change_jpy": 1718595,
-      "cash_flow_jpy": 951800
+      "base_date": "2026-07-17",
+      "base_jpy": 33156655,
+      "change_jpy": 665674,
+      "change_pct": 2.01,
+      "gross_change_jpy": 1517149,
+      "cash_flow_jpy": 851475
     },
     "ytd": {
       "base_date": "2026-06-08",
@@ -3173,6 +3173,12 @@
     },
     {
       "date": "2026-08-15",
+      "total_jpy": 34673804,
+      "usdjpy": 159.3,
+      "cash_flow_jpy": 0
+    },
+    {
+      "date": "2026-08-16",
       "total_jpy": 34673804,
       "usdjpy": 159.3,
       "cash_flow_jpy": 0
