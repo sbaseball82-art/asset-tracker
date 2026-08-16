@@ -72,7 +72,7 @@ topics:
   theme: 米国株の7月アノマリー 過去20年（平均+2.6% / 勝率16勝4敗）
   format: table
   builder: static
-  last_used: null
+  last_used: '2026-08-16'
   table:
     title: S&P500 月別アノマリー（過去20年・概算）
     subtitle: 報道・公表データベースの概算 / 月次リターン平均と勝率
