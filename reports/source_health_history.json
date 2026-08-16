@@ -1,0 +1,118 @@
+{
+ "weeks": [
+  {
+   "week": "2026-33",
+   "date": "2026-08-16",
+   "sources": {
+    "VTI/vanguard_api": {
+     "ok": false,
+     "count": 499,
+     "priority": 1,
+     "elapsed_ms": 1189
+    },
+    "VTI/vanguard_api_alt": {
+     "ok": false,
+     "count": 0,
+     "priority": 2,
+     "elapsed_ms": 786
+    },
+    "VTI/manual": {
+     "ok": false,
+     "count": 0,
+     "priority": 99,
+     "elapsed_ms": 0
+    },
+    "VYM/vanguard_api": {
+     "ok": true,
+     "count": 499,
+     "priority": 1,
+     "elapsed_ms": 1145
+    },
+    "VYM/manual": {
+     "ok": false,
+     "count": 0,
+     "priority": 99,
+     "elapsed_ms": 0
+    },
+    "HDV/ishares_csv": {
+     "ok": false,
+     "count": 0,
+     "priority": 1,
+     "elapsed_ms": 471
+    },
+    "HDV/manual": {
+     "ok": false,
+     "count": 0,
+     "priority": 99,
+     "elapsed_ms": 0
+    },
+    "QQQ/invesco_csv": {
+     "ok": false,
+     "count": 0,
+     "priority": 1,
+     "elapsed_ms": 1423
+    },
+    "QQQ/manual": {
+     "ok": false,
+     "count": 0,
+     "priority": 99,
+     "elapsed_ms": 0
+    },
+    "89311199/vanguard_api_voo": {
+     "ok": true,
+     "count": 499,
+     "priority": 1,
+     "elapsed_ms": 1066
+    },
+    "89311199/manual": {
+     "ok": false,
+     "count": 0,
+     "priority": 99,
+     "elapsed_ms": 0
+    },
+    "8931224C/schwab_csv": {
+     "ok": false,
+     "count": 0,
+     "priority": 1,
+     "elapsed_ms": 10236
+    },
+    "8931224C/schwab_fund_page": {
+     "ok": false,
+     "count": 0,
+     "priority": 2,
+     "elapsed_ms": 10180
+    },
+    "8931224C/manual": {
+     "ok": false,
+     "count": 0,
+     "priority": 99,
+     "elapsed_ms": 0
+    },
+    "04311181/ice_index_page": {
+     "ok": false,
+     "count": 0,
+     "priority": 1,
+     "elapsed_ms": 9295
+    },
+    "04311181/fngs_etn": {
+     "ok": false,
+     "count": 0,
+     "priority": 2,
+     "elapsed_ms": 12299
+    },
+    "04311181/manual": {
+     "ok": false,
+     "count": 0,
+     "priority": 3,
+     "elapsed_ms": 0
+    },
+    "04311181/declared_equal_weight": {
+     "ok": true,
+     "count": 10,
+     "priority": 90,
+     "elapsed_ms": 0
+    }
+   }
+  }
+ ]
+}
