@@ -105,14 +105,21 @@ def fetch_fund_nav_toushin(assoc_code: str, isin: str) -> dict | None:
     CSV列(ヘッダ): 年月日,基準価額(円),純資産総額(百万円),...
     返却: {dates:[...], navs:[...]} 新しい順
 
-    ISINがあれば isinCd+associFundCd で取得。ISINが無くても associFundCd 単独で
-    試す(協会CSVは協会コードだけで取れる場合がある)。取れなければ None を返し、
-    呼び出し側が Yahoo! フォールバックに回す。
+    **このCSVはISIN必須**。associFundCd だけを渡すと HTTP 200 のまま
+    `{"statusCode":null}` の19バイトが返るだけで、CSVにはならない
+    (2026-08-12 に全6銘柄で実測。ISINを持つ銘柄でも同じ)。
+    そのため ISIN が無ければ叩かずに None を返し、呼び出し側の
+    Yahoo! フォールバックに回す。
+
+    ISINが無い銘柄は事実上このフォールバック一本になり、一時障害がそのまま
+    その日の欠落になる。config.py には必ずISINを入れること
+    (候補の検証は scripts/diagnose_fund_source.py --isin)。
     """
-    if isin:
-        url = f"{TOUSHIN_CSV}?isinCd={isin}&associFundCd={assoc_code}"
-    else:
-        url = f"{TOUSHIN_CSV}?associFundCd={assoc_code}"
+    if not isin:
+        print(f"  ❌ {assoc_code} [協会CSV]: ISIN未設定のため取得不可"
+              f"(協会CSVはISIN必須)")
+        return None
+    url = f"{TOUSHIN_CSV}?isinCd={isin}&associFundCd={assoc_code}"
     try:
         res = requests.get(url, headers={"User-Agent": UA}, timeout=20)
         res.raise_for_status()
