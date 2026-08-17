@@ -29,3 +29,8 @@ date,type,topic_id,format,char_count,has_image,posted,views,likes,bookmarks,repl
 2026-08-12,earnings,2026-08-12_CPI,post,80,false,false,,,,,,
 2026-08-13,earnings,2026-08-12_CPI,morning,104,false,false,,,,,,
 2026-08-16,evergreen,ev003,table,189,true,false,,,,,,
+2026-08-17,daily_growth,dg003,versus,150,true,false,,,,,,
+2026-08-17,daily_growth,dg040,milestone,138,true,false,,,,,,
+2026-08-17,daily_growth,dg061,before_after,136,true,false,,,,,,
+2026-08-17,daily_growth,dg010,dark_financial_report,141,true,false,,,,,,
+2026-08-17,daily_growth,dg031,chart_focus,140,true,false,,,,,,

@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "errors": [],
+  "warnings": [],
+  "checks": {
+    "date": "2026-08-17",
+    "total_jpy": 34689130.0,
+    "usdjpy": 159.4,
+    "char_limit": 165.0,
+    "files": {
+      "posts": 5,
+      "unique_images": 5
+    },
+    "font": "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
+    "posts": [
+      {
+        "topic_id": "dg003",
+        "design_id": "versus",
+        "zenkaku": 150.0,
+        "image": "post_1.png"
+      },
+      {
+        "topic_id": "dg040",
+        "design_id": "milestone",
+        "zenkaku": 138.0,
+        "image": "post_2.png"
+      },
+      {
+        "topic_id": "dg061",
+        "design_id": "before_after",
+        "zenkaku": 136.5,
+        "image": "post_3.png"
+      },
+      {
+        "topic_id": "dg010",
+        "design_id": "dark_financial_report",
+        "zenkaku": 141.0,
+        "image": "post_4.png"
+      },
+      {
+        "topic_id": "dg031",
+        "design_id": "chart_focus",
+        "zenkaku": 140.5,
+        "image": "post_5.png"
+      }
+    ]
+  }
+}

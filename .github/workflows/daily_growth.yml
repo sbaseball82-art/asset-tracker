@@ -1,0 +1,144 @@
+name: daily-growth
+
+# 毎朝の投稿候補5本を生成する。**投稿はしない**（生成のみ）。
+#
+# 時刻の考え方（JST）
+#   07:00 前後  daily-asset-slide (fetch.yml) が data.json を更新
+#   07:30 前後  morning-brief / daily-report が市場データを更新
+#   08:00 前後  ここ。最新の data.json を読んで候補を作る
+#
+# data.json が古い（既定4日超）ときは生成せず中止する。
+# 古い数字で投稿文を作るくらいなら作らないほうがよい、という方針。
+
+on:
+  schedule:
+    # 23:00 UTC = 08:00 JST（翌朝）。GitHubのcronは大幅に遅延する実績があるため予備を1本置く。
+    # 同じ日に2回走っても、その日の出力ディレクトリを作り直すだけで履歴は二重にならない
+    # （同日ぶんの履歴があれば書き足さない）。
+    - cron: "0 23 * * *"
+    - cron: "30 0 * * *"
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "生成日（YYYY-MM-DD。空なら今日）"
+        required: false
+        default: ""
+      dry_run:
+        description: "履歴と logs/posts.csv を書かない"
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-growth
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+
+      # 画像の日本語が豆腐（□）になるのを防ぐ
+      - name: Install Japanese fonts
+        run: sudo apt-get update && sudo apt-get install -y fonts-noto-cjk
+
+      - name: Run tests first
+        run: |
+          pip install -q pytest
+          python -m pytest tests/ -q
+
+      - name: Generate daily growth posts
+        id: gen
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          ARGS=""
+          if [ -n "${{ github.event.inputs.date }}" ]; then
+            ARGS="$ARGS --date ${{ github.event.inputs.date }}"
+          fi
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          set +e
+          python -m src.daily_growth.generate $ARGS
+          CODE=$?
+          set -e
+          echo "code=$CODE" >> "$GITHUB_OUTPUT"
+          case "$CODE" in
+            0) echo "生成できました" ;;
+            1) echo "::warning::QAに通りませんでした。生成物は投稿素材として使わないでください" ;;
+            2) echo "::warning::生成を中止しました（data.json が古い／読めない など）" ;;
+            *) echo "::error::想定外の終了コード $CODE"; exit "$CODE" ;;
+          esac
+
+      # QAに落ちても中身は見たいので always() で上げる
+      - name: Upload generated posts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-growth
+          path: output/daily-growth/
+          retention-days: 30
+
+      # QAに通ったときだけコミットする。
+      # 生成物・履歴・実績ログの3つだけを、最新の origin に重ねてpushする
+      # （fetch.yml / evergreen.yml と同じ、衝突しない実績パターン）。
+      - name: Commit outputs
+        if: steps.gen.outputs.code == '0' && github.event.inputs.dry_run != 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          BRANCH="${GITHUB_REF_NAME}"
+
+          mkdir -p "$RUNNER_TEMP/gen"
+          cp -r output "$RUNNER_TEMP/gen/" 2>/dev/null || true
+          cp -r data   "$RUNNER_TEMP/gen/" 2>/dev/null || true
+          cp -r logs   "$RUNNER_TEMP/gen/" 2>/dev/null || true
+
+          for i in 1 2 3 4 5; do
+            git fetch origin "$BRANCH"
+            git reset --hard
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+            cp -r "$RUNNER_TEMP/gen/output/." output/ 2>/dev/null || true
+            cp "$RUNNER_TEMP/gen/data/daily_growth_history.jsonl" data/ 2>/dev/null || true
+            cp "$RUNNER_TEMP/gen/logs/posts.csv" logs/ 2>/dev/null || true
+
+            git add output/daily-growth data/daily_growth_history.jsonl logs/posts.csv
+            # 生成物に変化が無い日はコミットしない（無限コミットの防止）
+            if git diff --cached --quiet; then
+              echo "変更なし(コミットをスキップ)"; exit 0
+            fi
+            git commit -m "daily-growth: $(date -u +%Y-%m-%d)"
+            if git push origin "$BRANCH"; then exit 0; fi
+            echo "::warning::push拒否 (試行 $i)。5秒後に再試行"; sleep 5
+          done
+          echo "::error::5回試行してもpushできませんでした"; exit 1
+
+      - name: Summary
+        if: always()
+        run: |
+          DIR="output/daily-growth/$(TZ=Asia/Tokyo date +%Y-%m-%d)"
+          {
+            echo "## daily-growth"
+            echo ""
+            echo "生成のみです。**Xへの投稿はしません。**"
+            echo "生成物を目視で確認してから手で投稿してください。"
+            echo ""
+            if [ -f "$DIR/summary.md" ]; then cat "$DIR/summary.md"; fi
+          } >> "$GITHUB_STEP_SUMMARY"
