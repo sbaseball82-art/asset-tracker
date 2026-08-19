@@ -1,0 +1,94 @@
+{
+ "date": "2026-08-19",
+ "generated_at": "2026-08-19T21:08:04",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "AVGO",
+   "name": "ブロードコム",
+   "theme": "半導体",
+   "headline": "ブロードコム大幅安 -5%",
+   "conclusion": "ブロードコムのz=-1.3σは半導体見通しの修正を示唆",
+   "score": 0.4693,
+   "score_parts": {
+    "z": 0.1156,
+    "volume": 0.1553,
+    "media": 0.1333,
+    "sns": 0.0,
+    "holdings": 0.065,
+    "calendar": 0.0,
+    "global": 0.0,
+    "learn": 0.0
+   },
+   "n_media": 4,
+   "sns_heat": 0.0,
+   "slot": 1,
+   "template_id": "T6",
+   "topic_tag": "semiconductor",
+   "numbers": [
+    {
+     "label": "ブロードコム 日次",
+     "value": "-4.6%",
+     "sub": "z=-1.3σ",
+     "source": "yfinance終値",
+     "asof": "2026-08-19"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.9倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-08-19"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+9.1%",
+     "sub": "ブロードコム",
+     "source": "yfinance終値",
+     "asof": "2026-08-19"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+0.2%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-08-19"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-2.1%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-08-19"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.65%",
+     "sub": "2026-08-19",
+     "source": "米財務省",
+     "asof": "2026-08-19"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-08-19_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-08-19_1.txt"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "ticker": "JPY=X",
+   "score": 0.4471,
+   "unmet": [
+    "スコア0.45が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "SCHD",
+   "score": 0.3097,
+   "unmet": [
+    "スコア0.31が閾値0.45未満（材料薄）"
+   ]
+  }
+ ]
+}
