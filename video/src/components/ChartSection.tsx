@@ -13,6 +13,10 @@ import type { Dataset, Metric } from "../data/types";
 
 const MARKS = ["①", "②", "③"];
 
+/** 縦軸のレンジをならす窓。9点 × 4フレーム = 直近0.6秒ぶん */
+const AXIS_SMOOTHING_SAMPLES = 9;
+const AXIS_SMOOTHING_STRIDE = 4;
+
 interface Props {
   dataset: Dataset;
   metric: Metric;
@@ -29,21 +33,30 @@ export const ChartSection: React.FC<Props> = ({ dataset, metric, metricIndex }) 
   const populated = hasAnyValue(series);
 
   const chartFrame = frame - INTER_FRAMES;
+  const posAt = (f: number) =>
+    easedPosition(
+      Math.max(0, Math.min(lastIndex, (f - CHART_LEAD) / YEAR_STEP)),
+      lastIndex,
+    );
+
   const rawPos = Math.max(0, Math.min(lastIndex, (chartFrame - CHART_LEAD) / YEAR_STEP));
-  const pos = easedPosition(rawPos, lastIndex);
+  const pos = posAt(chartFrame);
+  // 縦軸のレンジをなめらかに動かすための直近フレーム。古い順に並べる
+  const posHistory = Array.from({ length: AXIS_SMOOTHING_SAMPLES }, (_, i) =>
+    posAt(chartFrame - (AXIS_SMOOTHING_SAMPLES - 1 - i) * AXIS_SMOOTHING_STRIDE),
+  );
 
   const yearIndex = Math.round(rawPos);
   const sinceSwitch = rawPos - (yearIndex - 0.5);
   const yearFlash = Math.max(0, Math.min(1, sinceSwitch / 0.3));
 
-  const missing = series.some((s) => s.values.some((v) => v === null));
   const footerLines = [
     "出典：各社IR資料（10-K／有価証券報告書／決算説明資料）",
     "米ドル換算は各年度の期中平均レート。営業利益率は営業利益÷売上高",
     "決算期：マイクロン8月期／サンディスク6月期／キオクシア3月期／他12月期",
     "サムスンはDS部門ベース（メモリ単独の営業利益は非開示）",
+    "点が各社の開示値。未開示の年は線を途切れさせている（0では描いていない）",
   ];
-  if (missing) footerLines.push("未開示・未取得の年は線を途切れさせている（0では描いていない）");
 
   return (
     <AbsoluteFill style={{ background: theme.background }}>
@@ -75,7 +88,14 @@ export const ChartSection: React.FC<Props> = ({ dataset, metric, metricIndex }) 
       </div>
 
       {populated ? (
-        <LineChart series={series} years={years} metric={metric} theme={theme} pos={pos} />
+        <LineChart
+          series={series}
+          years={years}
+          metric={metric}
+          theme={theme}
+          pos={pos}
+          posHistory={posHistory}
+        />
       ) : (
         <div
           style={{

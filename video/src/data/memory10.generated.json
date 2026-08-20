@@ -17,6 +17,7 @@
  "companies": [
   {
    "id": "samsung",
+   "monogram": "S",
    "name_ja": "サムスン電子",
    "name_en": "Samsung Electronics",
    "country": "韓国",
@@ -28,6 +29,7 @@
   },
   {
    "id": "skhynix",
+   "monogram": "SK",
    "name_ja": "SKハイニックス",
    "name_en": "SK hynix",
    "country": "韓国",
@@ -39,6 +41,7 @@
   },
   {
    "id": "micron",
+   "monogram": "MU",
    "name_ja": "マイクロン",
    "name_en": "Micron Technology",
    "country": "米国",
@@ -50,6 +53,7 @@
   },
   {
    "id": "kioxia",
+   "monogram": "KX",
    "name_ja": "キオクシア",
    "name_en": "Kioxia",
    "country": "日本",
@@ -61,6 +65,7 @@
   },
   {
    "id": "sandisk",
+   "monogram": "SD",
    "name_ja": "サンディスク",
    "name_en": "SanDisk",
    "country": "米国",
@@ -72,6 +77,7 @@
   },
   {
    "id": "nanya",
+   "monogram": "NT",
    "name_ja": "南亞科技",
    "name_en": "Nanya Technology",
    "country": "台湾",
@@ -83,6 +89,7 @@
   },
   {
    "id": "winbond",
+   "monogram": "WB",
    "name_ja": "華邦電子",
    "name_en": "Winbond Electronics",
    "country": "台湾",
@@ -94,6 +101,7 @@
   },
   {
    "id": "macronix",
+   "monogram": "MX",
    "name_ja": "旺宏電子",
    "name_en": "Macronix International",
    "country": "台湾",

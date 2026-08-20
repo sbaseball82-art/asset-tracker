@@ -2,6 +2,7 @@ export interface Company {
   id: string;
   name_ja: string;
   name_en: string;
+  monogram: string;
   country: string;
   currency: string;
   fiscal_year_end: string;
@@ -47,6 +48,7 @@ export interface Dataset {
 export interface Series {
   companyId: string;
   nameJa: string;
+  monogram: string;
   color: string;
   values: (number | null)[];
   isEstimate: boolean[];

@@ -1,6 +1,14 @@
 /** 目盛りとスケールの計算。純粋関数のみ。 */
 
-const NICE_STEPS = [1, 2, 2.5, 5, 10];
+/**
+ * 縦軸の上限に使う刻み。
+ * 目盛りより細かくしてある。粗いとデータの倍近くまで上限が飛んで、
+ * グラフの上半分が空いてしまうため。
+ */
+const CEIL_STEPS = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10];
+
+/** 目盛りの間隔に使う刻み。ラベルが丸い数字になるものだけ */
+const TICK_STEPS = [1, 2, 2.5, 5, 10];
 
 /** v 以上で最も小さい「切りのよい」値 */
 export function niceCeil(v: number): number {
@@ -8,7 +16,7 @@ export function niceCeil(v: number): number {
   const sign = Math.sign(v);
   const a = Math.abs(v);
   const mag = Math.pow(10, Math.floor(Math.log10(a)));
-  for (const s of NICE_STEPS) {
+  for (const s of CEIL_STEPS) {
     if (a <= s * mag * 1.0000001) return sign * s * mag;
   }
   return sign * 10 * mag;
@@ -37,8 +45,10 @@ export function domainFor(values: number[]): Domain {
   const rawMin = Math.min(0, ...finite);
   const span = rawMax - rawMin || Math.abs(rawMax) || 1;
 
-  const max = niceCeil(rawMax + span * 0.12);
-  const min = rawMin < 0 ? niceFloor(rawMin - span * 0.12) : 0;
+  // 余白を大きく取ると niceCeil が一段上の目盛りへ飛んでグラフ上部が空くので、
+  // ここは詰めておき、線が上端に触れないぶんは描画側の余白（TOP_PAD）で確保する
+  const max = niceCeil(rawMax + span * 0.02);
+  const min = rawMin < 0 ? niceFloor(rawMin - span * 0.02) : 0;
   return { min, max: max === min ? min + 1 : max };
 }
 
@@ -50,7 +60,7 @@ export function ticksFor(domain: Domain, count = 5): number[] {
   const rough = span / count;
   const mag = Math.pow(10, Math.floor(Math.log10(rough)));
   let step = 10 * mag;
-  for (const s of NICE_STEPS) {
+  for (const s of TICK_STEPS) {
     if (s * mag >= rough) {
       step = s * mag;
       break;
@@ -65,10 +75,3 @@ export function ticksFor(domain: Domain, count = 5): number[] {
   return out;
 }
 
-/** 2つの範囲を混ぜる（スケールが急に飛ばないようにするため） */
-export function blendDomain(a: Domain, b: Domain, t: number): Domain {
-  return {
-    min: a.min + (b.min - a.min) * t,
-    max: a.max + (b.max - a.max) * t,
-  };
-}

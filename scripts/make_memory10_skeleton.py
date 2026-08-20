@@ -7,6 +7,7 @@
 """
 import csv
 import json
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -18,55 +19,55 @@ YEARS = list(range(2016, 2026))
 # 規則: 決算月 >= 6 → その暦年 / 決算月 < 6 → 前暦年
 COMPANIES = [
     {
-        "id": "samsung", "name_ja": "サムスン電子", "name_en": "Samsung Electronics",
+        "id": "samsung", "monogram": "S", "name_ja": "サムスン電子", "name_en": "Samsung Electronics",
         "country": "韓国", "currency": "KRW", "fiscal_year_end": "12月",
         "fiscal_year_end_month": 12,
         "scope": "DS部門（半導体：メモリ＋ファウンドリ＋System LSI）",
         "scope_note": "メモリ単独の営業利益は非開示のため、3指標すべてDS部門ベース。売上高は実態よりファウンドリ/LSI分だけ大きく出る。",
     },
     {
-        "id": "skhynix", "name_ja": "SKハイニックス", "name_en": "SK hynix",
+        "id": "skhynix", "monogram": "SK", "name_ja": "SKハイニックス", "name_en": "SK hynix",
         "country": "韓国", "currency": "KRW", "fiscal_year_end": "12月",
         "fiscal_year_end_month": 12,
         "scope": "連結（メモリ専業。2021年末以降Solidigmを含む）",
         "scope_note": "Intel NANDメモリ事業(Solidigm)の第1段階クロージングは2021年12月。2022年以降は連結に含まれる。",
     },
     {
-        "id": "micron", "name_ja": "マイクロン", "name_en": "Micron Technology",
+        "id": "micron", "monogram": "MU", "name_ja": "マイクロン", "name_en": "Micron Technology",
         "country": "米国", "currency": "USD", "fiscal_year_end": "8月/9月",
         "fiscal_year_end_month": 8,
         "scope": "連結（メモリ専業）",
         "scope_note": "会計年度は8月末〜9月初に終了。FY2016は2016年9月1日終了。",
     },
     {
-        "id": "kioxia", "name_ja": "キオクシア", "name_en": "Kioxia",
+        "id": "kioxia", "monogram": "KX", "name_ja": "キオクシア", "name_en": "Kioxia",
         "country": "日本", "currency": "JPY", "fiscal_year_end": "3月",
         "fiscal_year_end_month": 3,
         "scope": "連結（NANDフラッシュ専業）",
         "scope_note": "2017年4月に東芝メモリとして分社、2018年6月に東芝から独立。2016〜2017年度は法人として存在せず、遡及開示も無い。",
     },
     {
-        "id": "sandisk", "name_ja": "サンディスク", "name_en": "SanDisk",
+        "id": "sandisk", "monogram": "SD", "name_ja": "サンディスク", "name_en": "SanDisk",
         "country": "米国", "currency": "USD", "fiscal_year_end": "6月/7月",
         "fiscal_year_end_month": 6,
         "scope": "2016〜2024年度=Western Digitalのフラッシュ事業、2025年度=SanDisk単体",
         "scope_note": "WDは営業利益をセグメント別に開示していない（FY2023までは単一報告セグメント、FY2024以降もセグメント開示は売上高と売上総利益まで）。営業利益はSanDisk単体開示のある年度のみ。",
     },
     {
-        "id": "nanya", "name_ja": "南亞科技", "name_en": "Nanya Technology",
+        "id": "nanya", "monogram": "NT", "name_ja": "南亞科技", "name_en": "Nanya Technology",
         "country": "台湾", "currency": "TWD", "fiscal_year_end": "12月",
         "fiscal_year_end_month": 12,
         "scope": "連結（DRAM専業）", "scope_note": "",
     },
     {
-        "id": "winbond", "name_ja": "華邦電子", "name_en": "Winbond Electronics",
+        "id": "winbond", "monogram": "WB", "name_ja": "華邦電子", "name_en": "Winbond Electronics",
         "country": "台湾", "currency": "TWD", "fiscal_year_end": "12月",
         "fiscal_year_end_month": 12,
         "scope": "連結（特殊DRAM/NORフラッシュ。ファウンドリ事業を含む）",
         "scope_note": "メモリ以外の受託生産を含む全社連結。メモリ単独のセグメント開示は無い。",
     },
     {
-        "id": "macronix", "name_ja": "旺宏電子", "name_en": "Macronix International",
+        "id": "macronix", "monogram": "MX", "name_ja": "旺宏電子", "name_en": "Macronix International",
         "country": "台湾", "currency": "TWD", "fiscal_year_end": "12月",
         "fiscal_year_end_month": 12,
         "scope": "連結（NORフラッシュ/ROM中心）", "scope_note": "",
@@ -89,7 +90,21 @@ def fiscal_label(company, year):
     return f"{year + 1}年{m}月期"
 
 
+def already_filled() -> bool:
+    """CSVに1つでも数値が入っていれば True。"""
+    path = DATA / "memory10.csv"
+    if not path.exists():
+        return False
+    with path.open(encoding="utf-8") as f:
+        return any((row.get("value_local") or "").strip() for row in csv.DictReader(f))
+
+
 def main():
+    if already_filled() and "--force" not in sys.argv:
+        print("data/memory10.csv にすでに数値が入っている。"
+              "作り直すと消えるので中止した（本当にやるなら --force）", file=sys.stderr)
+        return 1
+
     DATA.mkdir(exist_ok=True)
 
     rows = []
@@ -142,7 +157,8 @@ def main():
     print(f"wrote {csv_path} ({len(rows)} rows)")
     print(f"wrote {fx_path}")
     print(f"wrote {DATA / 'memory10.json'}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

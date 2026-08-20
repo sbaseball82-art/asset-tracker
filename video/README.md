@@ -21,11 +21,14 @@ export REMOTION_BROWSER_EXECUTABLE=/opt/pw-browsers/chromium_headless_shell-1194
 # 1. CSVからデータJSONを作る（出典URLの無い数値は通らない）
 python scripts/build_memory10_dataset.py
 
-# 2. 使う文字だけのフォントを同梱し、グリフ欠けが無いか確かめる
+# 2. ロゴ画像を置いていれば一覧に反映する（置いていなければ頭文字バッジ）
+python scripts/build_logo_manifest.py
+
+# 3. 使う文字だけのフォントを同梱し、グリフ欠けが無いか確かめる
 python scripts/subset_fonts.py
 python scripts/check_video_glyphs.py
 
-# 3. 書き出し
+# 4. 書き出し
 cd video
 npm run typecheck
 npm test
@@ -60,6 +63,9 @@ npx remotion ffprobe ../out/memory10.mp4
 | 社名・色・決算期・注記 | `data/memory10.json`（`scripts/make_memory10_skeleton.py` が生成） |
 | 尺・1期あたりの秒数 | `video/src/timing.ts` |
 | 配色・テーマ | `video/src/theme.ts` |
+| 動きの粘り（年ごとの止まり具合） | `video/src/layout/geometry.ts` の `CRUISE` |
+| 各社ロゴ | `video/public/logos/<企業ID>.svg` を置いて手順2 |
+| 頭文字バッジの文字 | `data/memory10.json` の `monogram` |
 | 文言（ヘッダー・注記・締め） | `video/src/components/` 各ファイル |
 
 `value_local` は**ローカル通貨の百万単位**で入れる（百万KRW / 百万JPY / 百万TWD / 百万USD）。
@@ -77,3 +83,18 @@ npx remotion ffprobe ../out/memory10.mp4
 - フォントはシステム任せにせず同梱する。グリフが1文字でも欠けたら
   `scripts/check_video_glyphs.py` が失敗する
 - 上下200pxはSNSのUIに隠れる想定で、重要な情報を置かない
+- **年ごとに止めない。** 1期ぶんを両端の速度を指定したエルミート補間でつなぎ、
+  中間の期は巡航速度で通過する（`CRUISE`）。最初と最後だけ静止から入って静止で終わる。
+  速度が年の境目で途切れないことはテストで固定してある
+- **線は単調3次補間**（Fritsch–Carlson）。データ点の外側に膨らまないので、
+  「年と年のあいだに実際より高い値があったように見える」ことがない。
+  開示値そのものは中抜きの点で必ず示す
+- 縦軸のレンジは直近0.6秒ぶんを重み付き平均してならす。
+  目盛りが1本増える瞬間に軸が跳ねないようにするため。
+  平均で現在値がはみ出さないよう、最後に必ず収まるところまで広げ直す
+
+## ロゴについて
+
+このリポジトリは各社のロゴ画像を同梱していない。ロゴは商標であり、
+投稿物に載せる判断は人間がすべきものなので、既定では社名の頭文字バッジを描く。
+実ロゴを使いたい場合は `video/public/logos/` の README を参照。

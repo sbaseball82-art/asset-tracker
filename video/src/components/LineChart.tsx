@@ -3,18 +3,27 @@ import { fontStack } from "../fonts";
 import { TEXT, type Theme } from "../theme";
 import type { Metric, Series } from "../data/types";
 import { formatTick, formatValue } from "../format";
+import { LogoBadge } from "./LogoBadge";
 import {
   LABEL_H,
   LABEL_SPACING,
   LABEL_W,
   LABEL_X,
   PLOT,
+  TOP_PAD,
+  bezierPath,
+  bottomPadFor,
+  consecutiveRuns,
   makeScales,
+  monotoneSegments,
   tipFor,
-  visibleRuns,
+  truncateBezier,
+  type Bezier,
 } from "../layout/geometry";
-import { blendDomain, domainFor, ticksFor } from "../layout/scale";
+import { domainFor, ticksFor, type Domain } from "../layout/scale";
 import { resolveCollisions } from "../layout/collision";
+
+const LOGO_SIZE = 40;
 
 interface Props {
   series: Series[];
@@ -23,39 +32,117 @@ interface Props {
   theme: Theme;
   /** 年インデックスの小数位置（イージング済み） */
   pos: number;
+  /** 直近のフレームぶんの pos。縦軸のレンジをなめらかに動かすために使う */
+  posHistory: number[];
 }
 
-export const LineChart: React.FC<Props> = ({ series, years, metric, theme, pos }) => {
-  // 各年時点での縦軸レンジを先に出しておき、年をまたぐときに滑らかに混ぜる
-  const domains = useMemo(
-    () =>
-      years.map((_, k) => {
-        const seen: number[] = [];
-        for (const s of series) {
-          for (let i = 0; i <= k; i++) {
-            const v = s.values[i];
-            if (v !== null) seen.push(v);
-          }
-        }
-        return domainFor(seen);
-      }),
-    [series, years],
+/** pos の時点で見えている値（年をまたぐ途中の補間値も含む） */
+function visibleValues(series: Series[], pos: number): number[] {
+  const out: number[] = [];
+  const k = Math.floor(pos + 1e-9);
+  const t = pos - k;
+  for (const s of series) {
+    for (let i = 0; i <= Math.min(k, s.values.length - 1); i++) {
+      const v = s.values[i];
+      if (v !== null) out.push(v);
+    }
+    if (t > 1e-9 && k + 1 < s.values.length) {
+      const a = s.values[k];
+      const b = s.values[k + 1];
+      if (a !== null && b !== null) out.push(a + (b - a) * t);
+    }
+  }
+  return out;
+}
+
+/**
+ * 縦軸のレンジ。
+ *
+ * 各時点の「切りのよいレンジ」を直近フレームぶん平均することで、
+ * 目盛りが1本増える瞬間に軸が跳ねるのを均している。
+ * 平均すると現在の値がはみ出しうるので、最後に必ず収まるところまで広げ直す。
+ */
+function smoothedDomain(series: Series[], pos: number, posHistory: number[]): Domain {
+  const samples = posHistory.map((p) => domainFor(visibleValues(series, p)));
+  const weightSum = samples.length * (samples.length + 1) / 2;
+  let min = 0;
+  let max = 0;
+  samples.forEach((d, i) => {
+    const w = (i + 1) / weightSum; // 新しいフレームほど重く
+    min += d.min * w;
+    max += d.max * w;
+  });
+
+  const now = visibleValues(series, pos);
+  const needMax = Math.max(0, ...now) * 1.01;
+  const needMin = Math.min(0, ...now) * 1.01;
+
+  const result = { min: Math.min(min, needMin), max: Math.max(max, needMax) };
+  return result.max === result.min ? { min: result.min, max: result.min + 1 } : result;
+}
+
+export const LineChart: React.FC<Props> = ({
+  series,
+  years,
+  metric,
+  theme,
+  pos,
+  posHistory,
+}) => {
+  const runsPerSeries = useMemo(
+    () => series.map((s) => consecutiveRuns(s.values)),
+    [series],
   );
 
-  const k = Math.min(years.length - 1, Math.floor(pos + 1e-9));
-  const t = Math.min(1, Math.max(0, pos - k));
-  const domain = blendDomain(domains[k], domains[Math.min(years.length - 1, k + 1)], t);
+  const domain = smoothedDomain(series, pos, posHistory);
   const { x, y } = makeScales(years, domain);
   const ticks = ticksFor(domain, 5);
 
-  const tips = series
-    .map((s) => ({ s, tip: tipFor(s.values, pos) }))
-    .filter((e): e is { s: Series; tip: NonNullable<ReturnType<typeof tipFor>> } =>
-      e.tip !== null,
-    );
+  const k = Math.min(years.length - 1, Math.floor(pos + 1e-9));
+  const t = Math.max(0, Math.min(1, pos - k));
+
+  // 各社の曲線を作る。接線は全期間の点から求めるので、
+  // 先端が進んでも描き終わった部分の形は変わらない。
+  const drawn = series.map((s, si) => {
+    const visible: Bezier[] = [];
+    const dots: { i: number; v: number }[] = [];
+    let tip: { sx: number; sy: number; v: number; opacity: number } | null = null;
+
+    for (const run of runsPerSeries[si]) {
+      const segments = monotoneSegments(
+        run.map((i) => ({ i, sx: x(i), sy: y(s.values[i] as number) })),
+      );
+      for (const seg of segments) {
+        if (seg.i1 <= k) {
+          visible.push(seg);
+        } else if (seg.i0 === k && t > 1e-9) {
+          const cut = truncateBezier(seg, t);
+          visible.push(cut);
+          tip = { sx: cut.p1[0], sy: cut.p1[1], v: invertY(cut.p1[1], domain), opacity: 1 };
+        }
+      }
+      for (const i of run) {
+        if (i <= k) dots.push({ i, v: s.values[i] as number });
+      }
+    }
+
+    if (tip === null) {
+      // 曲線が伸びていない＝欠損の縁にいる。0に落とさず、その場で濃度だけ変える
+      const edge = tipFor(s.values, pos);
+      if (edge !== null) {
+        tip = { sx: x(edge.i), sy: y(edge.v), v: edge.v, opacity: edge.opacity };
+      }
+    }
+
+    return { series: s, visible, dots, tip };
+  });
+
+  const withTip = drawn.filter(
+    (d): d is typeof d & { tip: NonNullable<typeof d.tip> } => d.tip !== null,
+  );
 
   const placed = resolveCollisions(
-    tips.map(({ s, tip }) => ({ id: s.companyId, desiredY: y(tip.v) })),
+    withTip.map((d) => ({ id: d.series.companyId, desiredY: d.tip.sy })),
     {
       minSpacing: LABEL_SPACING,
       minY: PLOT.y + LABEL_H / 2,
@@ -102,7 +189,6 @@ export const LineChart: React.FC<Props> = ({ series, years, metric, theme, pos }
         );
       })}
 
-      {/* 現在年のガイド線 */}
       <line
         x1={guideX}
         x2={guideX}
@@ -114,7 +200,6 @@ export const LineChart: React.FC<Props> = ({ series, years, metric, theme, pos }
         opacity={0.55}
       />
 
-      {/* 横軸ラベル */}
       {years.map((yr, i) => {
         const active = i === currentYearIndex;
         const cx = x(i);
@@ -122,14 +207,7 @@ export const LineChart: React.FC<Props> = ({ series, years, metric, theme, pos }
         return (
           <g key={yr}>
             {active ? (
-              <rect
-                x={cx - 32}
-                y={ly - 25}
-                width={64}
-                height={34}
-                rx={17}
-                fill={theme.accent}
-              />
+              <rect x={cx - 32} y={ly - 25} width={64} height={34} rx={17} fill={theme.accent} />
             ) : null}
             <text
               x={cx}
@@ -145,69 +223,59 @@ export const LineChart: React.FC<Props> = ({ series, years, metric, theme, pos }
         );
       })}
 
-      {/* 折れ線。欠損年をまたぐところは別のサブパスにして途切れさせる */}
-      {series.map((s) => {
-        const runs = visibleRuns(s.values, pos);
-        return (
-          <g key={s.companyId}>
-            {runs.map((run, ri) => {
-              if (run.length === 1) {
-                return (
-                  <circle
-                    key={ri}
-                    cx={x(run[0].i)}
-                    cy={y(run[0].v)}
-                    r={5}
-                    fill={s.color}
-                  />
-                );
-              }
-              const d = run
-                .map((p, i) => `${i === 0 ? "M" : "L"}${x(p.i).toFixed(2)},${y(p.v).toFixed(2)}`)
-                .join(" ");
-              return (
-                <path
-                  key={ri}
-                  d={d}
-                  fill="none"
-                  stroke={s.color}
-                  strokeWidth={4.5}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              );
-            })}
-          </g>
-        );
-      })}
+      {/* 折れ線。欠損年をまたぐところは別のサブパスなので線が途切れる */}
+      {drawn.map(({ series: s, visible, dots }) => (
+        <g key={s.companyId}>
+          {groupContiguous(visible).map((group, gi) => (
+            <path
+              key={gi}
+              d={bezierPath(group)}
+              fill="none"
+              stroke={s.color}
+              strokeWidth={4.5}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          ))}
+          {/* 実際に開示されている年の点。曲線が実測点を勝手に作っていないことを示すので、
+              線と同色で塗り潰さず中抜きにして必ず見えるようにする */}
+          {dots.map((d) => (
+            <circle
+              key={d.i}
+              cx={x(d.i)}
+              cy={y(d.v)}
+              r={3.9}
+              fill={theme.background}
+              stroke={s.color}
+              strokeWidth={2.2}
+            />
+          ))}
+        </g>
+      ))}
 
-      {/* リード線と先端の点は、カードより先にまとめて描く（他社のカードで切れないように） */}
-      {tips.map(({ s, tip }) => {
-        const px = x(tip.i);
-        const py = y(tip.v);
-        const cardY = placedById.get(s.companyId) ?? py;
-        const cardX = Math.min(px + 18, LABEL_X);
+      {/* リード線と先端の点は、カードより先にまとめて描く */}
+      {withTip.map(({ series: s, tip }) => {
+        const cardY = placedById.get(s.companyId) ?? tip.sy;
+        const cardX = Math.min(tip.sx + 18, LABEL_X);
         return (
           <g key={`lead-${s.companyId}`} opacity={tip.opacity}>
             <polyline
-              points={`${px},${py} ${px + 9},${py} ${cardX},${cardY}`}
+              points={`${tip.sx},${tip.sy} ${tip.sx + 9},${tip.sy} ${cardX},${cardY}`}
               fill="none"
               stroke={s.color}
               strokeWidth={1.4}
               opacity={0.5}
             />
-            <circle cx={px} cy={py} r={7} fill={s.color} stroke="#FFFFFF" strokeWidth={2.5} />
+            <circle cx={tip.sx} cy={tip.sy} r={7} fill={s.color} stroke="#FFFFFF" strokeWidth={2.5} />
           </g>
         );
       })}
 
       {/* 先端のカード型ラベル */}
-      {tips.map(({ s, tip }) => {
-        const px = x(tip.i);
-        const cardY = placedById.get(s.companyId) ?? y(tip.v);
+      {withTip.map(({ series: s, tip }) => {
+        const cardY = placedById.get(s.companyId) ?? tip.sy;
         const cardTop = cardY - LABEL_H / 2;
-        // カードは線の先端を追う。右端では画面からはみ出さないところで止める
-        const cardX = Math.min(px + 18, LABEL_X);
+        const cardX = Math.min(tip.sx + 18, LABEL_X);
         return (
           <g key={s.companyId} opacity={tip.opacity}>
             <rect
@@ -220,15 +288,15 @@ export const LineChart: React.FC<Props> = ({ series, years, metric, theme, pos }
               stroke={s.color}
               strokeWidth={3}
             />
-            {/* 社名と数値は上下に分ける。横並びだと社名の長さで数値と当たる */}
-            <circle cx={cardX + 24} cy={cardY - 14} r={8} fill={s.color} />
-            <text
-              x={cardX + 42}
-              y={cardY - 6}
-              fontSize={23}
-              fontWeight={700}
-              fill={TEXT.onLight}
-            >
+            <LogoBadge
+              companyId={s.companyId}
+              monogram={s.monogram}
+              color={s.color}
+              x={cardX + 12}
+              y={cardY - LOGO_SIZE / 2}
+              size={LOGO_SIZE}
+            />
+            <text x={cardX + 62} y={cardY - 6} fontSize={23} fontWeight={700} fill={TEXT.onLight}>
               {s.nameJa}
             </text>
             <text
@@ -248,3 +316,25 @@ export const LineChart: React.FC<Props> = ({ series, years, metric, theme, pos }
     </svg>
   );
 };
+
+/** 画面のY座標を値に戻す（曲線上の先端の値を出すため） */
+function invertY(sy: number, domain: Domain): number {
+  const bottom = bottomPadFor(domain);
+  const ratio = (PLOT.y + PLOT.h - bottom - sy) / (PLOT.h - TOP_PAD - bottom);
+  return domain.min + ratio * (domain.max - domain.min);
+}
+
+/** つながっている区間をひとつのパスにまとめる（欠損はここで切れる） */
+function groupContiguous(segments: Bezier[]): Bezier[][] {
+  const out: Bezier[][] = [];
+  let current: Bezier[] = [];
+  for (const seg of segments) {
+    if (current.length && current[current.length - 1].i1 !== seg.i0) {
+      out.push(current);
+      current = [];
+    }
+    current.push(seg);
+  }
+  if (current.length) out.push(current);
+  return out;
+}

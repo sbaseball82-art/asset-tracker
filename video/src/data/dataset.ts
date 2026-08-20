@@ -23,6 +23,7 @@ export function seriesFor(dataset: Dataset, metricId: string): Series[] {
     return {
       companyId: c.id,
       nameJa: c.name_ja,
+      monogram: c.monogram,
       color: COMPANY_COLORS[c.id] ?? "#8B96AB",
       values: dataset.years.map((y) => byYear.get(y)?.value ?? null),
       isEstimate: dataset.years.map((y) => byYear.get(y)?.isEstimate ?? false),
