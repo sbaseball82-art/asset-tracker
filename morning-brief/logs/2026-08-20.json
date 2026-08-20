@@ -1,0 +1,87 @@
+{
+ "date": "2026-08-20",
+ "generated_at": "2026-08-20T21:07:00",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "^DJI",
+   "name": "NYダウ",
+   "theme": "指数",
+   "headline": "NYダウ小幅安 -1%",
+   "conclusion": "NYダウのz=-1.8σは指数見通しの修正を示唆",
+   "score": 0.5668,
+   "score_parts": {
+    "z": 0.1588,
+    "volume": 0.078,
+    "media": 0.2,
+    "sns": 0.0,
+    "holdings": 0.05,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 7,
+   "sns_heat": 0.0,
+   "slot": 1,
+   "template_id": "T4",
+   "topic_tag": "macro",
+   "numbers": [
+    {
+     "label": "NYダウ 日次",
+     "value": "-1.3%",
+     "sub": "z=-1.8σ",
+     "source": "yfinance終値",
+     "asof": "2026-08-20"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "0.9倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-08-20"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+6.6%",
+     "sub": "NYダウ",
+     "source": "yfinance終値",
+     "asof": "2026-08-20"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "-0.9%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-08-20"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "+0.5%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-08-20"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.69%",
+     "sub": "2026-08-20",
+     "source": "米財務省",
+     "asof": "2026-08-20"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-08-20_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-08-20_1.txt"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "ticker": "VYM",
+   "score": 0.2467,
+   "unmet": [
+    "スコア0.25が閾値0.45未満（材料薄）"
+   ]
+  }
+ ]
+}
