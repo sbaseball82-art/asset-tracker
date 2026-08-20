@@ -1,0 +1,2980 @@
+{
+ "schema_version": 1,
+ "is_dummy": true,
+ "year_mapping_rule": "決算月>=6月のFYはその暦年へ、決算月<6月のFYは前暦年へ寄せる",
+ "years": [
+  2016,
+  2017,
+  2018,
+  2019,
+  2020,
+  2021,
+  2022,
+  2023,
+  2024,
+  2025
+ ],
+ "companies": [
+  {
+   "id": "samsung",
+   "name_ja": "サムスン電子",
+   "name_en": "Samsung Electronics",
+   "country": "韓国",
+   "currency": "KRW",
+   "fiscal_year_end": "12月",
+   "fiscal_year_end_month": 12,
+   "scope": "DS部門（半導体：メモリ＋ファウンドリ＋System LSI）",
+   "scope_note": "メモリ単独の営業利益は非開示のため、3指標すべてDS部門ベース。売上高は実態よりファウンドリ/LSI分だけ大きく出る。"
+  },
+  {
+   "id": "skhynix",
+   "name_ja": "SKハイニックス",
+   "name_en": "SK hynix",
+   "country": "韓国",
+   "currency": "KRW",
+   "fiscal_year_end": "12月",
+   "fiscal_year_end_month": 12,
+   "scope": "連結（メモリ専業。2021年末以降Solidigmを含む）",
+   "scope_note": "Intel NANDメモリ事業(Solidigm)の第1段階クロージングは2021年12月。2022年以降は連結に含まれる。"
+  },
+  {
+   "id": "micron",
+   "name_ja": "マイクロン",
+   "name_en": "Micron Technology",
+   "country": "米国",
+   "currency": "USD",
+   "fiscal_year_end": "8月/9月",
+   "fiscal_year_end_month": 8,
+   "scope": "連結（メモリ専業）",
+   "scope_note": "会計年度は8月末〜9月初に終了。FY2016は2016年9月1日終了。"
+  },
+  {
+   "id": "kioxia",
+   "name_ja": "キオクシア",
+   "name_en": "Kioxia",
+   "country": "日本",
+   "currency": "JPY",
+   "fiscal_year_end": "3月",
+   "fiscal_year_end_month": 3,
+   "scope": "連結（NANDフラッシュ専業）",
+   "scope_note": "2017年4月に東芝メモリとして分社、2018年6月に東芝から独立。2016〜2017年度は法人として存在せず、遡及開示も無い。"
+  },
+  {
+   "id": "sandisk",
+   "name_ja": "サンディスク",
+   "name_en": "SanDisk",
+   "country": "米国",
+   "currency": "USD",
+   "fiscal_year_end": "6月/7月",
+   "fiscal_year_end_month": 6,
+   "scope": "2016〜2024年度=Western Digitalのフラッシュ事業、2025年度=SanDisk単体",
+   "scope_note": "WDは営業利益をセグメント別に開示していない（FY2023までは単一報告セグメント、FY2024以降もセグメント開示は売上高と売上総利益まで）。営業利益はSanDisk単体開示のある年度のみ。"
+  },
+  {
+   "id": "nanya",
+   "name_ja": "南亞科技",
+   "name_en": "Nanya Technology",
+   "country": "台湾",
+   "currency": "TWD",
+   "fiscal_year_end": "12月",
+   "fiscal_year_end_month": 12,
+   "scope": "連結（DRAM専業）",
+   "scope_note": ""
+  },
+  {
+   "id": "winbond",
+   "name_ja": "華邦電子",
+   "name_en": "Winbond Electronics",
+   "country": "台湾",
+   "currency": "TWD",
+   "fiscal_year_end": "12月",
+   "fiscal_year_end_month": 12,
+   "scope": "連結（特殊DRAM/NORフラッシュ。ファウンドリ事業を含む）",
+   "scope_note": "メモリ以外の受託生産を含む全社連結。メモリ単独のセグメント開示は無い。"
+  },
+  {
+   "id": "macronix",
+   "name_ja": "旺宏電子",
+   "name_en": "Macronix International",
+   "country": "台湾",
+   "currency": "TWD",
+   "fiscal_year_end": "12月",
+   "fiscal_year_end_month": 12,
+   "scope": "連結（NORフラッシュ/ROM中心）",
+   "scope_note": ""
+  }
+ ],
+ "metrics": [
+  {
+   "id": "revenue",
+   "label_ja": "売上高",
+   "unit_ja": "億ドル",
+   "theme": "navy",
+   "derived": false
+  },
+  {
+   "id": "operating_income",
+   "label_ja": "営業利益",
+   "unit_ja": "億ドル",
+   "theme": "green",
+   "derived": false
+  },
+  {
+   "id": "operating_margin",
+   "label_ja": "営業利益率",
+   "unit_ja": "%",
+   "theme": "rust",
+   "derived": true,
+   "formula": "operating_income / revenue * 100"
+  }
+ ],
+ "fx_rates": [
+  {
+   "currency": "JPY",
+   "year": 2016,
+   "rate_per_usd": 130.0
+  },
+  {
+   "currency": "JPY",
+   "year": 2017,
+   "rate_per_usd": 130.0
+  },
+  {
+   "currency": "JPY",
+   "year": 2018,
+   "rate_per_usd": 130.0
+  },
+  {
+   "currency": "JPY",
+   "year": 2019,
+   "rate_per_usd": 130.0
+  },
+  {
+   "currency": "JPY",
+   "year": 2020,
+   "rate_per_usd": 130.0
+  },
+  {
+   "currency": "JPY",
+   "year": 2021,
+   "rate_per_usd": 130.0
+  },
+  {
+   "currency": "JPY",
+   "year": 2022,
+   "rate_per_usd": 130.0
+  },
+  {
+   "currency": "JPY",
+   "year": 2023,
+   "rate_per_usd": 130.0
+  },
+  {
+   "currency": "JPY",
+   "year": 2024,
+   "rate_per_usd": 130.0
+  },
+  {
+   "currency": "JPY",
+   "year": 2025,
+   "rate_per_usd": 130.0
+  },
+  {
+   "currency": "KRW",
+   "year": 2016,
+   "rate_per_usd": 1200.0
+  },
+  {
+   "currency": "KRW",
+   "year": 2017,
+   "rate_per_usd": 1200.0
+  },
+  {
+   "currency": "KRW",
+   "year": 2018,
+   "rate_per_usd": 1200.0
+  },
+  {
+   "currency": "KRW",
+   "year": 2019,
+   "rate_per_usd": 1200.0
+  },
+  {
+   "currency": "KRW",
+   "year": 2020,
+   "rate_per_usd": 1200.0
+  },
+  {
+   "currency": "KRW",
+   "year": 2021,
+   "rate_per_usd": 1200.0
+  },
+  {
+   "currency": "KRW",
+   "year": 2022,
+   "rate_per_usd": 1200.0
+  },
+  {
+   "currency": "KRW",
+   "year": 2023,
+   "rate_per_usd": 1200.0
+  },
+  {
+   "currency": "KRW",
+   "year": 2024,
+   "rate_per_usd": 1200.0
+  },
+  {
+   "currency": "KRW",
+   "year": 2025,
+   "rate_per_usd": 1200.0
+  },
+  {
+   "currency": "TWD",
+   "year": 2016,
+   "rate_per_usd": 30.0
+  },
+  {
+   "currency": "TWD",
+   "year": 2017,
+   "rate_per_usd": 30.0
+  },
+  {
+   "currency": "TWD",
+   "year": 2018,
+   "rate_per_usd": 30.0
+  },
+  {
+   "currency": "TWD",
+   "year": 2019,
+   "rate_per_usd": 30.0
+  },
+  {
+   "currency": "TWD",
+   "year": 2020,
+   "rate_per_usd": 30.0
+  },
+  {
+   "currency": "TWD",
+   "year": 2021,
+   "rate_per_usd": 30.0
+  },
+  {
+   "currency": "TWD",
+   "year": 2022,
+   "rate_per_usd": 30.0
+  },
+  {
+   "currency": "TWD",
+   "year": 2023,
+   "rate_per_usd": 30.0
+  },
+  {
+   "currency": "TWD",
+   "year": 2024,
+   "rate_per_usd": 30.0
+  },
+  {
+   "currency": "TWD",
+   "year": 2025,
+   "rate_per_usd": 30.0
+  },
+  {
+   "currency": "USD",
+   "year": 2016,
+   "rate_per_usd": 1.0
+  },
+  {
+   "currency": "USD",
+   "year": 2017,
+   "rate_per_usd": 1.0
+  },
+  {
+   "currency": "USD",
+   "year": 2018,
+   "rate_per_usd": 1.0
+  },
+  {
+   "currency": "USD",
+   "year": 2019,
+   "rate_per_usd": 1.0
+  },
+  {
+   "currency": "USD",
+   "year": 2020,
+   "rate_per_usd": 1.0
+  },
+  {
+   "currency": "USD",
+   "year": 2021,
+   "rate_per_usd": 1.0
+  },
+  {
+   "currency": "USD",
+   "year": 2022,
+   "rate_per_usd": 1.0
+  },
+  {
+   "currency": "USD",
+   "year": 2023,
+   "rate_per_usd": 1.0
+  },
+  {
+   "currency": "USD",
+   "year": 2024,
+   "rate_per_usd": 1.0
+  },
+  {
+   "currency": "USD",
+   "year": 2025,
+   "rate_per_usd": 1.0
+  }
+ ],
+ "coverage": {
+  "total_cells": 240,
+  "filled_cells": 220,
+  "filled_ratio": 0.9167
+ },
+ "data": [
+  {
+   "company_id": "samsung",
+   "metric_id": "revenue",
+   "year": 2016,
+   "value": 1052.36,
+   "value_local": 126283635.5,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_income",
+   "year": 2016,
+   "value": 412.41,
+   "value_local": 49489407.9,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_margin",
+   "year": 2016,
+   "value": 39.19,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "revenue",
+   "year": 2017,
+   "value": 1256.2,
+   "value_local": 150744358.5,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_income",
+   "year": 2017,
+   "value": 592.91,
+   "value_local": 71148901.8,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_margin",
+   "year": 2017,
+   "value": 47.2,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "revenue",
+   "year": 2018,
+   "value": 1207.59,
+   "value_local": 144910947.7,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_income",
+   "year": 2018,
+   "value": 445.25,
+   "value_local": 53429524.1,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_margin",
+   "year": 2018,
+   "value": 36.87,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "revenue",
+   "year": 2019,
+   "value": 733.62,
+   "value_local": 88034735.2,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_income",
+   "year": 2019,
+   "value": 8.89,
+   "value_local": 1067385.4,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_margin",
+   "year": 2019,
+   "value": 1.21,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "revenue",
+   "year": 2020,
+   "value": 600.22,
+   "value_local": 72026843.3,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_income",
+   "year": 2020,
+   "value": -58.18,
+   "value_local": -6981363.0,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_margin",
+   "year": 2020,
+   "value": -9.69,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "revenue",
+   "year": 2021,
+   "value": 523.26,
+   "value_local": 62791696.8,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_income",
+   "year": 2021,
+   "value": -84.4,
+   "value_local": -10128460.4,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_margin",
+   "year": 2021,
+   "value": -16.13,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "revenue",
+   "year": 2022,
+   "value": 852.9,
+   "value_local": 102347846.2,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_income",
+   "year": 2022,
+   "value": -5.92,
+   "value_local": -709857.1,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_margin",
+   "year": 2022,
+   "value": -0.69,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "revenue",
+   "year": 2023,
+   "value": 1593.69,
+   "value_local": 191242647.1,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_income",
+   "year": 2023,
+   "value": 529.39,
+   "value_local": 63526698.7,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_margin",
+   "year": 2023,
+   "value": 33.22,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "revenue",
+   "year": 2024,
+   "value": 1999.29,
+   "value_local": 239914410.8,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_income",
+   "year": 2024,
+   "value": 959.46,
+   "value_local": 115135121.7,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_margin",
+   "year": 2024,
+   "value": 47.99,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "revenue",
+   "year": 2025,
+   "value": 1899.23,
+   "value_local": 227907100.0,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_income",
+   "year": 2025,
+   "value": 739.63,
+   "value_local": 88755419.1,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "samsung",
+   "metric_id": "operating_margin",
+   "year": 2025,
+   "value": 38.94,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "revenue",
+   "year": 2016,
+   "value": 355.68,
+   "value_local": 42681187.6,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_income",
+   "year": 2016,
+   "value": 143.56,
+   "value_local": 17227141.1,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_margin",
+   "year": 2016,
+   "value": 40.36,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "revenue",
+   "year": 2017,
+   "value": 415.77,
+   "value_local": 49892014.1,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_income",
+   "year": 2017,
+   "value": 193.52,
+   "value_local": 23222228.0,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_margin",
+   "year": 2017,
+   "value": 46.54,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "revenue",
+   "year": 2018,
+   "value": 391.01,
+   "value_local": 46921761.3,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_income",
+   "year": 2018,
+   "value": 135.01,
+   "value_local": 16201337.7,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_margin",
+   "year": 2018,
+   "value": 34.53,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "revenue",
+   "year": 2019,
+   "value": 282.15,
+   "value_local": 33858069.5,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_income",
+   "year": 2019,
+   "value": 23.47,
+   "value_local": 2816921.8,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_margin",
+   "year": 2019,
+   "value": 8.32,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "revenue",
+   "year": 2020,
+   "value": 158.89,
+   "value_local": 19067329.2,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_income",
+   "year": 2020,
+   "value": -26.95,
+   "value_local": -3233782.8,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_margin",
+   "year": 2020,
+   "value": -16.96,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "revenue",
+   "year": 2021,
+   "value": 165.03,
+   "value_local": 19803005.1,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_income",
+   "year": 2021,
+   "value": -29.19,
+   "value_local": -3502262.5,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_margin",
+   "year": 2021,
+   "value": -17.69,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "revenue",
+   "year": 2022,
+   "value": 310.15,
+   "value_local": 37218508.1,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_income",
+   "year": 2022,
+   "value": 10.35,
+   "value_local": 1241507.0,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_margin",
+   "year": 2022,
+   "value": 3.34,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "revenue",
+   "year": 2023,
+   "value": 504.67,
+   "value_local": 60559856.0,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_income",
+   "year": 2023,
+   "value": 147.9,
+   "value_local": 17748017.6,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_margin",
+   "year": 2023,
+   "value": 29.31,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "revenue",
+   "year": 2024,
+   "value": 661.68,
+   "value_local": 79402197.9,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_income",
+   "year": 2024,
+   "value": 313.16,
+   "value_local": 37579581.0,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_margin",
+   "year": 2024,
+   "value": 47.33,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "revenue",
+   "year": 2025,
+   "value": 606.62,
+   "value_local": 72794169.6,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_income",
+   "year": 2025,
+   "value": 214.96,
+   "value_local": 25795011.9,
+   "currency": "KRW",
+   "fx_rate": 1200.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "skhynix",
+   "metric_id": "operating_margin",
+   "year": 2025,
+   "value": 35.44,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "revenue",
+   "year": 2016,
+   "value": 256.37,
+   "value_local": 25637.3,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_income",
+   "year": 2016,
+   "value": 81.81,
+   "value_local": 8181.4,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_margin",
+   "year": 2016,
+   "value": 31.91,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "revenue",
+   "year": 2017,
+   "value": 336.62,
+   "value_local": 33662.5,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_income",
+   "year": 2017,
+   "value": 160.4,
+   "value_local": 16039.9,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_margin",
+   "year": 2017,
+   "value": 47.65,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "revenue",
+   "year": 2018,
+   "value": 312.23,
+   "value_local": 31222.8,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_income",
+   "year": 2018,
+   "value": 107.34,
+   "value_local": 10734.4,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_margin",
+   "year": 2018,
+   "value": 34.38,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "revenue",
+   "year": 2019,
+   "value": 246.15,
+   "value_local": 24615.3,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_income",
+   "year": 2019,
+   "value": 32.36,
+   "value_local": 3236.0,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_margin",
+   "year": 2019,
+   "value": 13.15,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "revenue",
+   "year": 2020,
+   "value": 150.36,
+   "value_local": 15036.0,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_income",
+   "year": 2020,
+   "value": -17.79,
+   "value_local": -1779.1,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_margin",
+   "year": 2020,
+   "value": -11.83,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "revenue",
+   "year": 2021,
+   "value": 132.55,
+   "value_local": 13254.9,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_income",
+   "year": 2021,
+   "value": -23.3,
+   "value_local": -2329.7,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_margin",
+   "year": 2021,
+   "value": -17.58,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "revenue",
+   "year": 2022,
+   "value": 248.93,
+   "value_local": 24892.5,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_income",
+   "year": 2022,
+   "value": 8.69,
+   "value_local": 869.2,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_margin",
+   "year": 2022,
+   "value": 3.49,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "revenue",
+   "year": 2023,
+   "value": 460.58,
+   "value_local": 46058.5,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_income",
+   "year": 2023,
+   "value": 183.18,
+   "value_local": 18317.6,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_margin",
+   "year": 2023,
+   "value": 39.77,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "revenue",
+   "year": 2024,
+   "value": 533.07,
+   "value_local": 53307.0,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_income",
+   "year": 2024,
+   "value": 255.75,
+   "value_local": 25575.3,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_margin",
+   "year": 2024,
+   "value": 47.98,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "revenue",
+   "year": 2025,
+   "value": 512.03,
+   "value_local": 51203.1,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_income",
+   "year": 2025,
+   "value": 204.13,
+   "value_local": 20413.1,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "micron",
+   "metric_id": "operating_margin",
+   "year": 2025,
+   "value": 39.87,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "revenue",
+   "year": 2016,
+   "value": null,
+   "value_local": null,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_income",
+   "year": 2016,
+   "value": null,
+   "value_local": null,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_margin",
+   "year": 2016,
+   "value": null,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "revenue",
+   "year": 2017,
+   "value": null,
+   "value_local": null,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_income",
+   "year": 2017,
+   "value": null,
+   "value_local": null,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_margin",
+   "year": 2017,
+   "value": null,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "revenue",
+   "year": 2018,
+   "value": 161.25,
+   "value_local": 2096208.1,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_income",
+   "year": 2018,
+   "value": 70.66,
+   "value_local": 918608.2,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_margin",
+   "year": 2018,
+   "value": 43.82,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "revenue",
+   "year": 2019,
+   "value": 141.93,
+   "value_local": 1845082.4,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_income",
+   "year": 2019,
+   "value": 39.23,
+   "value_local": 510000.0,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_margin",
+   "year": 2019,
+   "value": 27.64,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "revenue",
+   "year": 2020,
+   "value": 91.01,
+   "value_local": 1183166.7,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_income",
+   "year": 2020,
+   "value": -1.37,
+   "value_local": -17762.0,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_margin",
+   "year": 2020,
+   "value": -1.5,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "revenue",
+   "year": 2021,
+   "value": 69.24,
+   "value_local": 900118.9,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_income",
+   "year": 2021,
+   "value": -9.67,
+   "value_local": -125669.3,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_margin",
+   "year": 2021,
+   "value": -13.96,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "revenue",
+   "year": 2022,
+   "value": 116.59,
+   "value_local": 1515610.5,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_income",
+   "year": 2022,
+   "value": 4.91,
+   "value_local": 63778.9,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_margin",
+   "year": 2022,
+   "value": 4.21,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "revenue",
+   "year": 2023,
+   "value": 199.52,
+   "value_local": 2593806.7,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_income",
+   "year": 2023,
+   "value": 68.96,
+   "value_local": 896539.5,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_margin",
+   "year": 2023,
+   "value": 34.56,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "revenue",
+   "year": 2024,
+   "value": 245.64,
+   "value_local": 3193345.6,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_income",
+   "year": 2024,
+   "value": 117.49,
+   "value_local": 1527371.2,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_margin",
+   "year": 2024,
+   "value": 47.83,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "revenue",
+   "year": 2025,
+   "value": 246.39,
+   "value_local": 3203005.4,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_income",
+   "year": 2025,
+   "value": 107.13,
+   "value_local": 1392692.7,
+   "currency": "JPY",
+   "fx_rate": 130.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "kioxia",
+   "metric_id": "operating_margin",
+   "year": 2025,
+   "value": 43.48,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "revenue",
+   "year": 2016,
+   "value": 181.61,
+   "value_local": 18160.7,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_income",
+   "year": 2016,
+   "value": null,
+   "value_local": null,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_margin",
+   "year": 2016,
+   "value": null,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "revenue",
+   "year": 2017,
+   "value": 243.2,
+   "value_local": 24320.1,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_income",
+   "year": 2017,
+   "value": null,
+   "value_local": null,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_margin",
+   "year": 2017,
+   "value": null,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "revenue",
+   "year": 2018,
+   "value": 262.8,
+   "value_local": 26279.5,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_income",
+   "year": 2018,
+   "value": null,
+   "value_local": null,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_margin",
+   "year": 2018,
+   "value": null,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "revenue",
+   "year": 2019,
+   "value": 151.42,
+   "value_local": 15142.1,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_income",
+   "year": 2019,
+   "value": null,
+   "value_local": null,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_margin",
+   "year": 2019,
+   "value": null,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "revenue",
+   "year": 2020,
+   "value": 130.06,
+   "value_local": 13005.7,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_income",
+   "year": 2020,
+   "value": null,
+   "value_local": null,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_margin",
+   "year": 2020,
+   "value": null,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "revenue",
+   "year": 2021,
+   "value": 98.03,
+   "value_local": 9803.4,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_income",
+   "year": 2021,
+   "value": null,
+   "value_local": null,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_margin",
+   "year": 2021,
+   "value": null,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "revenue",
+   "year": 2022,
+   "value": 150.26,
+   "value_local": 15025.9,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_income",
+   "year": 2022,
+   "value": null,
+   "value_local": null,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_margin",
+   "year": 2022,
+   "value": null,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "revenue",
+   "year": 2023,
+   "value": 294.97,
+   "value_local": 29497.2,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_income",
+   "year": 2023,
+   "value": 80.78,
+   "value_local": 8078.0,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_margin",
+   "year": 2023,
+   "value": 27.39,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "revenue",
+   "year": 2024,
+   "value": 393.42,
+   "value_local": 39341.6,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_income",
+   "year": 2024,
+   "value": 182.91,
+   "value_local": 18290.7,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_margin",
+   "year": 2024,
+   "value": 46.49,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "revenue",
+   "year": 2025,
+   "value": 415.94,
+   "value_local": 41594.3,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_income",
+   "year": 2025,
+   "value": 195.16,
+   "value_local": 19516.5,
+   "currency": "USD",
+   "fx_rate": 1.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "sandisk",
+   "metric_id": "operating_margin",
+   "year": 2025,
+   "value": 46.92,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "revenue",
+   "year": 2016,
+   "value": 26.49,
+   "value_local": 79457.7,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_income",
+   "year": 2016,
+   "value": 9.13,
+   "value_local": 27379.3,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_margin",
+   "year": 2016,
+   "value": 34.46,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "revenue",
+   "year": 2017,
+   "value": 33.78,
+   "value_local": 101344.2,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_income",
+   "year": 2017,
+   "value": 16.21,
+   "value_local": 48621.2,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_margin",
+   "year": 2017,
+   "value": 47.98,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "revenue",
+   "year": 2018,
+   "value": 31.32,
+   "value_local": 93963.7,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_income",
+   "year": 2018,
+   "value": 10.85,
+   "value_local": 32539.9,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_margin",
+   "year": 2018,
+   "value": 34.63,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "revenue",
+   "year": 2019,
+   "value": 23.09,
+   "value_local": 69276.4,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_income",
+   "year": 2019,
+   "value": 2.2,
+   "value_local": 6614.8,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_margin",
+   "year": 2019,
+   "value": 9.55,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "revenue",
+   "year": 2020,
+   "value": 20.05,
+   "value_local": 60151.5,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_income",
+   "year": 2020,
+   "value": -0.15,
+   "value_local": -463.7,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_margin",
+   "year": 2020,
+   "value": -0.77,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "revenue",
+   "year": 2021,
+   "value": 14.55,
+   "value_local": 43646.3,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_income",
+   "year": 2021,
+   "value": -2.17,
+   "value_local": -6502.9,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_margin",
+   "year": 2021,
+   "value": -14.9,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "revenue",
+   "year": 2022,
+   "value": 29.19,
+   "value_local": 87564.9,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_income",
+   "year": 2022,
+   "value": 3.46,
+   "value_local": 10385.5,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_margin",
+   "year": 2022,
+   "value": 11.86,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "revenue",
+   "year": 2023,
+   "value": 41.99,
+   "value_local": 125967.1,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_income",
+   "year": 2023,
+   "value": 13.55,
+   "value_local": 40662.7,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_margin",
+   "year": 2023,
+   "value": 32.28,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "revenue",
+   "year": 2024,
+   "value": 53.32,
+   "value_local": 159946.8,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_income",
+   "year": 2024,
+   "value": 25.59,
+   "value_local": 76762.2,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_margin",
+   "year": 2024,
+   "value": 47.99,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "revenue",
+   "year": 2025,
+   "value": 55.41,
+   "value_local": 166236.8,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_income",
+   "year": 2025,
+   "value": 25.96,
+   "value_local": 77871.2,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "nanya",
+   "metric_id": "operating_margin",
+   "year": 2025,
+   "value": 46.84,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "revenue",
+   "year": 2016,
+   "value": 28.31,
+   "value_local": 84931.5,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_income",
+   "year": 2016,
+   "value": 7.87,
+   "value_local": 23609.7,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_margin",
+   "year": 2016,
+   "value": 27.8,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "revenue",
+   "year": 2017,
+   "value": 39.42,
+   "value_local": 118257.2,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_income",
+   "year": 2017,
+   "value": 18.92,
+   "value_local": 56756.2,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_margin",
+   "year": 2017,
+   "value": 47.99,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "revenue",
+   "year": 2018,
+   "value": 38.87,
+   "value_local": 116609.4,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_income",
+   "year": 2018,
+   "value": 15.43,
+   "value_local": 46298.8,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_margin",
+   "year": 2018,
+   "value": 39.7,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "revenue",
+   "year": 2019,
+   "value": 24.54,
+   "value_local": 73608.9,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_income",
+   "year": 2019,
+   "value": 1.15,
+   "value_local": 3444.8,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_margin",
+   "year": 2019,
+   "value": 4.68,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "revenue",
+   "year": 2020,
+   "value": 15.12,
+   "value_local": 45356.7,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_income",
+   "year": 2020,
+   "value": -2.48,
+   "value_local": -7444.8,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_margin",
+   "year": 2020,
+   "value": -16.41,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "revenue",
+   "year": 2021,
+   "value": 18.02,
+   "value_local": 54052.8,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_income",
+   "year": 2021,
+   "value": -2.35,
+   "value_local": -7052.6,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_margin",
+   "year": 2021,
+   "value": -13.05,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "revenue",
+   "year": 2022,
+   "value": 28.29,
+   "value_local": 84857.1,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_income",
+   "year": 2022,
+   "value": 0.63,
+   "value_local": 1892.6,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_margin",
+   "year": 2022,
+   "value": 2.23,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "revenue",
+   "year": 2023,
+   "value": 54.48,
+   "value_local": 163425.1,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_income",
+   "year": 2023,
+   "value": 22.3,
+   "value_local": 66902.7,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_margin",
+   "year": 2023,
+   "value": 40.94,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "revenue",
+   "year": 2024,
+   "value": 61.83,
+   "value_local": 185503.7,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_income",
+   "year": 2024,
+   "value": 29.34,
+   "value_local": 88009.8,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_margin",
+   "year": 2024,
+   "value": 47.44,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "revenue",
+   "year": 2025,
+   "value": 54.31,
+   "value_local": 162938.5,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_income",
+   "year": 2025,
+   "value": 17.47,
+   "value_local": 52402.8,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "winbond",
+   "metric_id": "operating_margin",
+   "year": 2025,
+   "value": 32.16,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "revenue",
+   "year": 2016,
+   "value": 15.76,
+   "value_local": 47284.3,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_income",
+   "year": 2016,
+   "value": 4.09,
+   "value_local": 12259.2,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_margin",
+   "year": 2016,
+   "value": 25.93,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "revenue",
+   "year": 2017,
+   "value": 22.4,
+   "value_local": 67204.2,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_income",
+   "year": 2017,
+   "value": 10.64,
+   "value_local": 31910.5,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_margin",
+   "year": 2017,
+   "value": 47.48,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "revenue",
+   "year": 2018,
+   "value": 23.83,
+   "value_local": 71487.8,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_income",
+   "year": 2018,
+   "value": 10.93,
+   "value_local": 32794.6,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_margin",
+   "year": 2018,
+   "value": 45.87,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "revenue",
+   "year": 2019,
+   "value": 15.26,
+   "value_local": 45785.3,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_income",
+   "year": 2019,
+   "value": 1.39,
+   "value_local": 4156.0,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_margin",
+   "year": 2019,
+   "value": 9.08,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "revenue",
+   "year": 2020,
+   "value": 10.78,
+   "value_local": 32335.1,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_income",
+   "year": 2020,
+   "value": -1.01,
+   "value_local": -3018.9,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_margin",
+   "year": 2020,
+   "value": -9.34,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "revenue",
+   "year": 2021,
+   "value": 8.7,
+   "value_local": 26108.1,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_income",
+   "year": 2021,
+   "value": -1.57,
+   "value_local": -4697.3,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_margin",
+   "year": 2021,
+   "value": -17.99,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "revenue",
+   "year": 2022,
+   "value": 19.69,
+   "value_local": 59083.0,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_income",
+   "year": 2022,
+   "value": 2.47,
+   "value_local": 7414.0,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_margin",
+   "year": 2022,
+   "value": 12.55,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "revenue",
+   "year": 2023,
+   "value": 27.35,
+   "value_local": 82050.4,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_income",
+   "year": 2023,
+   "value": 8.34,
+   "value_local": 25030.7,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_margin",
+   "year": 2023,
+   "value": 30.51,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "revenue",
+   "year": 2024,
+   "value": 35.44,
+   "value_local": 106306.1,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_income",
+   "year": 2024,
+   "value": 16.91,
+   "value_local": 50717.4,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_margin",
+   "year": 2024,
+   "value": 47.71,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "revenue",
+   "year": 2025,
+   "value": 32.71,
+   "value_local": 98116.2,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_income",
+   "year": 2025,
+   "value": 11.88,
+   "value_local": 35627.7,
+   "currency": "TWD",
+   "fx_rate": 30.0,
+   "is_estimate": false,
+   "source": null
+  },
+  {
+   "company_id": "macronix",
+   "metric_id": "operating_margin",
+   "year": 2025,
+   "value": 36.31,
+   "value_local": null,
+   "currency": null,
+   "fx_rate": null,
+   "is_estimate": false,
+   "source": null
+  }
+ ]
+}

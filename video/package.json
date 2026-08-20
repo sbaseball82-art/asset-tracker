@@ -1,0 +1,26 @@
+{
+  "name": "memory10-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "世界メモリ大手8社の業績推移アニメーション（縦型 1080x1920 / 60fps）",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render Memory10 ../out/memory10.mp4",
+    "render:dummy": "remotion render Memory10Dummy",
+    "test": "node --experimental-strip-types --test test/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.513",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "remotion": "^4.0.513"
+  },
+  "devDependencies": {
+    "@expo-google-fonts/noto-sans-jp": "^0.4.3",
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "typescript": "^7.0.2"
+  }
+}
