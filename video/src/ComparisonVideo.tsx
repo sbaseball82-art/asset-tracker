@@ -24,7 +24,7 @@ function summaryLine(dataset: Dataset): string {
   return `${dataset.years[last]}年の売上高は ${first.name} が最大で、${second.name} が続いています。`;
 }
 
-export const Memory10: React.FC<{ dataset: Dataset }> = ({ dataset }) => {
+export const ComparisonVideo: React.FC<{ dataset: Dataset }> = ({ dataset }) => {
   ensureFontsLoaded();
 
   const section = sectionFrames(dataset.years.length);
@@ -34,7 +34,8 @@ export const Memory10: React.FC<{ dataset: Dataset }> = ({ dataset }) => {
       <Sequence durationInFrames={TITLE_FRAMES}>
         <TitleCard
           durationInFrames={TITLE_FRAMES}
-          companyNames={dataset.companies.map((c) => c.name_ja)}
+          copy={dataset.copy}
+          companies={dataset.companies}
         />
       </Sequence>
 
@@ -52,7 +53,11 @@ export const Memory10: React.FC<{ dataset: Dataset }> = ({ dataset }) => {
         from={TITLE_FRAMES + dataset.metrics.length * section}
         durationInFrames={OUTRO_FRAMES}
       >
-        <OutroCard durationInFrames={OUTRO_FRAMES} summaryLine={summaryLine(dataset)} />
+        <OutroCard
+          durationInFrames={OUTRO_FRAMES}
+          headline={dataset.copy.outro_headline}
+          summaryLine={summaryLine(dataset)}
+        />
       </Sequence>
     </AbsoluteFill>
   );

@@ -50,13 +50,6 @@ export const ChartSection: React.FC<Props> = ({ dataset, metric, metricIndex }) 
   const sinceSwitch = rawPos - (yearIndex - 0.5);
   const yearFlash = Math.max(0, Math.min(1, sinceSwitch / 0.3));
 
-  const footerLines = [
-    "出典：各社IR資料（10-K／有価証券報告書／決算説明資料）",
-    "米ドル換算は各年度の期中平均レート。営業利益率は営業利益÷売上高",
-    "決算期：マイクロン8月期／サンディスク6月期／キオクシア3月期／他12月期",
-    "サムスンはDS部門ベース（メモリ単独の営業利益は非開示）",
-    "点が各社の開示値。未開示の年は線を途切れさせている（0では描いていない）",
-  ];
 
   return (
     <AbsoluteFill style={{ background: theme.background }}>
@@ -66,6 +59,7 @@ export const ChartSection: React.FC<Props> = ({ dataset, metric, metricIndex }) 
         metric={metric}
         year={years[yearIndex]}
         yearFlash={yearFlash}
+        subtitle={dataset.copy.header_subtitle}
         theme={theme}
       />
 
@@ -89,6 +83,7 @@ export const ChartSection: React.FC<Props> = ({ dataset, metric, metricIndex }) 
 
       {populated ? (
         <LineChart
+          slug={dataset.slug}
           series={series}
           years={years}
           metric={metric}
@@ -118,14 +113,14 @@ export const ChartSection: React.FC<Props> = ({ dataset, metric, metricIndex }) 
             データ未取得
           </div>
           <div style={{ fontSize: 25, fontWeight: 700, color: TEXT.muted, marginTop: 20, lineHeight: 1.7 }}>
-            data/memory10.csv がまだ埋まっていない。
+            data/{dataset.slug}.csv がまだ埋まっていない。
             <br />
             推測値では埋めない方針のため、空欄のまま表示している。
           </div>
         </div>
       )}
 
-      <Footer lines={footerLines} />
+      <Footer lines={dataset.copy.footer_notes} />
 
       <Interstitial
         label={metric.label_ja}

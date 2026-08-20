@@ -45,17 +45,8 @@ export const THEMES: Record<ThemeName, Theme> = {
   },
 };
 
-/** 8社の系列色。隣り合う色相を離してある */
-export const COMPANY_COLORS: Record<string, string> = {
-  samsung: "#4A9EFF",
-  skhynix: "#FF7A45",
-  micron: "#2FD07E",
-  kioxia: "#A86BFF",
-  sandisk: "#F0454C",
-  nanya: "#37D6D6",
-  winbond: "#E8D44D",
-  macronix: "#FF6FB5",
-};
+/** 系列色が spec に無いときの逃げ道。通常は data/specs/<slug>.yml の color を使う */
+export const FALLBACK_COLOR = "#8B96AB";
 
 export const TEXT = {
   primary: "#FFFFFF",

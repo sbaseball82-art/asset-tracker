@@ -26,6 +26,7 @@ import { resolveCollisions } from "../layout/collision";
 const LOGO_SIZE = 40;
 
 interface Props {
+  slug: string;
   series: Series[];
   years: number[];
   metric: Metric;
@@ -82,6 +83,7 @@ function smoothedDomain(series: Series[], pos: number, posHistory: number[]): Do
 }
 
 export const LineChart: React.FC<Props> = ({
+  slug,
   series,
   years,
   metric,
@@ -289,6 +291,7 @@ export const LineChart: React.FC<Props> = ({
               strokeWidth={3}
             />
             <LogoBadge
+              slug={slug}
               companyId={s.companyId}
               monogram={s.monogram}
               color={s.color}

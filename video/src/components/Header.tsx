@@ -14,6 +14,7 @@ interface Props {
   metric: Metric;
   year: number;
   yearFlash: number;
+  subtitle: string;
   theme: Theme;
 }
 
@@ -23,6 +24,7 @@ export const Header: React.FC<Props> = ({
   metric,
   year,
   yearFlash,
+  subtitle,
   theme,
 }) => {
   // 年が切り替わった直後だけ、数字をわずかに持ち上げて気づかせる
@@ -123,7 +125,7 @@ export const Header: React.FC<Props> = ({
           color: "rgba(255,255,255,0.66)",
         }}
       >
-        世界メモリ大手8社／2016年→2025年
+        {subtitle}
       </div>
     </div>
   );

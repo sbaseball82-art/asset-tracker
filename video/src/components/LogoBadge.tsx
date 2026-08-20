@@ -3,9 +3,11 @@ import { staticFile } from "remotion";
 import logos from "../data/logos.generated.json";
 import { fontStack } from "../fonts";
 
-const LOGO_FILES = logos as Record<string, string>;
+const LOGO_FILES = logos as Record<string, Record<string, string>>;
 
 interface Props {
+  /** データセットのスラッグ。ロゴはデータセットごとに置き場が分かれている */
+  slug: string;
   companyId: string;
   monogram: string;
   color: string;
@@ -22,12 +24,12 @@ interface Props {
  * 無ければ頭文字バッジを描く。ロゴは商標なので同梱するかは人間が決める。
  * 一覧は scripts/build_logo_manifest.py が作る。
  */
-export const LogoBadge: React.FC<Props> = ({ companyId, monogram, color, x, y, size }) => {
-  const file = LOGO_FILES[companyId];
+export const LogoBadge: React.FC<Props> = ({ slug, companyId, monogram, color, x, y, size }) => {
+  const file = LOGO_FILES[slug]?.[companyId];
   const radius = Math.round(size * 0.24);
 
   if (file) {
-    const clipId = `logo-clip-${companyId}`;
+    const clipId = `logo-clip-${slug}-${companyId}`;
     return (
       <g>
         <clipPath id={clipId}>

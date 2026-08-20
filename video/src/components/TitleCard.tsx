@@ -1,14 +1,16 @@
 import React from "react";
 import { interpolate, useCurrentFrame } from "remotion";
 import { fontStack } from "../fonts";
-import { COMPANY_COLORS, TEXT } from "../theme";
+import { FALLBACK_COLOR, TEXT } from "../theme";
+import type { Company, Copy } from "../data/types";
 
 interface Props {
   durationInFrames: number;
-  companyNames: string[];
+  copy: Copy;
+  companies: Company[];
 }
 
-export const TitleCard: React.FC<Props> = ({ durationInFrames, companyNames }) => {
+export const TitleCard: React.FC<Props> = ({ durationInFrames, copy, companies }) => {
   const frame = useCurrentFrame();
   const p = frame / durationInFrames;
 
@@ -16,6 +18,9 @@ export const TitleCard: React.FC<Props> = ({ durationInFrames, companyNames }) =
   const fadeIn = interpolate(p, [0, 0.22], [0, 1], { extrapolateRight: "clamp" });
   const fadeOut = interpolate(p, [0.86, 1], [1, 0], { extrapolateLeft: "clamp" });
   const opacity = Math.min(fadeIn, fadeOut);
+
+  // 社名が増えるほど1行に収まらないので、行数に応じて見出しを詰める
+  const titleSize = copy.title_lines.length >= 3 ? 84 : 92;
 
   return (
     <div
@@ -33,31 +38,29 @@ export const TitleCard: React.FC<Props> = ({ durationInFrames, companyNames }) =
     >
       <div style={{ transform: `translateY(${rise}px)` }}>
         <div style={{ fontSize: 30, fontWeight: 700, color: "#5FB0FF", marginBottom: 28 }}>
-          ASSET LOG ／ 業界データ
+          {copy.kicker}
         </div>
         <div
           style={{
-            fontSize: 92,
+            fontSize: titleSize,
             fontWeight: 900,
             color: TEXT.primary,
             lineHeight: 1.24,
             letterSpacing: -2,
           }}
         >
-          世界のメモリ大手
-          <br />
-          8社を10期ぶん
-          <br />
-          比べてみた
+          {copy.title_lines.map((line) => (
+            <div key={line}>{line}</div>
+          ))}
         </div>
         <div style={{ fontSize: 31, fontWeight: 700, color: TEXT.secondary, marginTop: 40 }}>
-          2016年 → 2025年／売上高・営業利益・営業利益率
+          {copy.title_sub}
         </div>
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 52 }}>
-          {companyNames.map((name, i) => (
+          {companies.map((c) => (
             <div
-              key={name}
+              key={c.id}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -76,10 +79,10 @@ export const TitleCard: React.FC<Props> = ({ durationInFrames, companyNames }) =
                   width: 12,
                   height: 12,
                   borderRadius: 999,
-                  background: Object.values(COMPANY_COLORS)[i] ?? "#8B96AB",
+                  background: c.color ?? FALLBACK_COLOR,
                 }}
               />
-              {name}
+              {c.name_ja}
             </div>
           ))}
         </div>

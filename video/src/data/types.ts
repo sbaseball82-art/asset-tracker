@@ -3,8 +3,10 @@ export interface Company {
   name_ja: string;
   name_en: string;
   monogram: string;
+  color: string;
   country: string;
   currency: string;
+  fx_basis: string;
   fiscal_year_end: string;
   fiscal_year_end_month: number;
   scope: string;
@@ -18,6 +20,16 @@ export interface Metric {
   theme: "navy" | "green" | "rust";
   derived: boolean;
   formula?: string;
+}
+
+/** 画面に出す文言。データセットごとに差し替わる */
+export interface Copy {
+  kicker: string;
+  title_lines: string[];
+  title_sub: string;
+  header_subtitle: string;
+  outro_headline: string;
+  footer_notes: string[];
 }
 
 export interface DataPoint {
@@ -34,12 +46,14 @@ export interface DataPoint {
 
 export interface Dataset {
   schema_version: number;
+  slug: string;
   is_dummy: boolean;
   year_mapping_rule: string;
   years: number[];
+  copy: Copy;
   companies: Company[];
   metrics: Metric[];
-  fx_rates: { currency: string; year: number; rate_per_usd: number }[];
+  fx_rates: { currency: string; basis: string; year: number; rate_per_usd: number }[];
   coverage: { total_cells: number; filled_cells: number; filled_ratio: number };
   data: DataPoint[];
 }

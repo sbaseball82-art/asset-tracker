@@ -2,11 +2,11 @@
   "name": "memory10-video",
   "version": "1.0.0",
   "private": true,
-  "description": "世界メモリ大手8社の業績推移アニメーション（縦型 1080x1920 / 60fps）",
+  "description": "業績比較アニメーション（縦型 1080x1920 / 60fps）",
   "scripts": {
     "studio": "remotion studio",
-    "render": "remotion render Memory10 ../out/memory10.mp4",
-    "render:dummy": "remotion render Memory10Dummy",
+    "render:memory10": "remotion render Memory10 ../out/memory10.mp4",
+    "render:security8": "remotion render Security8 ../out/security8.mp4",
     "test": "node --experimental-strip-types --test test/*.test.ts",
     "typecheck": "tsc --noEmit"
   },

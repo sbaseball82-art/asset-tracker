@@ -1,0 +1,131 @@
+# 世界サイバーセキュリティ大手8社の業績推移（動画②）
+slug: security8
+years: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+
+copy:
+  kicker: ASSET LOG ／ 業界データ
+  title_lines:
+    - 世界のサイバー
+    - セキュリティ大手8社を
+    - 10期ぶん比べてみた
+  title_sub: 2016年 → 2025年／売上高・営業利益・営業利益率
+  header_subtitle: 世界サイバーセキュリティ大手8社／2016年→2025年
+  outro_headline: データ出典：各社IR資料
+  footer_notes:
+    - 出典：各社IR資料（10-K／20-F／S-1／有価証券報告書）
+    - 米ドル換算は各年度の期中平均レート。営業利益率は営業利益÷売上高
+    - 決算期：7月期＝パロアルト・Zscaler／1月期＝クラウドストライク・Okta・SentinelOne
+    - 上記以外は12月期。数値はGAAPベース（各社が強調するNon-GAAPでは黒字の年が多い）
+    - 点が各社の開示値。未開示の年は線を途切れさせている（0では描いていない）
+
+metrics:
+  - {id: revenue,          label_ja: 売上高,     unit_ja: 億ドル, theme: navy,  derived: false}
+  - {id: operating_income, label_ja: 営業利益,   unit_ja: 億ドル, theme: green, derived: false}
+  - {id: operating_margin, label_ja: 営業利益率, unit_ja: '%',    theme: rust,  derived: true,
+     formula: operating_income / revenue * 100}
+
+# 色は色相をおよそ45度ずつ離してある（8本の線が確実に見分けられるように）
+companies:
+  - id: fortinet
+    name_ja: フォーティネット
+    name_en: Fortinet
+    monogram: FT
+    color: '#F05454'
+    country: 米国
+    currency: USD
+    fx_basis: calendar
+    fiscal_year_end: 12月
+    fiscal_year_end_month: 12
+    scope: 連結（ネットワークセキュリティ専業）
+    scope_note: 自社ASICによるファイアウォール製品が主力。ハードウェアを含むため粗利構造が他のSaaS勢と異なる。
+
+  - id: paloalto
+    name_ja: パロアルト
+    name_en: Palo Alto Networks
+    monogram: PA
+    color: '#FF9F2E'
+    country: 米国
+    currency: USD
+    fx_basis: calendar
+    fiscal_year_end: 7月
+    fiscal_year_end_month: 7
+    scope: 連結（サイバーセキュリティ専業）
+    scope_note: 会計年度は7月末終了。FY2016は2016年7月31日終了。GAAP営業利益は長く赤字で、黒字化は近年。
+
+  - id: trendmicro
+    name_ja: トレンドマイクロ
+    name_en: Trend Micro
+    monogram: TM
+    color: '#C9D93A'
+    country: 日本
+    currency: JPY
+    fx_basis: calendar
+    fiscal_year_end: 12月
+    fiscal_year_end_month: 12
+    scope: 連結（エンドポイント/クラウドセキュリティ）
+    scope_note: 円建て開示。会計基準の変更（日本基準→IFRS）があった年をまたぐため、収集時に適用基準を年ごとに記録すること。
+
+  - id: sentinelone
+    name_ja: SentinelOne
+    name_en: SentinelOne
+    monogram: S1
+    color: '#3AD97F'
+    country: 米国
+    currency: USD
+    fx_basis: calendar
+    fiscal_year_end: 1月
+    fiscal_year_end_month: 1
+    scope: 連結（エンドポイント/XDR）
+    scope_note: 会計年度は1月末終了（FY2026＝2025年2月〜2026年1月）。2021年6月IPO。S-1の遡及財務でも2019年度より前は取れないため初期は欠損。
+
+  - id: okta
+    name_ja: Okta
+    name_en: Okta
+    monogram: OK
+    color: '#26D0CE'
+    country: 米国
+    currency: USD
+    fx_basis: calendar
+    fiscal_year_end: 1月
+    fiscal_year_end_month: 1
+    scope: 連結（アイデンティティ管理）
+    scope_note: 会計年度は1月末終了。2021年のAuth0買収でのれん償却と株式報酬が膨らみ、GAAP営業利益の赤字幅が拡大している。
+
+  - id: checkpoint
+    name_ja: チェックポイント
+    name_en: Check Point Software
+    monogram: CP
+    color: '#4A9EFF'
+    country: イスラエル
+    currency: USD
+    fx_basis: calendar
+    fiscal_year_end: 12月
+    fiscal_year_end_month: 12
+    scope: 連結（ネットワークセキュリティ専業）
+    scope_note: 外国民間発行体のため10-Kではなく20-Fを提出。米ドル建てで開示するため換算不要。8社で唯一、全期間で高い営業利益率を維持している。
+
+  - id: zscaler
+    name_ja: Zscaler
+    name_en: Zscaler
+    monogram: ZS
+    color: '#A86BFF'
+    country: 米国
+    currency: USD
+    fx_basis: calendar
+    fiscal_year_end: 7月
+    fiscal_year_end_month: 7
+    scope: 連結（ゼロトラスト/SSE）
+    scope_note: 会計年度は7月末終了。2018年3月IPO。上場前の年度はS-1記載の監査済み財務から取る。
+
+  - id: crowdstrike
+    name_ja: クラウドストライク
+    name_en: CrowdStrike
+    monogram: CS
+    color: '#FF5FA8'
+    country: 米国
+    currency: USD
+    fx_basis: calendar
+    fiscal_year_end: 1月
+    fiscal_year_end_month: 1
+    scope: 連結（エンドポイント/クラウドセキュリティ）
+    scope_note: 会計年度は1月末終了（FY2026＝2025年2月〜2026年1月）。2019年6月IPO。上場前の年度はS-1記載の監査済み財務から取る。

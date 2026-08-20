@@ -56,10 +56,13 @@
 
 | ファイル | 内容 |
 |---|---|
+| `data/specs/memory10.yml` | 企業・指標・文言・配色の定義（ここが原本） |
 | `data/memory10.csv` | long形式の本体（company × metric × year = 240行）。値は未記入 |
-| `data/memory10.json` | 企業・指標のメタデータと年次マッピング規則 |
-| `data/fx_rates.csv` | 期中平均レート（KRW / JPY / TWD）。未記入 |
-| `scripts/make_memory10_skeleton.py` | 上記3ファイルの生成スクリプト |
+| `data/memory10.json` | spec から生成したメタデータ（Remotion側も読む） |
+| `data/fx_rates.csv` | 期中平均レート（全データセット共通）。通貨×基準×年で引く |
+
+為替は通貨だけでなく**基準**でも引く。キオクシアは4月〜3月の年度平均、
+それ以外の会社は暦年平均を使うため、同じJPYでも行が分かれている。
 
 `operating_margin` は入力せず `operating_income / revenue * 100` で導出する
 （`derived=TRUE`）。売上高か営業利益のどちらかが null の年は営業利益率も null。

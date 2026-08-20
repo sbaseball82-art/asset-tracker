@@ -5,10 +5,11 @@ import { TEXT } from "../theme";
 
 interface Props {
   durationInFrames: number;
+  headline: string;
   summaryLine: string;
 }
 
-export const OutroCard: React.FC<Props> = ({ durationInFrames, summaryLine }) => {
+export const OutroCard: React.FC<Props> = ({ durationInFrames, headline, summaryLine }) => {
   const frame = useCurrentFrame();
   const p = frame / durationInFrames;
   const opacity = interpolate(p, [0, 0.18], [0, 1], { extrapolateRight: "clamp" });
@@ -30,7 +31,7 @@ export const OutroCard: React.FC<Props> = ({ durationInFrames, summaryLine }) =>
     >
       <div style={{ transform: `translateY(${rise}px)` }}>
         <div style={{ fontSize: 44, fontWeight: 900, color: TEXT.primary, marginBottom: 32 }}>
-          データ出典：各社IR資料
+          {headline}
         </div>
         <div style={{ fontSize: 30, fontWeight: 700, color: TEXT.secondary, lineHeight: 1.6 }}>
           {summaryLine}

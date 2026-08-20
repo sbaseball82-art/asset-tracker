@@ -1,0 +1,130 @@
+# 世界メモリ大手8社の業績推移（動画①）
+slug: memory10
+years: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+
+copy:
+  kicker: ASSET LOG ／ 業界データ
+  title_lines:
+    - 世界のメモリ大手
+    - 8社を10期ぶん
+    - 比べてみた
+  title_sub: 2016年 → 2025年／売上高・営業利益・営業利益率
+  header_subtitle: 世界メモリ大手8社／2016年→2025年
+  outro_headline: データ出典：各社IR資料
+  footer_notes:
+    - 出典：各社IR資料（10-K／有価証券報告書／決算説明資料）
+    - 米ドル換算は各年度の期中平均レート。営業利益率は営業利益÷売上高
+    - 決算期：マイクロン8月期／サンディスク6月期／キオクシア3月期／他12月期
+    - サムスンはDS部門ベース（メモリ単独の営業利益は非開示）
+    - 点が各社の開示値。未開示の年は線を途切れさせている（0では描いていない）
+
+metrics:
+  - {id: revenue,          label_ja: 売上高,     unit_ja: 億ドル, theme: navy,  derived: false}
+  - {id: operating_income, label_ja: 営業利益,   unit_ja: 億ドル, theme: green, derived: false}
+  - {id: operating_margin, label_ja: 営業利益率, unit_ja: '%',    theme: rust,  derived: true,
+     formula: operating_income / revenue * 100}
+
+companies:
+  - id: samsung
+    name_ja: サムスン電子
+    name_en: Samsung Electronics
+    monogram: S
+    color: '#4A9EFF'
+    country: 韓国
+    currency: KRW
+    fx_basis: calendar
+    fiscal_year_end: 12月
+    fiscal_year_end_month: 12
+    scope: DS部門（半導体：メモリ＋ファウンドリ＋System LSI）
+    scope_note: メモリ単独の営業利益は非開示のため、3指標すべてDS部門ベース。売上高は実態よりファウンドリ/LSI分だけ大きく出る。
+
+  - id: skhynix
+    name_ja: SKハイニックス
+    name_en: SK hynix
+    monogram: SK
+    color: '#FF7A45'
+    country: 韓国
+    currency: KRW
+    fx_basis: calendar
+    fiscal_year_end: 12月
+    fiscal_year_end_month: 12
+    scope: 連結（メモリ専業。2021年末以降Solidigmを含む）
+    scope_note: Intel NANDメモリ事業(Solidigm)の第1段階クロージングは2021年12月。2022年以降は連結に含まれる。
+
+  - id: micron
+    name_ja: マイクロン
+    name_en: Micron Technology
+    monogram: MU
+    color: '#2FD07E'
+    country: 米国
+    currency: USD
+    fx_basis: calendar
+    fiscal_year_end: 8月/9月
+    fiscal_year_end_month: 8
+    scope: 連結（メモリ専業）
+    scope_note: 会計年度は8月末〜9月初に終了。FY2016は2016年9月1日終了。
+
+  - id: kioxia
+    name_ja: キオクシア
+    name_en: Kioxia
+    monogram: KX
+    color: '#A86BFF'
+    country: 日本
+    currency: JPY
+    fx_basis: fy_apr_mar
+    fiscal_year_end: 3月
+    fiscal_year_end_month: 3
+    scope: 連結（NANDフラッシュ専業）
+    scope_note: 2017年4月に東芝メモリとして分社、2018年6月に東芝から独立。2016〜2017年度は法人として存在せず、遡及開示も無い。
+
+  - id: sandisk
+    name_ja: サンディスク
+    name_en: SanDisk
+    monogram: SD
+    color: '#F0454C'
+    country: 米国
+    currency: USD
+    fx_basis: calendar
+    fiscal_year_end: 6月/7月
+    fiscal_year_end_month: 6
+    scope: 2016〜2024年度=Western Digitalのフラッシュ事業、2025年度=SanDisk単体
+    scope_note: WDは営業利益をセグメント別に開示していない（FY2023までは単一報告セグメント、FY2024以降もセグメント開示は売上高と売上総利益まで）。営業利益はSanDisk単体開示のある年度のみ。
+
+  - id: nanya
+    name_ja: 南亞科技
+    name_en: Nanya Technology
+    monogram: NT
+    color: '#37D6D6'
+    country: 台湾
+    currency: TWD
+    fx_basis: calendar
+    fiscal_year_end: 12月
+    fiscal_year_end_month: 12
+    scope: 連結（DRAM専業）
+    scope_note: ''
+
+  - id: winbond
+    name_ja: 華邦電子
+    name_en: Winbond Electronics
+    monogram: WB
+    color: '#E8D44D'
+    country: 台湾
+    currency: TWD
+    fx_basis: calendar
+    fiscal_year_end: 12月
+    fiscal_year_end_month: 12
+    scope: 連結（特殊DRAM/NORフラッシュ。ファウンドリ事業を含む）
+    scope_note: メモリ以外の受託生産を含む全社連結。メモリ単独のセグメント開示は無い。
+
+  - id: macronix
+    name_ja: 旺宏電子
+    name_en: Macronix International
+    monogram: MX
+    color: '#FF6FB5'
+    country: 台湾
+    currency: TWD
+    fx_basis: calendar
+    fiscal_year_end: 12月
+    fiscal_year_end_month: 12
+    scope: 連結（NORフラッシュ/ROM中心）
+    scope_note: ''

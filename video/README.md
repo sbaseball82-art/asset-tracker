@@ -1,6 +1,12 @@
-# memory10 — 世界メモリ大手8社の業績推移動画
+# 業績比較アニメーション動画
 
 縦型 1080×1920 / 60fps / 音声なしの mp4 を Remotion で書き出す。
+**1つの動画＝1つのデータセット**で、定義は `data/specs/<slug>.yml` に集約してある。
+
+| slug | 内容 | Composition |
+|---|---|---|
+| `memory10` | 世界メモリ大手8社 | `Memory10` / `Memory10Dummy` |
+| `security8` | 世界サイバーセキュリティ大手8社 | `Security8` / `Security8Dummy` |
 
 ## 前提
 
@@ -19,7 +25,7 @@ export REMOTION_BROWSER_EXECUTABLE=/opt/pw-browsers/chromium_headless_shell-1194
 
 ```bash
 # 1. CSVからデータJSONを作る（出典URLの無い数値は通らない）
-python scripts/build_memory10_dataset.py
+python scripts/build_dataset.py security8
 
 # 2. ロゴ画像を置いていれば一覧に反映する（置いていなければ頭文字バッジ）
 python scripts/build_logo_manifest.py
@@ -32,46 +38,45 @@ python scripts/check_video_glyphs.py
 cd video
 npm run typecheck
 npm test
-npm run render          # → out/memory10.mp4
+npm run render:security8      # → out/security8.mp4
+npm run render:memory10       # → out/memory10.mp4
 ```
 
 確認：
 
 ```bash
-npx remotion ffprobe ../out/memory10.mp4
+npx remotion ffprobe ../out/security8.mp4
 ```
 
-## コンポジション
+## 動画を1本増やすとき
 
-| id | 中身 |
-|---|---|
-| `Memory10` | 本番。`src/data/memory10.generated.json` を読む |
-| `Memory10Dummy` | 動作確認用。`src/data/memory10.dummy.json` を読む |
+1. `data/specs/<slug>.yml` を書く（企業・指標・年・文言・配色）
+2. `python scripts/make_dataset_skeleton.py <slug>` で収集用CSVを作る
+3. CSVを埋める
+4. `video/src/data/dataset.ts` の `DATASETS` / `DUMMY_DATASETS` と
+   `src/Root.tsx` の `COMPOSITION_IDS` に1行ずつ足す
+5. `package.json` に `render:<slug>` を足す
 
-ダミーの数字が本番の書き出しに混ざらないよう、読むファイルごと分けてある。
-`Memory10` が `dummyDataset` を読むようにはしないこと。
-ダミーの生成は `python scripts/build_memory10_dataset.py --dummy`。
+Remotion側のコンポーネントは spec 駆動なので、**画面の作りには触らなくてよい**。
 
 ## 数値を直したいとき
 
-**`data/memory10.csv` だけを編集する。** 手順1から流し直せば動画に反映される。
+**`data/<slug>.csv` だけを編集する。** 手順1から流し直せば動画に反映される。
 
 | 直したいもの | 直すファイル |
 |---|---|
-| 各社の売上高・営業利益 | `data/memory10.csv` の `value_local` と `source_url` |
-| 為替レート | `data/fx_rates.csv` の `rate_per_usd` |
-| 社名・色・決算期・注記 | `data/memory10.json`（`scripts/make_memory10_skeleton.py` が生成） |
+| 各社の売上高・営業利益 | `data/<slug>.csv` の `value_local` と `source_url` |
+| 為替レート | `data/fx_rates.csv` の `rate_per_usd`（通貨×基準×年で1行） |
+| 社名・色・決算期・頭文字・注記・画面の文言 | `data/specs/<slug>.yml` → `make_dataset_skeleton.py` |
 | 尺・1期あたりの秒数 | `video/src/timing.ts` |
-| 配色・テーマ | `video/src/theme.ts` |
+| 指標ごとのテーマ色 | `video/src/theme.ts` |
 | 動きの粘り（年ごとの止まり具合） | `video/src/layout/geometry.ts` の `CRUISE` |
-| 各社ロゴ | `video/public/logos/<企業ID>.svg` を置いて手順2 |
-| 頭文字バッジの文字 | `data/memory10.json` の `monogram` |
-| 文言（ヘッダー・注記・締め） | `video/src/components/` 各ファイル |
+| 各社ロゴ | `video/public/logos/<slug>/<企業ID>.svg` を置いて手順2 |
 
-`value_local` は**ローカル通貨の百万単位**で入れる（百万KRW / 百万JPY / 百万TWD / 百万USD）。
+`value_local` は**ローカル通貨の百万単位**で入れる（百万USD / 百万JPY / 百万KRW / 百万TWD）。
 営業利益率は入力しない。`営業利益 ÷ 売上高` で導出する。
 
-文言を足したら `scripts/subset_fonts.py` を必ず再実行すること
+文言や社名を足したら `scripts/subset_fonts.py` を必ず再実行すること
 （同梱フォントは使う文字だけに絞ってあるため、足した文字は入っていない）。
 
 ## 設計上の決め事
@@ -92,6 +97,8 @@ npx remotion ffprobe ../out/memory10.mp4
 - 縦軸のレンジは直近0.6秒ぶんを重み付き平均してならす。
   目盛りが1本増える瞬間に軸が跳ねないようにするため。
   平均で現在値がはみ出さないよう、最後に必ず収まるところまで広げ直す
+- **本番とダミーは Composition ごと分ける。** ダミーの数字が本番の書き出しに
+  混ざらないようにするためなので、本番側が `DUMMY_DATASETS` を読むようにはしない
 
 ## ロゴについて
 
