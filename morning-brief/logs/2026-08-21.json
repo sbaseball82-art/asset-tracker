@@ -1,0 +1,72 @@
+{
+ "date": "2026-08-21",
+ "generated_at": "2026-08-21T21:03:54",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "^GSPC",
+   "name": "S&P500",
+   "theme": "指数",
+   "headline": "材料待ち S&P500 +0.43%",
+   "conclusion": "値動きはあったが裏取りが揃わず見送り",
+   "score": null,
+   "score_parts": null,
+   "n_media": 0,
+   "sns_heat": 0.0,
+   "slot": 1,
+   "template_id": "T2",
+   "topic_tag": "quiet",
+   "numbers": [
+    {
+     "label": "S&P500",
+     "value": "+0.43%",
+     "sub": "7,674",
+     "source": "yfinance終値",
+     "asof": "2026-08-21"
+    },
+    {
+     "label": "ナスダック",
+     "value": "+0.43%",
+     "sub": "26,180",
+     "source": "yfinance終値",
+     "asof": "2026-08-21"
+    },
+    {
+     "label": "ドル円",
+     "value": "+0.37%",
+     "sub": "158.86円",
+     "source": "yfinance終値",
+     "asof": "2026-08-21"
+    },
+    {
+     "label": "米10年金利",
+     "value": "+4bp",
+     "sub": "4.74%",
+     "source": "yfinance終値",
+     "asof": "2026-08-21"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-08-21_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-08-21_1.txt"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "ticker": "TSLA",
+   "score": 0.3663,
+   "unmet": [
+    "スコア0.37が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "XLU",
+   "score": 0.3494,
+   "unmet": [
+    "スコア0.35が閾値0.45未満（材料薄）"
+   ]
+  }
+ ],
+ "note": "quiet_day:gate_failed"
+}
