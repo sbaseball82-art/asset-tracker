@@ -38,6 +38,21 @@ DEFAULTS: dict = {
     "schedule": {"lookthrough": "monthly", "source_health": "weekly"},
     "post": {"limits": [100, 150, 165]},
     "source_health": {"degraded_after_weeks": 2, "timeout_sec": 60},
+    "daily_growth": {
+        "posts_per_day": 5,
+        "char_limit": 165,
+        "max_per_category": 2,
+        "weights": {"freshness": 0.30, "personal_asset_relevance": 0.30,
+                    "surprise": 0.20, "timeliness": 0.10,
+                    "visual_clarity": 0.10},
+        "rotation": {"topic_reuse_days": 14, "hook_avoid_days": 30,
+                     "design_max_consecutive_days": 3,
+                     "hook_similarity": 0.80, "prev_day_similarity": 0.72},
+        "learning": {"min_samples_per_format": 8,
+                     "objective": ["follows", "profile_clicks", "bookmarks",
+                                   "replies", "likes", "views"]},
+        "data": {"halt_age_days": 4, "warn_age_days": 1},
+    },
 }
 
 
@@ -102,3 +117,40 @@ def freshness_days() -> tuple[int, int]:
 
 def post_limits() -> tuple[int, ...]:
     return tuple(get("post", "limits", [100, 150, 165]))
+
+
+# --------------------------------------------------------------------------
+# Daily Growth System
+# --------------------------------------------------------------------------
+
+def daily_growth(key: str, default=None):
+    """daily_growth セクションの値。書かれていなければ DEFAULTS を返す。
+
+    ネストした dict（weights / rotation など）は、config.yml に書いた
+    キーだけを既定値に重ねる（一部だけ上書きできるようにするため）。
+    """
+    fallback = DEFAULTS["daily_growth"].get(key, default)
+    value = get("daily_growth", key, None)
+    if value is None:
+        return fallback
+    if isinstance(fallback, dict) and isinstance(value, dict):
+        merged = dict(fallback)
+        merged.update(value)
+        return merged
+    return value
+
+
+def dg_weights() -> dict[str, float]:
+    return {k: float(v) for k, v in daily_growth("weights").items()}
+
+
+def dg_rotation() -> dict:
+    return daily_growth("rotation")
+
+
+def dg_char_limit() -> int:
+    return int(daily_growth("char_limit", 165))
+
+
+def dg_posts_per_day() -> int:
+    return int(daily_growth("posts_per_day", 5))

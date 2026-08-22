@@ -1,0 +1,653 @@
+# =============================================================
+# daily_growth_topics.yml — 毎朝の投稿候補のネタプール
+# -------------------------------------------------------------
+# ここに書くのは「文言」と「重み」だけ。数値は必ず Python 側の
+# builder（src/daily_growth/topics.py）が作る。
+# YAML に数字を直書きしても投稿には出ない（QAで落ちる）。
+#
+# 項目
+#   id            … 履歴に残る一意ID。14日間は再利用されない
+#   builder       … 数値を作る関数。null なら「データ源が無い話題」
+#   requires      … facts のキー。1つでも欠けたら候補にしない
+#   params        … builder への引数（成立条件・対象期間など）
+#   hook          … 1行目（強い冒頭）。ここだけで意味が通ること
+#   numbers       … 具体的な数字の行。入らなければ後ろから落ちる
+#   view          … 自分の観察。断定せず一人称の推測形で書く
+#   headline      … 画像の見出し
+#   designs       … 使ってよいデザイン（3日連続では使われない）
+#   relevance / timeliness / clarity … スコアの静的な重み（0〜1）
+#   cyclical      … true ならメモリ関連。「シクリカル」を必ず入れる
+#
+# {placeholder} は builder が作った値に置き換わる。
+# =============================================================
+
+topics:
+
+  # ---------------------------------------------------------- 日々の値動き
+  - id: dg001
+    title: 前日比の中身（どの銘柄が効いたか）
+    category: daily_move
+    builder: daily_move
+    requires: [day, contributions, total_jpy]
+    hook: 総資産{total}。前日比{day_pct}（{day_jpy}）でした。
+    numbers:
+      - いちばん効いたのは{top_label}で{top_pt}、次が{second_label}の{second_pt}。
+    view: 全体の数字より、どれが効いたかを見るほうが自分には意味がある気がしています。
+    headline: 前日比{day_pct}の内訳
+    designs: [dark_financial_report, chart_focus, ratio_visual]
+    relevance: 1.0
+    timeliness: 0.9
+    clarity: 0.9
+    tags: ["#資産推移", "#米国株", "#ETF"]
+
+  - id: dg002
+    title: 何も起きなかった日
+    category: daily_move
+    builder: quiet_day
+    requires: [quiet, day, holdings, total_jpy]
+    hook: 今日は何も起きませんでした。総資産{total}、前日比{day_pct}です。
+    numbers:
+      - ETF{count}のうち、いちばん動いたものでも{max_pct}でした。
+    view: 動かない日の記録もあとで効いてくる気がして、そのまま残しています。
+    headline: 動かなかった日
+    designs: [light_editorial, magazine_cover, dark_financial_report]
+    relevance: 0.9
+    timeliness: 0.8
+    clarity: 0.8
+    tags: ["#資産推移", "#インデックス投資"]
+
+  - id: dg003
+    title: 株価と円換算で符号が逆になった日
+    category: fx
+    builder: fx_decomp
+    requires: [fx_decomp, usdjpy, total_jpy]
+    params: {require_opposite: true}
+    hook: 保有株は{price_word}なのに、円換算の総資産は{total}でした。
+    numbers:
+      - 株価の値動きが{price}、為替の影響が{fx}。差し引きでこうなりました。
+    view: 円で暮らしている以上、見ている数字は株価そのものではないのだと思います。
+    headline: 株価{price}／為替{fx}
+    designs: [versus, before_after, dark_financial_report]
+    relevance: 1.0
+    timeliness: 1.0
+    clarity: 0.9
+    tags: ["#資産推移", "#米国株", "#ドル円"]
+
+  - id: dg004
+    title: 前日と逆の動き
+    category: daily_move
+    builder: reversal
+    requires: [reversal, day, total_jpy]
+    hook: 昨日{prev_pct}、今日{today_pct}。連日で向きが変わりました。
+    numbers:
+      - 総資産は{total}、今日の増減は{day_jpy}です。
+    view: 2日並べると、1日だけ見て何か言うのは難しいなと感じます。
+    headline: 昨日{prev_pct}／今日{today_pct}
+    designs: [before_after, versus, chart_focus]
+    relevance: 0.9
+    timeliness: 1.0
+    clarity: 0.85
+    tags: ["#資産推移", "#米国株"]
+
+  - id: dg005
+    title: 今日の変動は平常の範囲だったか
+    category: volatility
+    builder: sigma
+    requires: [volatility, total_jpy]
+    params: {inside: true, band: 1.5}
+    hook: 今日の変動{day_pct}は、直近{n}の標準偏差{sigma}の中に収まっていました。
+    numbers:
+      - ぶれ幅でいうと{z}。金額なら1日あたり{sigma_jpy}くらいが平常です。
+    view: 大きく動いた日より、こういう日のほうが多いのだと数えて気づきました。
+    headline: 今日の変動は{z}
+    designs: [chart_focus, light_editorial, dark_financial_report]
+    relevance: 0.85
+    timeliness: 0.7
+    clarity: 0.8
+    tags: ["#資産推移", "#インデックス投資"]
+
+  - id: dg006
+    title: 平常より大きく動いた日
+    category: volatility
+    builder: sigma
+    requires: [volatility, total_jpy]
+    params: {outside: true, band: 1.5}
+    hook: 今日の変動{day_pct}は、直近{n}の平常値から外れました（{z}）。
+    numbers:
+      - ふだんの1日の振れ幅は{sigma}、金額にして{sigma_jpy}ほどです。
+    view: 数字が大きい日ほど、あとから見ると理由づけしたくなるので気をつけたいです。
+    headline: 平常の{z}だった日
+    designs: [dark_financial_report, chart_focus, magazine_cover]
+    relevance: 0.85
+    timeliness: 1.0
+    clarity: 0.8
+    tags: ["#資産推移", "#米国株"]
+
+  # ---------------------------------------------------------- 寄与
+  - id: dg010
+    title: 今日の犯人（寄与トップ）
+    category: contribution
+    builder: contribution
+    requires: [contributions, price_change_pct]
+    hook: 今日の資産を動かした犯人は{top_label}でした（{top_pt}）。
+    numbers:
+      - 値動きは{top_pct}、金額で{top_jpy}。2番手は{second_label}の{second_pt}です。
+    view: 比率が大きい銘柄ほど、自分の気分まで動かしているのだと思います。
+    headline: 今日の犯人は{top_label}
+    designs: [dark_financial_report, receipt, ratio_visual]
+    relevance: 1.0
+    timeliness: 0.95
+    clarity: 0.9
+    tags: ["#資産推移", "#米国株", "#ETF"]
+
+  - id: dg011
+    title: 銘柄別の寄与を全部並べる
+    category: contribution
+    builder: contribution
+    requires: [contributions, price_change_pct]
+    hook: 保有ぜんぶの寄与を並べたら、合計{sum_pt}になりました。
+    numbers:
+      - 押し上げたのは{top_label}（{top_pt}）、次が{second_label}（{second_pt}）です。
+    view: 足すと全体になる形で並べると、どこを見ればいいか分かりやすい気がします。
+    headline: 銘柄別の寄与（合計{sum_pt}）
+    designs: [receipt, dark_financial_report, light_editorial]
+    relevance: 0.95
+    timeliness: 0.8
+    clarity: 0.85
+    tags: ["#資産推移", "#ETF"]
+
+  # ---------------------------------------------------------- 為替
+  - id: dg020
+    title: 株価 vs 為替
+    category: fx
+    builder: fx_decomp
+    requires: [fx_decomp, usdjpy, total_jpy]
+    params: {min_share: 20}
+    hook: 今日の前日比{total}を、株価と為替に分けてみました。
+    numbers:
+      - 株価の値動きが{price}、為替の影響が{fx}。為替の割合は{fx_share}でした。
+    view: 増えた減ったの理由が半分くらい為替の日もあって、素直に喜べないなと思います。
+    headline: 株価{price}／為替{fx}
+    designs: [versus, dark_financial_report, ratio_visual]
+    relevance: 1.0
+    timeliness: 0.9
+    clarity: 0.9
+    tags: ["#資産推移", "#ドル円", "#米国株"]
+
+  - id: dg021
+    title: 為替が資産変動の大半を説明した日
+    category: fx
+    builder: fx_decomp
+    requires: [fx_decomp, usdjpy, total_jpy]
+    params: {min_share: 60}
+    hook: 今日の資産の増減は、{fx_share}が為替で説明できてしまいました。
+    numbers:
+      - 株価要因{price}に対して、為替要因が{fx}。USD/JPYは{usdjpy}です。
+    view: 米国株を買っているつもりで、実は為替も一緒に買っているのだと感じます。
+    headline: 変動の{fx_share}は為替
+    designs: [ratio_visual, versus, magazine_cover]
+    relevance: 1.0
+    timeliness: 1.0
+    clarity: 0.85
+    tags: ["#資産推移", "#ドル円"]
+
+  - id: dg022
+    title: 円高になったら資産はいくら減るか
+    category: fx
+    builder: fx_sim
+    requires: [fx_sim, total_jpy]
+    params: {move_yen: 10}
+    hook: いまUSD/JPYは{usdjpy}。ここから{move}の円高になると、単純計算で{impact}動きます。
+    numbers:
+      - 外貨建ては{usd_assets}。総資産に対して{impact_pct}にあたります。
+    view: 株価を固定した仮定の計算ですが、自分の為替の持ち分を知っておきたくて出しています。
+    headline: "{move}の円高で{impact}"
+    designs: [simulation, versus, light_editorial]
+    relevance: 0.9
+    timeliness: 0.4
+    clarity: 0.9
+    tags: ["#資産推移", "#ドル円"]
+
+  - id: dg023
+    title: 為替感応度（1円あたり）
+    category: fx
+    builder: fx_sim
+    requires: [fx_sim, total_jpy]
+    params: {move_yen: 1}
+    hook: USD/JPYが{move}動くと、私の資産は{impact}動く計算になります。
+    numbers:
+      - 外貨建ての評価額は{usd_assets}、総資産に対しては{impact_pct}です。
+    view: 為替のニュースを見たときに、自分ごとに換算できる数字を1つ持っておきたいと思っています。
+    headline: "{move}動くと{impact}"
+    designs: [simulation, receipt, dark_financial_report]
+    relevance: 0.85
+    timeliness: 0.4
+    clarity: 0.9
+    tags: ["#資産推移", "#ドル円"]
+
+  # ---------------------------------------------------------- 期間比較
+  - id: dg030
+    title: 週間の変化
+    category: window
+    builder: window
+    requires: [windows, total_jpy]
+    params: {window: week}
+    hook: 先週{base_date}からの1週間で、運用だけで{market}{direction}。
+    numbers:
+      - 率にすると{pct}。総資産はいま{total}です。
+    view: 1日ごとに見ると気になる動きも、週でまとめると落ち着いて見える気がします。
+    headline: 先週比{pct}
+    designs: [chart_focus, dark_financial_report, light_editorial]
+    relevance: 1.0
+    timeliness: 0.7
+    clarity: 0.85
+    tags: ["#資産推移", "#米国株"]
+
+  - id: dg031
+    title: 月間の変化
+    category: window
+    builder: window
+    requires: [windows, total_jpy]
+    params: {window: month}
+    hook: 先月{base_date}から、運用だけで{market}{direction}。
+    numbers:
+      - 率にすると{pct}。入金分はこの数字に入れていません。
+    view: 入金を混ぜるとどうしてもプラスに見えるので、分けて数えるようにしています。
+    headline: 先月比{pct}
+    designs: [chart_focus, light_editorial, magazine_cover]
+    relevance: 1.0
+    timeliness: 0.6
+    clarity: 0.85
+    tags: ["#資産推移", "#インデックス投資"]
+
+  - id: dg032
+    title: 入金で増えた金 vs 運用で増えた金
+    category: flow
+    builder: flow_vs_market
+    requires: [windows, total_jpy]
+    params: {window: month}
+    hook: 先月{base_date}からの増加{gross}のうち、入金が{flow}、運用が{market}でした。
+    numbers:
+      - 増えた分の{flow_share}は、自分で足したお金です。
+    view: 資産が増えた日ほど、どっちで増えたのかを確かめるようにしています。
+    headline: 入金{flow}／運用{market}
+    designs: [versus, receipt, before_after]
+    relevance: 1.0
+    timeliness: 0.6
+    clarity: 0.95
+    tags: ["#資産推移", "#つみたて投資"]
+
+  - id: dg033
+    title: 入金より市場の動きのほうが大きかった
+    category: flow
+    builder: flow_vs_market
+    requires: [windows, total_jpy]
+    params: {window: month, market_must_win: true}
+    hook: 先月からの入金{flow}に対して、市場の動きは{market}。入金より大きくなりました。
+    numbers:
+      - 合計で{gross}、いま総資産は{total}です。
+    view: ある規模を超えると入金では動かせなくなるのだと、数字を見て思いました。
+    headline: 運用{market}／入金{flow}
+    designs: [versus, magazine_cover, dark_financial_report]
+    relevance: 1.0
+    timeliness: 0.8
+    clarity: 0.9
+    tags: ["#資産推移", "#インデックス投資"]
+
+  - id: dg034
+    title: 入金除外リターン（週）
+    category: flow
+    builder: flow_vs_market
+    requires: [windows, total_jpy]
+    params: {window: week}
+    hook: 今週の増加{gross}から入金{flow}を抜くと、運用で増えたのは{market}でした。
+    numbers:
+      - 見かけの増加のうち{flow_share}は入金です。総資産は{total}。
+    view: 見かけの数字は入金で膨らむので、抜いた数字のほうを自分の成績だと思っています。
+    headline: 入金除外だと{market}
+    designs: [receipt, before_after, ratio_visual]
+    relevance: 1.0
+    timeliness: 0.7
+    clarity: 0.9
+    tags: ["#資産推移", "#つみたて投資"]
+
+  - id: dg035
+    title: 週と月で符号が逆
+    category: window
+    builder: window_conflict
+    requires: [window_conflict, total_jpy]
+    hook: 先週比は{week_pct}、先月比は{month_pct}。切り取る期間で符号が逆になりました。
+    numbers:
+      - 金額では週が{week_jpy}、月が{month_jpy}です。
+    view: どちらも本当の数字なので、期間を選んだ時点で結論も選んでいるのだと思います。
+    headline: 週{week_pct}／月{month_pct}
+    designs: [versus, before_after, chart_focus]
+    relevance: 0.95
+    timeliness: 1.0
+    clarity: 0.85
+    tags: ["#資産推移", "#インデックス投資"]
+
+  # ---------------------------------------------------------- 記録更新
+  - id: dg040
+    title: 過去最高を更新した日
+    category: record
+    builder: record
+    requires: [record, total_jpy]
+    params: {require_new: true}
+    hook: 総資産{total}。{prev_high_date}の{prev_high}を超えて、記録更新でした。
+    numbers:
+      - これまでの最高からは{gap}（{gap_pct}）です。
+    view: 更新した日ほど、下がったときの自分の反応を先に決めておきたくなります。
+    headline: 最高値を更新（{total}）
+    designs: [milestone, magazine_cover, chart_focus]
+    relevance: 1.0
+    timeliness: 1.0
+    clarity: 0.9
+    tags: ["#資産推移", "#米国株"]
+
+  - id: dg041
+    title: 最高値からどれだけ落ちているか
+    category: record
+    builder: record
+    requires: [record, total_jpy]
+    params: {require_gap: true}
+    hook: 総資産{total}。{prev_high_date}につけた最高{prev_high}からは{gap_pct}のところにいます。
+    numbers:
+      - 金額にすると{gap}、あれから{days}経ちました。
+    view: 高値からの距離を書いておくと、増えた話ばかりにならなくて済む気がします。
+    headline: 最高値から{gap_pct}
+    designs: [chart_focus, light_editorial, dark_financial_report]
+    relevance: 1.0
+    timeliness: 0.8
+    clarity: 0.85
+    tags: ["#資産推移", "#米国株"]
+
+  # ---------------------------------------------------------- 構造
+  - id: dg050
+    title: 保有比率ランキング
+    category: structure
+    builder: weights
+    requires: [ranked_holdings, total_jpy]
+    hook: 総資産{total}のうち、いちばん大きいのは{top_label}で{top_pct}でした。
+    numbers:
+      - 2番目は{second_label}の{second_pct}。全部で{count}持っています。
+    view: 買った順番と比率が一致していなくて、増えたものが勝手に太っていました。
+    headline: いちばん大きいのは{top_label}
+    designs: [ratio_visual, dark_financial_report, receipt]
+    relevance: 1.0
+    timeliness: 0.3
+    clarity: 0.95
+    tags: ["#資産推移", "#ETF", "#インデックス投資"]
+
+  - id: dg051
+    title: 資産集中度（分散しているつもり）
+    category: structure
+    builder: concentration
+    requires: [concentration, total_jpy, holding_count]
+    hook: "{count}に分けているつもりでしたが、上位3本だけで{top3}ありました。"
+    numbers:
+      - いちばん大きい{top1_label}だけで{top1}、ETFが全体の{etf}です。
+    view: 本数を増やすことと分散することは別なのだと、比率を出して気づきました。
+    headline: 上位3本で{top3}
+    designs: [ratio_visual, magazine_cover, light_editorial]
+    relevance: 1.0
+    timeliness: 0.3
+    clarity: 0.9
+    tags: ["#資産推移", "#インデックス投資"]
+
+  # ---------------------------------------------------------- 高配当
+  - id: dg060
+    title: 下落日に高配当はクッションになったか
+    category: cushion
+    builder: cushion
+    requires: [cushion]
+    params: {require_growth_down: true}
+    hook: グロース系が{growth}の日に、高配当は{high}。差は{diff}でした。
+    numbers:
+      - 比べたのは{high_names}と{growth_names}です。今日は{verdict}ように見えます。
+    view: クッションになる日とならない日があって、毎回そうとは限らないなと思っています。
+    headline: 高配当−グロース＝{diff}
+    designs: [versus, dark_financial_report, ratio_visual]
+    relevance: 1.0
+    timeliness: 0.9
+    clarity: 0.9
+    tags: ["#高配当ETF", "#米国株", "#資産推移"]
+
+  - id: dg061
+    title: 同じ「高配当」で逆方向に動いた
+    category: cushion
+    builder: hy_split
+    requires: [hy_split]
+    hook: 同じ高配当ETFなのに、VYMが{vym}でHDVが{hdv}。逆方向でした。
+    numbers:
+      - 差は{diff}。名前は似ていても中身は別物だと分かります。
+    view: 高配当をひとまとめに語ると、こういう日を見落とすのだと思います。
+    headline: VYM{vym}／HDV{hdv}
+    designs: [versus, before_after, light_editorial]
+    relevance: 0.95
+    timeliness: 1.0
+    clarity: 0.9
+    tags: ["#高配当ETF", "#ETF"]
+
+  - id: dg062
+    title: グロース下落でも高配当はプラス
+    category: cushion
+    builder: cushion
+    requires: [cushion]
+    params: {require_flip: true}
+    hook: グロース系が{growth}の日に、高配当は{high}で踏みとどまりました。
+    numbers:
+      - 差し引き{diff}。{high_names}と{growth_names}の比較です。
+    view: 守りが効いた日は記録しておかないと、効かなかった日だけ覚えている気がします。
+    headline: グロース{growth}／高配当{high}
+    designs: [versus, magazine_cover, ratio_visual]
+    relevance: 1.0
+    timeliness: 1.0
+    clarity: 0.9
+    tags: ["#高配当ETF", "#資産推移"]
+
+  # ---------------------------------------------------------- 運用の実務
+  - id: dg070
+    title: ETFと投資信託の反映日ズレ
+    category: ops
+    builder: lag
+    requires: [lag, holdings, total_jpy]
+    hook: 私の総資産{total}は、実は同じ日の数字ではありません。
+    numbers:
+      - ETFは{etf_date}、投資信託は{fund_date}。{days}ズレています。
+      - 投信は{fund_count}で{fund_pct}を占めます。
+    view: 「今日の資産」と言いながら、中身は少し前の日付が混ざっているのだと思います。
+    headline: 反映日が{days}ズレている
+    designs: [receipt, light_editorial, dark_financial_report]
+    relevance: 1.0
+    timeliness: 0.6
+    clarity: 0.85
+    tags: ["#資産推移", "#投資信託", "#ETF"]
+
+  - id: dg071
+    title: DRAMのシクリカルな値動き
+    category: cycle
+    builder: dram
+    requires: [dram, holdings, total_jpy]
+    cyclical: true
+    hook: 保有のDRAMメモリ半導体ETFが{dram_pct}。保有比率は{weight}です。
+    numbers:
+      - 金額では{dram_jpy}。総資産{total}のごく一部です。
+    view: メモリはシクリカルな業種なので、上下どちらも大きく出るものとして見ています。
+    headline: DRAM {dram_pct}
+    designs: [dark_financial_report, chart_focus, receipt]
+    relevance: 0.8
+    timeliness: 0.9
+    clarity: 0.8
+    tags: ["#半導体", "#ETF", "#資産推移"]
+
+  # ---------------------------------------------------------- 進捗
+  - id: dg080
+    title: マイルストーンまでの進捗
+    category: progress
+    builder: milestone
+    requires: [milestone, total_jpy]
+    hook: 総資産{total}。次の目標{target}に対して{progress}まで来ました。
+    numbers:
+      - 残りは{remaining}です。
+    view: 割合で見ると、増えた月も減った月も同じ物差しで並べられて助かっています。
+    headline: "{target}まで{progress}"
+    designs: [milestone, ratio_visual, magazine_cover]
+    relevance: 1.0
+    timeliness: 0.3
+    clarity: 0.95
+    tags: ["#資産推移", "#資産形成"]
+
+  - id: dg081
+    title: 3億円まであと何日（実績ペースの単純計算）
+    category: progress
+    builder: milestone
+    requires: [milestone, pace, total_jpy]
+    params: {target_jpy: 300000000, with_pace: true}
+    hook: 総資産{total}。{target}までは残り{remaining}です。
+    numbers:
+      - 直近{pace_days}の実績が1日あたり{per_day}なので、そのまま続くと仮定すると{years_left}。
+    view: 相場も入金も変わるので当たらない計算ですが、距離感を持つには役に立っています。
+    headline: "{target}まで{progress}"
+    designs: [milestone, simulation, light_editorial]
+    relevance: 0.9
+    timeliness: 0.3
+    clarity: 0.85
+    tags: ["#資産推移", "#資産形成"]
+
+  - id: dg082
+    title: この規模の口座の1日
+    category: progress
+    builder: daily_life
+    requires: [volatility, day, total_jpy]
+    hook: 総資産{total}だと、1日で動く金額はだいたい{sigma_jpy}です。
+    numbers:
+      - 率にすると{sigma}。今日の増減は{day_jpy}でした。
+    view: 慣れたつもりでも、1日の振れ幅が月給を超えた頃から見方が変わった気がします。
+    headline: 1日の振れ幅{sigma_jpy}
+    designs: [magazine_cover, light_editorial, chart_focus]
+    relevance: 1.0
+    timeliness: 0.4
+    clarity: 0.9
+    tags: ["#資産推移", "#資産形成"]
+
+  - id: dg083
+    title: 買い増し履歴
+    category: flow
+    builder: buy_history
+    requires: [flows, total_jpy, history_from]
+    hook: 直近の買い増しは{last_date}の{last_jpy}。あれから{days_since}経ちました。
+    numbers:
+      - 記録している{from_date}以降では{count}、合計{sum_all}を入れています。
+    view: 入金の履歴を残しておくと、増えた理由を運用のせいにしすぎずに済みます。
+    headline: 直近の買い増し{last_jpy}
+    designs: [receipt, before_after, dark_financial_report]
+    relevance: 0.95
+    timeliness: 0.5
+    clarity: 0.85
+    tags: ["#資産推移", "#つみたて投資"]
+
+  # ---------------------------------------------------------- 答え合わせ
+  - id: dg090
+    title: 過去投稿の答え合わせ
+    category: checkback
+    builder: checkback
+    requires: [checkback, total_jpy]
+    hook: "{days}前に{past_total}と書いていました。今日は{total}です。"
+    numbers:
+      - 差は{diff}（{diff_pct}）。{past_date}からの記録です。
+    view: 書いた数字を後から並べるだけで、そのときの自分の見立てのくせが見えてきます。
+    headline: "{days}前と比べて{diff}"
+    designs: [before_after, receipt, light_editorial]
+    relevance: 1.0
+    timeliness: 0.8
+    clarity: 0.85
+    tags: ["#資産推移", "#記録"]
+
+  - id: dg091
+    title: 1年前の自分と比較
+    category: checkback
+    builder: year_ago
+    requires: [year_ago, total_jpy]
+    hook: 1年前の{past_date}は{past_total}でした。今日は{total}です。
+    numbers:
+      - 差は{diff}（{diff_pct}）。{days}ぶんの記録です。
+    view: 1年単位で並べると、途中で気にしていた上下がほとんど残らないのが面白いです。
+    headline: 1年で{diff}
+    designs: [before_after, chart_focus, magazine_cover]
+    relevance: 1.0
+    timeliness: 0.5
+    clarity: 0.9
+    tags: ["#資産推移", "#資産形成"]
+
+  # ---------------------------------------------------------- ルックスルー
+  - id: dg092
+    title: 私の資産を企業まで分解
+    category: lookthrough
+    builder: lookthrough
+    requires: [lookthrough, total_jpy]
+    hook: 総資産{total}をファンドの中身まで分解すると、いちばん大きいのは{top_label}でした。
+    numbers:
+      - 実質{top_pct}（{top_jpy}）。個別銘柄まで分解できたのは{coverage}です。
+    view: 何本に分けたかより、中身が誰と重なっているかのほうが効いている気がします。
+    headline: 実質トップは{top_label}
+    designs: [ratio_visual, dark_financial_report, receipt]
+    relevance: 1.0
+    timeliness: 0.4
+    clarity: 0.85
+    tags: ["#資産推移", "#ETF", "#インデックス投資"]
+
+  # ==========================================================
+  # データ源がまだ無い話題（候補には出さない。summary.md に理由を残す）
+  # 数字を作れないものを「それらしく」書かないための明示的な置き場。
+  # 取得の仕組みができたら builder / requires を埋める。
+  # ==========================================================
+  - id: dg100
+    title: 100万円を10年前に投資していたら
+    category: simulation
+    builder: null
+    blocked_reason: 10年ぶんの基準価額・株価の履歴がリポジトリに無いため、金額を作れない
+    hook: null
+    view: null
+    headline: null
+    designs: [simulation]
+
+  - id: dg101
+    title: 私が実際に受け取った配当金
+    category: income
+    builder: null
+    blocked_reason: 受取配当の記録が無いため（data.json に配当データが無い）
+    hook: null
+    view: null
+    headline: null
+    designs: [receipt]
+
+  - id: dg102
+    title: 失敗や見立て違いの振り返り
+    category: reflection
+    builder: null
+    blocked_reason: 見立てを書き残すファイルが無いため。人間が書いたものだけを使う
+    hook: null
+    view: null
+    headline: null
+    designs: [light_editorial]
+
+  - id: dg103
+    title: 反証条件の答え合わせ
+    category: reflection
+    builder: null
+    blocked_reason: 反証条件（どうなったら見立てが外れか）の記録が無いため
+    hook: null
+    view: null
+    headline: null
+    designs: [before_after]
+
+  - id: dg104
+    title: 指数寄与（ルックスルー版・指数との比較）
+    category: lookthrough
+    builder: null
+    blocked_reason: 指数側の構成比データが無く、寄与を%ptで出せないため
+    hook: null
+    view: null
+    headline: null
+    designs: [dark_financial_report]

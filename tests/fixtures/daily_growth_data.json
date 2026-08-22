@@ -1,0 +1,541 @@
+{
+ "updated_at": "2026-08-17T07:12:17.020097+09:00",
+ "date": "2026-08-17",
+ "usdjpy": 159.4,
+ "total_jpy": 34689130,
+ "day_change_jpy": 78559,
+ "day_change_pct": 0.23,
+ "comparisons": {
+  "day": {
+   "base_date": "2026-08-16",
+   "base_jpy": 34673804,
+   "change_jpy": 15326,
+   "change_pct": 0.04,
+   "gross_change_jpy": 15326,
+   "cash_flow_jpy": 0
+  },
+  "week": {
+   "base_date": "2026-08-10",
+   "base_jpy": 33194056,
+   "change_jpy": 643599,
+   "change_pct": 1.94,
+   "gross_change_jpy": 1495074,
+   "cash_flow_jpy": 851475
+  },
+  "month": {
+   "base_date": "2026-07-18",
+   "base_jpy": 32960226,
+   "change_jpy": 877429,
+   "change_pct": 2.66,
+   "gross_change_jpy": 1728904,
+   "cash_flow_jpy": 851475
+  },
+  "ytd": {
+   "base_date": "2026-06-08",
+   "base_jpy": 31853815,
+   "change_jpy": 1478053,
+   "change_pct": 4.64,
+   "gross_change_jpy": 2835315,
+   "cash_flow_jpy": 1357262
+  }
+ },
+ "etf": {
+  "VYM": {
+   "name": "VYM 米国高配当ETF",
+   "type": "ETF",
+   "shares": 313,
+   "prev_price": 167.03,
+   "curr_price": 166.52,
+   "change_pct": -0.31,
+   "prev_jpy": 8333494,
+   "curr_jpy": 8308049,
+   "usdjpy": 159.4
+  },
+  "VTI": {
+   "name": "VTI 全米株式ETF",
+   "type": "ETF",
+   "shares": 195,
+   "prev_price": 384.3,
+   "curr_price": 383.85,
+   "change_pct": -0.12,
+   "prev_jpy": 11945197,
+   "curr_jpy": 11931210,
+   "usdjpy": 159.4
+  },
+  "HDV": {
+   "name": "HDV 米国高配当ETF",
+   "type": "ETF",
+   "shares": 495,
+   "prev_price": 29.26,
+   "curr_price": 29.34,
+   "change_pct": 0.27,
+   "prev_jpy": 2308702,
+   "curr_jpy": 2315014,
+   "usdjpy": 159.4
+  },
+  "QQQ": {
+   "name": "QQQ ナスダック100ETF",
+   "type": "ETF",
+   "shares": 16,
+   "prev_price": 732.07,
+   "curr_price": 731.07,
+   "change_pct": -0.14,
+   "prev_jpy": 1867071,
+   "curr_jpy": 1864521,
+   "usdjpy": 159.4
+  },
+  "DRAM": {
+   "name": "DRAM メモリ半導体ETF",
+   "type": "ETF",
+   "shares": 1,
+   "prev_price": 56.93,
+   "curr_price": 57.32,
+   "change_pct": 0.69,
+   "prev_jpy": 9075,
+   "curr_jpy": 9137,
+   "usdjpy": 159.4
+  }
+ },
+ "fund": {
+  "29313233": {
+   "name": "ニッセイNASDAQ100",
+   "type": "投資信託",
+   "fund_code": "29313233",
+   "units": 36374,
+   "prev_nav": 28272.0,
+   "curr_nav": 28601.0,
+   "change_pct": 1.16,
+   "prev_jpy": 102837,
+   "curr_jpy": 104033,
+   "source": "協会CSV",
+   "curr_date": "2026-08-14"
+  },
+  "89311199": {
+   "name": "SBI・V・S&P500",
+   "type": "投資信託",
+   "fund_code": "89311199",
+   "units": 850904,
+   "prev_nav": 41508.0,
+   "curr_nav": 41791.0,
+   "change_pct": 0.68,
+   "prev_jpy": 3531932,
+   "curr_jpy": 3556013,
+   "source": "協会CSV",
+   "curr_date": "2026-08-14"
+  },
+  "04311181": {
+   "name": "iFreeNEXT FANG+",
+   "type": "投資信託",
+   "fund_code": "04311181",
+   "units": 327750,
+   "prev_nav": 99084.0,
+   "curr_nav": 101036.0,
+   "change_pct": 1.97,
+   "prev_jpy": 3247478,
+   "curr_jpy": 3311455,
+   "source": "協会CSV",
+   "curr_date": "2026-08-14"
+  },
+  "8931224C": {
+   "name": "SBI S 米国高配当(年4回)",
+   "type": "投資信託",
+   "fund_code": "8931224C",
+   "units": 1969774,
+   "prev_nav": 12847.0,
+   "curr_nav": 12913.0,
+   "change_pct": 0.51,
+   "prev_jpy": 2530569,
+   "curr_jpy": 2543569,
+   "source": "協会CSV",
+   "curr_date": "2026-08-14"
+  },
+  "79314186": {
+   "name": "イノベーションAI",
+   "type": "投資信託",
+   "fund_code": "79314186",
+   "units": 36240,
+   "prev_nav": 69238.0,
+   "curr_nav": 70975.0,
+   "change_pct": 2.51,
+   "prev_jpy": 250919,
+   "curr_jpy": 257213,
+   "source": "協会CSV",
+   "curr_date": "2026-08-14"
+  },
+  "89311265": {
+   "name": "SBI NASDAQ100",
+   "type": "投資信託",
+   "fund_code": "89311265",
+   "units": 476155,
+   "prev_nav": 10150.0,
+   "curr_nav": 10268.0,
+   "change_pct": 1.16,
+   "prev_jpy": 483297,
+   "curr_jpy": 488916,
+   "source": "協会CSV",
+   "curr_date": "2026-08-14"
+  }
+ },
+ "history": [
+  {
+   "date": "2026-06-08",
+   "total_jpy": 31853815,
+   "usdjpy": 160.14
+  },
+  {
+   "date": "2026-06-09",
+   "total_jpy": 31510603,
+   "usdjpy": 160.15
+  },
+  {
+   "date": "2026-06-10",
+   "total_jpy": 31603781,
+   "usdjpy": 160.49
+  },
+  {
+   "date": "2026-06-11",
+   "total_jpy": 31309320,
+   "usdjpy": 160.57
+  },
+  {
+   "date": "2026-06-12",
+   "total_jpy": 31466237,
+   "usdjpy": 160.12
+  },
+  {
+   "date": "2026-06-13",
+   "total_jpy": 31753527,
+   "usdjpy": 160.18
+  },
+  {
+   "date": "2026-06-17",
+   "total_jpy": 32066495,
+   "usdjpy": 160.26
+  },
+  {
+   "date": "2026-06-18",
+   "total_jpy": 31832404,
+   "usdjpy": 160.92
+  },
+  {
+   "date": "2026-06-19",
+   "total_jpy": 32000682,
+   "usdjpy": 161.24
+  },
+  {
+   "date": "2026-06-20",
+   "total_jpy": 32146647,
+   "usdjpy": 161.27
+  },
+  {
+   "date": "2026-06-22",
+   "total_jpy": 32177984,
+   "usdjpy": 161.55
+  },
+  {
+   "date": "2026-06-23",
+   "total_jpy": 32148836,
+   "usdjpy": 161.41
+  },
+  {
+   "date": "2026-06-24",
+   "total_jpy": 31913541,
+   "usdjpy": 161.72
+  },
+  {
+   "date": "2026-06-25",
+   "total_jpy": 31798365,
+   "usdjpy": 161.78
+  },
+  {
+   "date": "2026-06-26",
+   "total_jpy": 31842499,
+   "usdjpy": 161.63
+  },
+  {
+   "date": "2026-06-27",
+   "total_jpy": 31760637,
+   "usdjpy": 161.68
+  },
+  {
+   "date": "2026-06-30",
+   "total_jpy": 32034698,
+   "usdjpy": 162.36
+  },
+  {
+   "date": "2026-07-01",
+   "total_jpy": 32273313,
+   "usdjpy": 162.67
+  },
+  {
+   "date": "2026-07-02",
+   "total_jpy": 32067163,
+   "usdjpy": 161.2
+  },
+  {
+   "date": "2026-07-03",
+   "total_jpy": 32121576,
+   "usdjpy": 160.93
+  },
+  {
+   "date": "2026-07-04",
+   "total_jpy": 32160142,
+   "usdjpy": 161.34
+  },
+  {
+   "date": "2026-07-06",
+   "total_jpy": 32284577,
+   "usdjpy": 162.19
+  },
+  {
+   "date": "2026-07-07",
+   "total_jpy": 32379746,
+   "usdjpy": 161.89
+  },
+  {
+   "date": "2026-07-08",
+   "total_jpy": 32467521,
+   "usdjpy": 162.24
+  },
+  {
+   "date": "2026-07-09",
+   "total_jpy": 32816386,
+   "usdjpy": 162.37,
+   "cash_flow_jpy": 324883
+  },
+  {
+   "date": "2026-07-10",
+   "total_jpy": 32947107,
+   "usdjpy": 162.37,
+   "cash_flow_jpy": 80579
+  },
+  {
+   "date": "2026-07-11",
+   "total_jpy": 32957844,
+   "usdjpy": 161.67,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-12",
+   "total_jpy": 32957844,
+   "usdjpy": 161.67,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-13",
+   "total_jpy": 33003871,
+   "usdjpy": 161.98,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-14",
+   "total_jpy": 32982574,
+   "usdjpy": 162.41,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-15",
+   "total_jpy": 32926469,
+   "usdjpy": 162.22,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-16",
+   "total_jpy": 32955209,
+   "usdjpy": 162.11,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-17",
+   "total_jpy": 33156655,
+   "usdjpy": 162.38,
+   "cash_flow_jpy": 100325
+  },
+  {
+   "date": "2026-07-18",
+   "total_jpy": 32960226,
+   "usdjpy": 162.35,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-19",
+   "total_jpy": 32960226,
+   "usdjpy": 162.35,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-20",
+   "total_jpy": 32982255,
+   "usdjpy": 162.5,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-21",
+   "total_jpy": 32913419,
+   "usdjpy": 162.48,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-22",
+   "total_jpy": 33110392,
+   "usdjpy": 163.2,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-23",
+   "total_jpy": 33247263,
+   "usdjpy": 163.1,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-24",
+   "total_jpy": 33139114,
+   "usdjpy": 163.84,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-25",
+   "total_jpy": 33132740,
+   "usdjpy": 163.79,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-26",
+   "total_jpy": 33071500,
+   "usdjpy": 163.79,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-27",
+   "total_jpy": 33113343,
+   "usdjpy": 163.67,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-28",
+   "total_jpy": 33150124,
+   "usdjpy": 163.74,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-29",
+   "total_jpy": 33294808,
+   "usdjpy": 163.86,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-30",
+   "total_jpy": 32907671,
+   "usdjpy": 163.39,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-07-31",
+   "total_jpy": 32469987,
+   "usdjpy": 159.7,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-01",
+   "total_jpy": 32162517,
+   "usdjpy": 157.4,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-02",
+   "total_jpy": 32162517,
+   "usdjpy": 157.4,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-03",
+   "total_jpy": 32145252,
+   "usdjpy": 157.27,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-04",
+   "total_jpy": 32197088,
+   "usdjpy": 157.35,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-05",
+   "total_jpy": 32881210,
+   "usdjpy": 157.72,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-06",
+   "total_jpy": 33038930,
+   "usdjpy": 157.7,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-07",
+   "total_jpy": 33080806,
+   "usdjpy": 158.4,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-08",
+   "total_jpy": 33175799,
+   "usdjpy": 157.74,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-09",
+   "total_jpy": 33175799,
+   "usdjpy": 157.74,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-10",
+   "total_jpy": 33194056,
+   "usdjpy": 157.86,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-11",
+   "total_jpy": 33486971,
+   "usdjpy": 159.29,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-12",
+   "total_jpy": 34319950,
+   "usdjpy": 159.34,
+   "cash_flow_jpy": 851475
+  },
+  {
+   "date": "2026-08-13",
+   "total_jpy": 34484131,
+   "usdjpy": 159.42,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-14",
+   "total_jpy": 34627453,
+   "usdjpy": 159.51,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-15",
+   "total_jpy": 34673804,
+   "usdjpy": 159.3,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-16",
+   "total_jpy": 34673804,
+   "usdjpy": 159.3,
+   "cash_flow_jpy": 0
+  },
+  {
+   "date": "2026-08-17",
+   "total_jpy": 34689130,
+   "usdjpy": 159.4,
+   "cash_flow_jpy": 0
+  }
+ ]
+}

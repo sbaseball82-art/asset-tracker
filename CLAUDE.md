@@ -74,6 +74,26 @@ X APIへの投稿処理をこのリポジトリに入れない。
 - **%** … 比率そのもの（実質保有比率、騰落率）
 - **%pt** … 差分・寄与（指数寄与は必ず %pt）
 
+### 6. 数字が入る経路は1本だけにする（Daily Growth）
+
+投稿に出る数値は、**必ず**次の経路だけを通す。
+
+```
+data.json → facts.py（純粋関数） → builder → Val(raw, text) → {placeholder}
+```
+
+- テンプレ（YAML）に数値を直書きしない。書いても QA の照合で落ちる。
+- 文章生成で金融数値を作らない。画像生成AIで数字を描かない。
+- 事実が取れない話題は `builder: null` と `blocked_reason` を書いて宣言する。
+  候補には出さず、`summary.md` に理由つきで残す（黙って消さない）。
+
+### 7. 条件をゆるめたら必ず書き残す
+
+ネタが尽きてローテーション条件をゆるめた、カバレッジが足りない、
+データが古い——こうした「本来の条件を満たしていない状態」で生成したときは、
+`summary.md` と `qa.json`（または `notes.md`）に必ず記録する。
+**黙って本数を減らす／黙って同じ話題を出す／黙って条件を下げる、はしない。**
+
 ---
 
 ## 投稿文のトーン
@@ -109,8 +129,22 @@ data/
   history/              月次スナップショット（前月比の算出に使う）
   lookthrough.json      機能②が読むルックスルー結果
 
+data/
+  daily_growth_topics.yml    ← 機能③：ネタプール（文言と重みだけ。数値は書かない）
+  daily_growth_designs.yml   画像デザインのプール（10種）
+  daily_growth_history.jsonl 生成履歴（重複防止の判定に使う。1行1投稿）
+
 src/
   common/               textcheck / render / fontcheck / util / notify / postlog / settings
+  daily_growth/         ← 機能③：毎朝の投稿候補5本
+    facts.py            data.json から事実だけを取り出す（純粋関数のみ）
+    topics.py           ネタプールと builder（数値は必ず Val で作る）
+    compose.py          投稿文の組み立てと検査（純粋関数のみ）
+    score.py            スコアと選抜、ローテーションのゆるめ方（純粋関数のみ）
+    history.py          daily_growth_history.jsonl と重複判定
+    render.py           画像（theme × layout）
+    qa.py               生成物の自動QA
+    generate.py         入出力とオーケストレーション
   lookthrough/          ← 機能①：保有を個別銘柄まで分解する
     compute.py          按分計算（純粋関数のみ）
     validation.py       構成銘柄の検証（純粋関数のみ）
@@ -265,6 +299,54 @@ python -m pytest tests/ -q
 
 ---
 
+## 機能③：Daily Growth System（毎朝の投稿候補5本）
+
+毎朝 `data.json` を読んで、**その日のデータでしか書けない話題**を選び、
+投稿候補を5本つくる。生成のみ。投稿ボタンは人間が押す。
+
+```bash
+python -m src.daily_growth.generate            # 通常
+python -m src.daily_growth.generate --dry-run  # 履歴・ログを書かない
+python -m src.daily_growth.generate --sample   # 隔離ディレクトリにだけ書く
+python -m src.daily_growth.generate --no-render
+```
+
+出力は `output/daily-growth/YYYY-MM-DD/`（`post_1..5.png` / `post_1..5.txt` /
+`summary.md` / `qa.json`）。GitHub Actions は **毎朝 08:00 JST 前後**
+（`.github/workflows/daily_growth.yml`）。
+
+### 守ること（機能③固有）
+
+- **1投稿1画像**。5投稿を1枚にまとめない。
+- 画像に通し番号（`01` / `1/5` / `①`）を入れない。
+- 全角換算165字以内（`zenkaku_len()` を使う）。1〜2行目だけで意味が通ること。
+- 末尾は資産投稿なら `※記録・情報共有目的であり投資助言ではありません`、
+  報道ベースなら `※報道ベースの概算。投資助言ではありません`。
+- メモリ・DRAM に触れたら「シクリカル」。禁止語は `compose.FORBIDDEN`
+  （lookthrough と共通のものに煽り表現を足したもの）。
+- `compute.py` と同じく、`facts.py` / `compose.py` / `score.py` に
+  I/O・ネットワークを入れない。
+
+### 毎日同じにならないための規則（既定値は config.yml）
+
+| 規則 | 既定 |
+|---|---|
+| 同一 `topic_id` の再利用 | 14日禁止 |
+| 同一・類似 `hook` | 30日回避 |
+| 同一 `design_id` | 3日連続まで |
+| 前日の5本と似た候補 | 除外 |
+| 同じ日の同じデザイン／同じ計算 | 禁止 |
+
+違反は**減点ではなく除外**。ネタが尽きたときのゆるめ方はあらかじめ決めてあり
+（`score.relaxation_ladder`）、**ゆるめた事実を必ず記録する**。
+
+### QA を通らなかったものは投稿素材ではない
+
+`qa.json` の `ok` が `false` の日は、生成物をコミットしないし投稿もしない。
+「作れたけれど出さない」を選べることが、この機能の価値。
+
+---
+
 ## 「完全自動」の範囲
 
 自動化するのは **データ取得から投稿文・画像の生成まで**。
@@ -275,8 +357,10 @@ python -m pytest tests/ -q
 | 構成銘柄の取得（多段フォールバック） | 生成物の目視確認 |
 | 分解・集計・前月比 | X への投稿 |
 | 画像・投稿文の生成と検査 | `data/manual/` のCSV更新（必要時） |
+| 毎朝の投稿候補5本の生成とQA | 5本のうちどれを出すかの判断 |
 | source のヘルスチェック（週1） | 壊れた source のURL修正 |
 | 中止・劣化の通知 | `excluded` にするかの判断 |
+| — | `logs/posts.csv` の実績入力（週1） |
 
 ---
 
@@ -286,6 +370,10 @@ python -m pytest tests/ -q
 - 取得できなかった数値の穴埋め（推定・補完・前月値の流用）
 - カバレッジ不足のまま投稿文を作ること
 - 投資判断・推奨の文言を出力に含めること
-- `compute.py` / `validation.py` にネットワークやファイル読み書きを入れること
+- `compute.py` / `validation.py` / `daily_growth/facts.py` / `daily_growth/compose.py`
+  / `daily_growth/score.py` にネットワークやファイル読み書きを入れること
+- 投稿テンプレ（YAML）に金融数値を直書きすること
+- 画像生成AIに数字を描かせること
+- 5投稿を1枚の画像にまとめること／画像に通し番号を入れること
 - 保有比率の小さいファンドのために壊れやすいスクレイパーを書くこと
   （`excluded` にして、必要なら手動CSVで足す）
