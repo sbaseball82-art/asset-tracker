@@ -131,7 +131,7 @@ topics:
   theme: CAPEレシオ41.59の読み方と、過去の高水準期のその後
   format: table
   builder: static
-  last_used: null
+  last_used: '2026-08-23'
   table:
     title: CAPEレシオ 高水準期とその後（概算）
     subtitle: 報道・公表データベースの概算 / Shiller CAPE
