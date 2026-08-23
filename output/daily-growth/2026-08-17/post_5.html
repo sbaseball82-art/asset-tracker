@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  width:1180px; height:1450px; background:#0B1220; color:#FFFFFF;
+  font-family:'Noto Sans JP','Noto Sans CJK JP','Hiragino Sans',sans-serif; padding:56px 64px 40px;
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.num { font-variant-numeric:tabular-nums; font-feature-settings:'tnum' 1; }
+.up { color:#6EE7A8; } .down { color:#F08A8A; } .flat { color:#FFFFFF; }
+
+header { display:flex; justify-content:space-between; align-items:flex-start;
+  padding-bottom:18px; border-bottom:2px solid #1E2A42; }
+.kicker { font-size:24px; font-weight:700; color:#4A9EFF;
+  letter-spacing:.06em; }
+.asof { font-size:20px; color:#8B96AB; margin-top:8px; }
+.acct { font-size:20px; color:#8B96AB; font-weight:700; text-align:right; }
+
+main { flex:1; display:flex; flex-direction:column;
+  justify-content:space-evenly; gap:18px; padding:8px 0; }
+
+.headline { font-size:52px; font-weight:700; line-height:1.28;
+  letter-spacing:.01em; }
+
+.hero { }
+.hero-label { font-size:24px; color:#8B96AB; }
+.hero-value { font-size:72px; font-weight:700; line-height:1.02;
+  margin-top:10px; letter-spacing:-.01em; }
+.hero-delta { font-size:28px; margin-top:16px; color:#8B96AB; }
+
+.figure { background:#111A2E; border-radius:18px;
+  padding:30px 32px; }
+.fig-note { font-size:20px; color:#8B96AB; margin-top:20px;
+  line-height:1.45; }
+
+.bars { display:flex; flex-direction:column; gap:20px; }
+.bar-row { display:grid; grid-template-columns:250px 1fr 190px;
+  align-items:center; column-gap:20px; }
+.bar-label { font-size:24px; white-space:nowrap; overflow:hidden;
+  text-overflow:ellipsis; }
+.bar-track { height:22px; background:#16203A; border-radius:11px; }
+.bar-fill { height:22px; border-radius:11px; background:#4A9EFF; }
+.bar-fill.up { background:#6EE7A8; } .bar-fill.down { background:#F08A8A; }
+.bar-value { font-size:28px; font-weight:700; text-align:right; }
+
+.compare { display:grid; grid-template-columns:1fr 2px 1fr; align-items:stretch;
+  column-gap:28px; }
+.cmp { padding:8px 4px; }
+.cmp-div { background:#1E2A42; }
+.cmp-label { font-size:23px; color:#8B96AB; line-height:1.35; }
+.cmp-value { font-size:60px; font-weight:700; margin-top:14px;
+  line-height:1.05; }
+.cmp-note { font-size:21px; color:#8B96AB; margin-top:14px; }
+
+.prog { }
+.prog-ends { display:flex; justify-content:space-between; font-size:26px;
+  color:#8B96AB; margin-bottom:16px; }
+.prog-track { height:34px; background:#16203A; border-radius:17px; }
+.prog-fill { height:34px; border-radius:17px; background:#E0B45C; }
+
+.fig-table { width:100%; border-collapse:collapse; }
+.fig-table th { font-size:21px; color:#8B96AB; font-weight:700;
+  padding:0 8px 14px; border-bottom:1px solid #1E2A42; }
+.fig-table td { font-size:27px; padding:15px 8px;
+  border-bottom:1px solid #1E2A42; }
+.fig-table tr:last-child td { border-bottom:none; }
+.left { text-align:left; } .right { text-align:right; }
+
+.spark svg { width:100%; height:300px; display:block; }
+.spark-line { fill:none; stroke:#4A9EFF; stroke-width:5;
+  vector-effect:non-scaling-stroke; }
+.spark-area { fill:#4A9EFF; opacity:.13; stroke:none; }
+.spark-ends { display:flex; justify-content:space-between; font-size:21px;
+  color:#8B96AB; margin-top:14px; }
+
+.notes { display:flex; flex-direction:column; gap:12px; }
+.note { font-size:22px; color:#8B96AB; line-height:1.5; }
+.assumption { border-left:5px solid #E0B45C;
+  padding:8px 0 8px 20px; font-size:22px; color:#8B96AB; line-height:1.5; }
+
+footer { margin-top:auto; padding-top:22px; display:flex;
+  justify-content:space-between; align-items:flex-end;
+  border-top:1px solid #1E2A42; }
+.f-note { font-size:19px; color:#8B96AB; }
+.f-brand { font-size:21px; font-weight:700; color:#E0B45C;
+  letter-spacing:.10em; }
+</style></head><body>
+  <header>
+    <div>
+      <div class="kicker">先月からの変化</div>
+      <div class="asof">基準日 2026-08-17</div>
+    </div>
+    <div class="acct">@84m5dm9xdm</div>
+  </header>
+  <main><div class="headline">先月比+2.66%</div><div class="figure"><div class="spark"><svg viewBox="0 0 1000 300" preserveAspectRatio="none"><polygon points="14,286 14.0,198.9 46.4,198.9 78.8,196.5 111.2,203.9 143.6,182.8 176.0,168.2 208.4,179.7 240.8,180.4 273.2,187.0 305.6,182.5 338.0,178.6 370.4,163.1 402.8,204.5 435.2,251.3 467.6,284.2 500.0,284.2 532.4,286.0 564.8,280.5 597.2,207.3 629.6,190.4 662.0,186.0 694.4,175.8 726.8,175.8 759.2,173.9 791.6,142.5 824.0,53.5 856.4,35.9 888.8,20.6 921.2,15.6 953.6,15.6 986.0,14.0 986,286" class="spark-area"/><polyline points="14.0,198.9 46.4,198.9 78.8,196.5 111.2,203.9 143.6,182.8 176.0,168.2 208.4,179.7 240.8,180.4 273.2,187.0 305.6,182.5 338.0,178.6 370.4,163.1 402.8,204.5 435.2,251.3 467.6,284.2 500.0,284.2 532.4,286.0 564.8,280.5 597.2,207.3 629.6,190.4 662.0,186.0 694.4,175.8 726.8,175.8 759.2,173.9 791.6,142.5 824.0,53.5 856.4,35.9 888.8,20.6 921.2,15.6 953.6,15.6 986.0,14.0" class="spark-line"/></svg><div class="spark-ends"><span>2026-07-18</span><span>2026-08-17</span></div></div><div class="fig-note">折れ線は総資産の推移（入金を含む）。先月比 +2.66% は入金を除いた増減です</div></div><div class="hero"><div class="hero-label">先月比（入金除外）</div><div class="hero-value num up">+2.66%</div><div class="hero-delta">+87.7万円</div></div><div class="notes"><div class="note">入金分を除いた、運用だけの増減です</div></div></main>
+  <footer>
+    <span class="f-note">※記録・情報共有目的であり投資助言ではありません</span>
+    <span class="f-brand">ASSET LOG</span>
+  </footer>
+</body></html>

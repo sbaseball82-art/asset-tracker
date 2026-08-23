@@ -58,3 +58,43 @@ source_health:
   degraded_after_weeks: 2
   # 1ソースあたりの取得タイムアウト（秒）
   timeout_sec: 60
+
+# =============================================================
+# Daily Growth System（毎朝の投稿候補5本）
+# -------------------------------------------------------------
+# 「毎日出す」より「毎日ちがう」を優先する。ここの数字を変えれば
+# ローテーションの厳しさとスコアの重みをコードなしで調整できる。
+# =============================================================
+daily_growth:
+  posts_per_day: 5
+  # 投稿文の全角換算上限
+  char_limit: 165
+  # 1日の候補で同じカテゴリを何本まで許すか（テーマ偏りの防止）
+  max_per_category: 2
+
+  weights:
+    freshness: 0.30                # 最近使っていないか
+    personal_asset_relevance: 0.30 # 自分の資産の話になっているか
+    surprise: 0.20                 # その日のデータ特有の異常・逆転か
+    timeliness: 0.10               # 今日でないと言えないか
+    visual_clarity: 0.10           # 画像1枚で伝わるか
+
+  rotation:
+    topic_reuse_days: 14           # 同一topic_idの再利用禁止日数
+    hook_avoid_days: 30            # 同一・類似hookの回避日数
+    design_max_consecutive_days: 3 # 同一design_idの連続使用上限（日）
+    hook_similarity: 0.80          # これ以上似ていたら同一hookとみなす
+    prev_day_similarity: 0.72      # 前日の5本とこれ以上似ていたら除外
+
+  learning:
+    # logs/posts.csv がこの件数たまるまで学習補正をかけない
+    min_samples_per_format: 8
+    # 目的関数の優先順位（前ほど重い）
+    objective: [follows, profile_clicks, bookmarks, replies, likes, views]
+
+  data:
+    # data.json の日付が今日からこれ以上離れていたら生成を中止する
+    # （土日・祝日で前営業日が数日前になることがあるため既定4日）
+    halt_age_days: 4
+    # これを超えたら警告つきで生成する
+    warn_age_days: 1

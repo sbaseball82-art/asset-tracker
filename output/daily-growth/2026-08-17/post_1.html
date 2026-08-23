@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  width:1180px; height:1450px; background:#F4F1EA; color:#14202E;
+  font-family:'Noto Sans JP','Noto Sans CJK JP','Hiragino Sans',sans-serif; padding:56px 64px 40px;
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.num { font-variant-numeric:tabular-nums; font-feature-settings:'tnum' 1; }
+.up { color:#1C7A4F; } .down { color:#B03A3A; } .flat { color:#14202E; }
+
+header { display:flex; justify-content:space-between; align-items:flex-start;
+  padding-bottom:18px; border-bottom:2px solid #D6CFC0; }
+.kicker { font-size:24px; font-weight:700; color:#1B5FA8;
+  letter-spacing:.06em; }
+.asof { font-size:20px; color:#6C7787; margin-top:8px; }
+.acct { font-size:20px; color:#6C7787; font-weight:700; text-align:right; }
+
+main { flex:1; display:flex; flex-direction:column;
+  justify-content:space-evenly; gap:18px; padding:8px 0; }
+
+.headline { font-size:52px; font-weight:700; line-height:1.28;
+  letter-spacing:.01em; }
+
+.hero { }
+.hero-label { font-size:24px; color:#6C7787; }
+.hero-value { font-size:96px; font-weight:700; line-height:1.02;
+  margin-top:10px; letter-spacing:-.01em; }
+.hero-delta { font-size:28px; margin-top:16px; color:#6C7787; }
+
+.figure { background:#FFFFFF; border-radius:18px;
+  padding:30px 32px; }
+.fig-note { font-size:20px; color:#6C7787; margin-top:20px;
+  line-height:1.45; }
+
+.bars { display:flex; flex-direction:column; gap:20px; }
+.bar-row { display:grid; grid-template-columns:250px 1fr 190px;
+  align-items:center; column-gap:20px; }
+.bar-label { font-size:24px; white-space:nowrap; overflow:hidden;
+  text-overflow:ellipsis; }
+.bar-track { height:22px; background:#ECE7DC; border-radius:11px; }
+.bar-fill { height:22px; border-radius:11px; background:#1B5FA8; }
+.bar-fill.up { background:#1C7A4F; } .bar-fill.down { background:#B03A3A; }
+.bar-value { font-size:28px; font-weight:700; text-align:right; }
+
+.compare { display:grid; grid-template-columns:1fr 2px 1fr; align-items:stretch;
+  column-gap:28px; }
+.cmp { padding:8px 4px; }
+.cmp-div { background:#D6CFC0; }
+.cmp-label { font-size:23px; color:#6C7787; line-height:1.35; }
+.cmp-value { font-size:60px; font-weight:700; margin-top:14px;
+  line-height:1.05; }
+.cmp-note { font-size:21px; color:#6C7787; margin-top:14px; }
+
+.prog { }
+.prog-ends { display:flex; justify-content:space-between; font-size:26px;
+  color:#6C7787; margin-bottom:16px; }
+.prog-track { height:34px; background:#ECE7DC; border-radius:17px; }
+.prog-fill { height:34px; border-radius:17px; background:#9A7526; }
+
+.fig-table { width:100%; border-collapse:collapse; }
+.fig-table th { font-size:21px; color:#6C7787; font-weight:700;
+  padding:0 8px 14px; border-bottom:1px solid #D6CFC0; }
+.fig-table td { font-size:27px; padding:15px 8px;
+  border-bottom:1px solid #D6CFC0; }
+.fig-table tr:last-child td { border-bottom:none; }
+.left { text-align:left; } .right { text-align:right; }
+
+.spark svg { width:100%; height:300px; display:block; }
+.spark-line { fill:none; stroke:#1B5FA8; stroke-width:5;
+  vector-effect:non-scaling-stroke; }
+.spark-area { fill:#1B5FA8; opacity:.13; stroke:none; }
+.spark-ends { display:flex; justify-content:space-between; font-size:21px;
+  color:#6C7787; margin-top:14px; }
+
+.notes { display:flex; flex-direction:column; gap:12px; }
+.note { font-size:22px; color:#6C7787; line-height:1.5; }
+.assumption { border-left:5px solid #9A7526;
+  padding:8px 0 8px 20px; font-size:22px; color:#6C7787; line-height:1.5; }
+
+footer { margin-top:auto; padding-top:22px; display:flex;
+  justify-content:space-between; align-items:flex-end;
+  border-top:1px solid #D6CFC0; }
+.f-note { font-size:19px; color:#6C7787; }
+.f-brand { font-size:21px; font-weight:700; color:#9A7526;
+  letter-spacing:.10em; }
+</style></head><body>
+  <header>
+    <div>
+      <div class="kicker">値動きと為替の分解</div>
+      <div class="asof">基準日 2026-08-17</div>
+    </div>
+    <div class="acct">@84m5dm9xdm</div>
+  </header>
+  <main><div class="headline">株価+7.9万円／為替-6.3万円</div><div class="figure"><div class="compare"><div class="cmp left"><div class="cmp-label">株価の値動き</div><div class="cmp-value num up">+7.9万円</div><div class="cmp-note">同じ為替で比較</div></div><div class="cmp-div"></div><div class="cmp right"><div class="cmp-label">為替の影響</div><div class="cmp-value num down">-6.3万円</div><div class="cmp-note">USD/JPY 159.40円</div></div></div><div class="fig-note">合計＝総資産の前日比 +1.5万円</div></div><div class="hero"><div class="hero-label">総資産の前日比</div><div class="hero-value num up">+1.5万円</div><div class="hero-delta">株価+7.9万円 ／ 為替-6.3万円</div></div><div class="notes"><div class="note">株価要因＋為替要因＝総資産の前日比（入金なしの日）</div></div></main>
+  <footer>
+    <span class="f-note">※記録・情報共有目的であり投資助言ではありません</span>
+    <span class="f-brand">ASSET LOG</span>
+  </footer>
+</body></html>

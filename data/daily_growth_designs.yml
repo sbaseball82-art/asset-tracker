@@ -1,0 +1,88 @@
+# =============================================================
+# daily_growth_designs.yml — 画像デザインのプール
+# -------------------------------------------------------------
+# 金融レポート／編集記事の見え方に寄せる。イラスト素材は使わない
+# （ロケット・札束・コイン・炎・人物・盾・テンプレ的な上昇矢印は禁止）。
+# 数字はすべてプログラムが実データから描く。画像生成AIは使わない。
+#
+#   theme   … dark / light / paper（配色とフォント）
+#   layout  … 骨格。stack / editorial / split / hero_first /
+#             figure_first / receipt / cover
+#   width, height … キャンバス。既定は 1180×1450。
+#             X のタイムライン確認用に 1200×1200 も持たせている。
+#
+# 同じ design_id は3日連続では使われない（config.yml の
+# daily_growth.rotation.design_max_consecutive_days）。
+# =============================================================
+
+designs:
+  - id: dark_financial_report
+    label: ダーク金融レポート
+    theme: dark
+    layout: stack
+    width: 1180
+    height: 1450
+
+  - id: light_editorial
+    label: 明るい編集記事
+    theme: light
+    layout: editorial
+    width: 1180
+    height: 1450
+
+  - id: before_after
+    label: ビフォー／アフター
+    theme: dark
+    layout: split
+    width: 1180
+    height: 1450
+
+  - id: versus
+    label: 対比（vs）
+    theme: light
+    layout: split
+    width: 1180
+    height: 1450
+
+  - id: simulation
+    label: 試算（前提を明示）
+    theme: dark
+    layout: stack
+    width: 1180
+    height: 1450
+    assumption_band: true
+
+  - id: milestone
+    label: マイルストーン
+    theme: dark
+    layout: hero_first
+    width: 1180
+    height: 1450
+
+  - id: chart_focus
+    label: 図優先
+    theme: dark
+    layout: figure_first
+    width: 1180
+    height: 1450
+
+  - id: ratio_visual
+    label: 比率
+    theme: light
+    layout: figure_first
+    width: 1180
+    height: 1450
+
+  - id: receipt
+    label: レシート（等幅）
+    theme: paper
+    layout: receipt
+    width: 1200
+    height: 1200
+
+  - id: magazine_cover
+    label: 雑誌の表紙
+    theme: dark
+    layout: cover
+    width: 1200
+    height: 1200
