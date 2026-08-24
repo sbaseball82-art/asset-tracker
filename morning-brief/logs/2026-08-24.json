@@ -1,0 +1,57 @@
+{
+ "date": "2026-08-24",
+ "generated_at": "2026-08-24T21:12:02",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "^GSPC",
+   "name": "S&P500",
+   "theme": "指数",
+   "headline": "静かな1日 S&P500 -0.28%",
+   "conclusion": "深掘りの基準に届いた銘柄はなし",
+   "score": null,
+   "score_parts": null,
+   "n_media": 0,
+   "sns_heat": 0.0,
+   "slot": 1,
+   "template_id": "T2",
+   "topic_tag": "quiet",
+   "numbers": [
+    {
+     "label": "S&P500",
+     "value": "-0.28%",
+     "sub": "7,653",
+     "source": "yfinance終値",
+     "asof": "2026-08-24"
+    },
+    {
+     "label": "ナスダック",
+     "value": "-0.76%",
+     "sub": "25,980",
+     "source": "yfinance終値",
+     "asof": "2026-08-24"
+    },
+    {
+     "label": "ドル円",
+     "value": "+0.10%",
+     "sub": "159.04円",
+     "source": "yfinance終値",
+     "asof": "2026-08-24"
+    },
+    {
+     "label": "米10年金利",
+     "value": "-3bp",
+     "sub": "4.70%",
+     "source": "yfinance終値",
+     "asof": "2026-08-24"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-08-24_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-08-24_1.txt"
+   ]
+  }
+ ],
+ "skipped": [],
+ "note": "quiet_day:no_anomaly"
+}
