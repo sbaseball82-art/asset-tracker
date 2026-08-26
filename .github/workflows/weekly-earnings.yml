@@ -9,6 +9,17 @@ name: weekly-earnings
 on:
   schedule:
     - cron: "0 13 * * 0"        # 日曜 13:00 UTC = 日曜 22:00 JST
+  # 本番投入前の実アクセス確認用。作業ブランチでだけ走る（main では走らない）。
+  # workflow_dispatch は既定ブランチに置かれるまで使えないため、その代わり。
+  # マージ前にこの push トリガは外す。
+  push:
+    branches:
+      - "claude/weekly-earnings-calendar-*"
+    paths:
+      - ".github/workflows/weekly-earnings.yml"
+      - "src/earnings_week/**"
+      - "config/watchlist.json"
+      - "config/theme.json"
   workflow_dispatch:
     inputs:
       week_start:
