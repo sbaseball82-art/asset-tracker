@@ -161,7 +161,7 @@ def run(args: argparse.Namespace) -> int:
     start, end = week_bounds(week_start)
 
     result = render.render_week(companies, start, end, theme, others=others,
-                                handle=handle)
+                                handle=handle, sample=args.sample)
     qa.verify(result.image, result.report,
               (theme["canvas"]["width"], theme["canvas"]["height"]))
 

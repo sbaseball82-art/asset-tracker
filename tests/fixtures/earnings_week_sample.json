@@ -1,5 +1,5 @@
 {
-  "_comment": "レイアウト確認用のサンプル。--sample はこのファイルだけを読み、本番の出力先・キャッシュには一切触れない。EPS予想が null の行を意図的に混ぜてある（「—」と描かれることの確認用）。",
+  "_comment": "レイアウト確認用のサンプル。**日付・EPS・売上はすべて作り物で、実際の決算日ではない**（12社×5日という一番詰まった配置を検査するための並び）。--sample で描く画像には SAMPLE 表示が入る。本番の日付は Finnhub から取るのでこのファイルは使わない。EPS予想が null の行を混ぜてあるのは「—」と描かれることの確認用。",
   "week_start": "2026-08-31",
   "companies": [
     {"symbol": "AAPL",  "name": "Apple Inc.",             "date": "2026-08-31", "hour": "amc", "epsEstimate": 2.41,  "revenueEstimate": 98500000000,  "marketCapitalization": 3450000},

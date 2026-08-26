@@ -91,10 +91,10 @@ def timing_label(hour: str | None, theme: dict) -> str:
     return labels.get((hour or "").lower(), labels[""])
 
 
-def timing_color(hour: str | None, theme: dict) -> str:
-    c = theme["colors"]
-    return {"bmo": c["blue"], "amc": c["gold"], "dmh": c["teal"]}.get(
-        (hour or "").lower(), c["dim"])
+def timing_style(hour: str | None, theme: dict) -> dict:
+    """バッジの見た目（solid=塗り / outline=枠線）。theme.json で差し替えられる。"""
+    styles = theme["timing_styles"]
+    return styles.get((hour or "").lower(), styles[""])
 
 
 def fmt_day_heading(day: date, theme: dict) -> str:
@@ -243,12 +243,25 @@ class Canvas:
 
     def __init__(self, width: int, height: int, bg: str,
                  scale: int = SUPERSAMPLE, font_family: str = "Noto Sans CJK JP",
-                 font_index: int = 0):
+                 font_index: int = 0, bg_bottom: str | None = None):
         self.w, self.h, self.scale = width, height, scale
         self.family, self.findex = font_family, font_index
         self.img = Image.new("RGB", (width * scale, height * scale), _hex(bg))
+        if bg_bottom and bg_bottom != bg:
+            self._paint_gradient(bg, bg_bottom)
         self.draw = ImageDraw.Draw(self.img)
         self.report = QAReport()
+
+    def _paint_gradient(self, top: str, bottom: str) -> None:
+        """上から下へごく淡く色を変える（参考デザインの下がわずかに明るい背景）。"""
+        a, b = _hex(top), _hex(bottom)
+        h = self.img.height
+        column = Image.new("RGB", (1, h))
+        px = column.load()
+        for y in range(h):
+            t = y / max(1, h - 1)
+            px[0, y] = tuple(round(a[i] + (b[i] - a[i]) * t) for i in range(3))
+        self.img.paste(column.resize((self.img.width, h)), (0, 0))
 
     # -- フォント --------------------------------------------------
     def font(self, size: int, bold: bool = False):
@@ -351,10 +364,24 @@ def _rounded_mask(size: int, radius: int) -> Image.Image:
     return mask
 
 
-def _logo_tile(path: str, size: int, radius: int, pad_color: str) -> Image.Image | None:
-    """白い角丸パッドの上にロゴを置いたタイルを作る。
+def mean_luminance(image: Image.Image, alpha_floor: int = 32) -> float:
+    """不透明な画素の平均的な明るさ（0〜255）。暗いロゴの判定に使う。"""
+    rgba = image.convert("RGBA")
+    total = count = 0.0
+    for r, g, b, a in rgba.getdata():
+        if a >= alpha_floor:
+            total += 0.299 * r + 0.587 * g + 0.114 * b
+            count += 1
+    return total / count if count else 255.0
 
-    透過ロゴが暗い背景に埋もれるのを避けるため、必ず白地を敷く。
+
+def _logo_tile(path: str, size: int, radius: int, theme: dict
+               ) -> Image.Image | None:
+    """カードに載せるロゴのタイル（RGBA）を作る。
+
+    参考デザインに合わせ **白パッドは敷かない**。ただし黒一色の透過ロゴは
+    暗い背景で消えてしまうため、不透明部の明るさが閾値を下回るときだけ
+    白い角丸パッドを敷く（読めないロゴを出さないための保険）。
     読めない/壊れたファイルなら None を返し、呼び出し側が代替表示に落とす。
     """
     try:
@@ -363,11 +390,27 @@ def _logo_tile(path: str, size: int, radius: int, pad_color: str) -> Image.Image
     except Exception:  # noqa: BLE001 — 壊れたキャッシュで生成を止めない
         return None
 
-    tile = Image.new("RGBA", (size, size), (*_hex(pad_color), 255))
-    inner = round(size * 0.76)
-    logo.thumbnail((inner, inner), Image.LANCZOS)
-    tile.alpha_composite(logo, ((size - logo.width) // 2, (size - logo.height) // 2))
-    tile.putalpha(_rounded_mask(size, radius))
+    cfg = theme.get("logo", {})
+    threshold = cfg.get("dark_luminance_threshold", 78)
+    inset = cfg.get("inset_ratio", 0.94)
+
+    if mean_luminance(logo) < threshold:
+        # 暗いロゴ: 白い角丸パッドの上に置く
+        tile = Image.new("RGBA", (size, size),
+                         (*_hex(theme["colors"]["logo_pad"]), 255))
+        fitted = logo.copy()
+        fitted.thumbnail((round(size * 0.76), round(size * 0.76)), Image.LANCZOS)
+        tile.alpha_composite(fitted, ((size - fitted.width) // 2,
+                                      (size - fitted.height) // 2))
+        tile.putalpha(_rounded_mask(size, radius))
+        return tile
+
+    # 明るい/色付きのロゴ: 背景を敷かずそのまま置く
+    tile = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    fitted = logo.copy()
+    fitted.thumbnail((round(size * inset), round(size * inset)), Image.LANCZOS)
+    tile.alpha_composite(fitted, ((size - fitted.width) // 2,
+                                  (size - fitted.height) // 2))
     return tile
 
 
@@ -383,21 +426,43 @@ class RenderResult:
 
 def render_week(companies: list[Company], week_start: date, week_end: date,
                 theme: dict, others: int = 0, handle: str = "@84m5dm9xdm",
-                stale_note: str = "") -> RenderResult:
-    """1週間ぶんの決算カレンダー画像を描いて返す（保存は呼び出し側）。"""
+                stale_note: str = "", sample: bool = False) -> RenderResult:
+    """1週間ぶんの決算カレンダー画像を描いて返す（保存は呼び出し側）。
+
+    sample=True のときは「SAMPLE」表示を必ず入れる。ダミーの日付・数値で
+    描いた画像が本物の決算日として読まれないようにするため。
+    """
     cv_cfg, col, s, lay = (theme["canvas"], theme["colors"],
                            theme["sizes"], theme["layout"])
     W, H = cv_cfg["width"], cv_cfg["height"]
     mx = cv_cfg["margin_x"]
     cv = Canvas(W, H, col["bg"], font_family=theme["font"]["family"],
-                font_index=theme["font"].get("index", 0))
+                font_index=theme["font"].get("index", 0),
+                bg_bottom=col.get("bg_bottom"))
     right = W - mx
+    rule = blend(col.get("rule", col["gold"]), col["bg"],
+                 col.get("rule_alpha", 0.42))
 
     # ---- ヘッダー -------------------------------------------------
     top = cv_cfg["margin_top"]
     cv.text((mx, top), theme["text"]["brand"], s["brand"], col["gold"],
             bold=True, tracking=4, clip=(mx, top - 4, right, top + 60),
             label="brand")
+
+    if sample:
+        stext = theme["text"]["sample_badge"]
+        sw = cv.measure(stext, s["badge_week"], bold=True)
+        sa, sd = cv.metrics(s["badge_week"], bold=True)
+        spill_h = round((sa + sd) + 16)
+        spill = (mx + cv.measure(theme["text"]["brand"], s["brand"], True) + 4 * 13 + 26,
+                 top - 2, 0, 0)
+        spill = (spill[0], top - 2, spill[0] + sw + 34, top - 2 + spill_h)
+        cv.rrect(spill, spill_h / 2, fill=blend(col["down"], col["bg"], 0.20),
+                 outline=blend(col["down"], col["bg"], 0.65), width=1)
+        cv.text(((spill[0] + spill[2]) / 2, (spill[1] + spill[3]) / 2), stext,
+                s["badge_week"], col["down"], bold=True, anchor="mm",
+                clip=(spill[0] + 4, spill[1], spill[2] - 4, spill[3]),
+                label="sample_badge")
 
     badge_text = fmt_week_badge(week_start)
     bw = cv.measure(badge_text, s["badge_week"], bold=True)
@@ -417,16 +482,17 @@ def render_week(companies: list[Company], week_start: date, week_end: date,
     ry = ty + round(s["title"] * 1.5) + 6
     cv.text((mx, ry), fmt_range(week_start, week_end), s["range"], col["dim"],
             clip=(mx, ry - 4, right - 260, ry + s["range"] * 1.6), label="range")
-    cv.text((right, ry + 2), handle, s["handle"], col["blue"], anchor="ra",
+    cv.text((right, ry + 2), handle, s["handle"],
+            col.get("handle", col["blue"]), anchor="ra",
             clip=(right - 260, ry - 4, right, ry + s["handle"] * 1.8),
             label="handle")
 
     div_y = ry + round(s["range"] * 1.6) + 18
-    cv.line((mx, div_y, right, div_y), fill=_hex(col["line"]), width=2)
+    cv.line((mx, div_y, right, div_y), fill=rule, width=1)
 
     # ---- フッター（先に位置を決めて本文の高さを確定させる） -------
     foot_div = H - cv_cfg["margin_bottom"] - 52
-    cv.line((mx, foot_div, right, foot_div), fill=_hex(col["line"]), width=2)
+    cv.line((mx, foot_div, right, foot_div), fill=rule, width=1)
     fy = foot_div + 16
     cv.text((mx, fy), theme["text"]["disclaimer"], s["footer"], col["dim"],
             clip=(mx, fy - 4, right - 190, fy + s["footer"] * 2), label="disclaimer")
@@ -437,6 +503,8 @@ def render_week(companies: list[Company], week_start: date, week_end: date,
 
     body_bottom = foot_div - 22
     notes: list[str] = []
+    if sample:
+        notes.append(theme["text"]["sample_note"])
     if others > 0:
         notes.append(f"ほか{others}社（時価総額の大きい順に{lay['max_companies']}社を掲載）")
     if stale_note:
@@ -463,8 +531,7 @@ def render_week(companies: list[Company], week_start: date, week_end: date,
                 label=f"day:{day}")
         hw = cv.measure(head, s["day_heading"], bold=True)
         rule_y = y + plan.heading_h * 0.55
-        cv.line((mx + hw + 18, rule_y, right, rule_y),
-                fill=blend(col["gold"], col["bg"], 0.28), width=1)
+        cv.line((mx + hw + 18, rule_y, right, rule_y), fill=rule, width=1)
         y += plan.heading_h + plan.heading_gap
 
         for ci, company in enumerate(rows):
@@ -487,11 +554,11 @@ def _draw_card(cv: Canvas, c: Company, x0: float, y0: float, x1: float, y1: floa
     cv.rrect((x0, y0, x1, y1), lay["card_radius"], fill=_hex(col["card"]),
              outline=_hex(col["line"]), width=1)
 
-    # ロゴ（白い角丸パッド。取れなければ配色ブロック＋ティッカー4文字）
+    # ロゴ（カードの上に直接。取れなければ配色ブロック＋ティッカー4文字）
     box = int(round(_clamp(h * lay["logo_box_ratio"], 38, 92)))
     lx, ly = x0 + lay["card_pad_x"], y0 + (h - box) / 2
     tile = _logo_tile(c.logo_path, box * cv.scale,
-                      round(lay["logo_radius"] * cv.scale), col["logo_pad"]) \
+                      round(lay["logo_radius"] * cv.scale), theme) \
         if c.logo_path else None
     if tile is not None:
         cv.paste(tile.convert("RGB"), (lx, ly), tile.split()[-1])
@@ -508,7 +575,7 @@ def _draw_card(cv: Canvas, c: Company, x0: float, y0: float, x1: float, y1: floa
 
     # 右側（発表タイミングのバッジ / 予想値）
     tlabel = timing_label(c.hour, theme)
-    tcolor = timing_color(c.hour, theme)
+    tstyle = timing_style(c.hour, theme)
     tw = cv.measure(tlabel, plan.timing_size, bold=True)
     est = f"EPS予想 {fmt_eps(c.eps_estimate)}　売上予想 {fmt_revenue(c.revenue_estimate)}"
     ew = cv.measure(est, plan.estimate_size)
@@ -539,8 +606,14 @@ def _draw_card(cv: Canvas, c: Company, x0: float, y0: float, x1: float, y1: floa
     badge_cy = top + th / 2
     badge = (right_edge - tw - 30, badge_cy - badge_h / 2,
              right_edge, badge_cy + badge_h / 2)
-    cv.rrect(badge, badge_h / 2, fill=blend(tcolor, col["card"], 0.16),
-             outline=blend(tcolor, col["card"], 0.5), width=1)
+    accent = tstyle["color"]
+    if tstyle.get("mode") == "solid":
+        fill, outline, tcolor = _hex(accent), None, tstyle.get("text", "#0B1220")
+    else:
+        fill = blend(accent, col["card"], 0.16)
+        outline = blend(accent, col["card"], 0.55)
+        tcolor = accent
+    cv.rrect(badge, badge_h / 2, fill=fill, outline=outline, width=1)
     cv.text(((badge[0] + badge[2]) / 2, badge_cy), tlabel, plan.timing_size, tcolor,
             bold=True, anchor="mm",
             clip=(badge[0] + 2, y0 + 2, badge[2], y1 - 2),

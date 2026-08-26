@@ -61,6 +61,29 @@ def test_timing_label_unknown_is_not_guessed():
     assert render.timing_label("xxx", THEME) == "時間未定"
 
 
+def test_timing_style_modes():
+    """バッジの様式は theme.json から引く（引け後だけ塗り、他は枠線）。"""
+    assert render.timing_style("amc", THEME)["mode"] == "solid"
+    assert render.timing_style("bmo", THEME)["mode"] == "outline"
+    assert render.timing_style("dmh", THEME)["mode"] == "outline"
+    assert render.timing_style(None, THEME) == THEME["timing_styles"][""]
+    for style in THEME["timing_styles"].values():
+        if style["mode"] == "solid":
+            assert "text" in style        # 塗りには必ず文字色を持たせる
+
+
+def test_dark_logo_gets_a_white_pad():
+    """暗い透過ロゴは背景に埋もれるので白パッドを敷く（それ以外は敷かない）。"""
+    from PIL import Image
+    dark = Image.new("RGBA", (40, 40), (10, 10, 12, 255))
+    bright = Image.new("RGBA", (40, 40), (240, 120, 60, 255))
+    threshold = THEME["logo"]["dark_luminance_threshold"]
+    assert render.mean_luminance(dark) < threshold
+    assert render.mean_luminance(bright) > threshold
+    # 完全な透過は「明るい」扱い（判定対象の画素が無いため落ちないこと）
+    assert render.mean_luminance(Image.new("RGBA", (8, 8), (0, 0, 0, 0))) == 255.0
+
+
 def test_day_heading_and_range():
     assert render.fmt_day_heading(date(2026, 8, 31), THEME) == "8/31 (月)"
     assert render.fmt_range(date(2026, 8, 31), date(2026, 9, 4)) == "2026/08/31 - 09/04"
@@ -149,6 +172,19 @@ def test_rendered_text_shows_dash_for_missing_eps():
     result = render.render_week(comps, date(2026, 8, 31), date(2026, 9, 4), THEME)
     est = [b.text for b in result.report.boxes if b.label.startswith("est:")]
     assert est and "EPS予想 —" in est[0]
+
+
+def test_sample_render_is_marked_as_sample():
+    """ダミーデータの画像が本物の決算日として読まれないよう SAMPLE を出す。"""
+    comps = _sample_companies(3)
+    plain = render.render_week(comps, date(2026, 8, 31), date(2026, 9, 4), THEME)
+    marked = render.render_week(comps, date(2026, 8, 31), date(2026, 9, 4), THEME,
+                                sample=True)
+    assert THEME["text"]["sample_badge"] not in [b.text for b in plain.report.boxes]
+    texts = [b.text for b in marked.report.boxes]
+    assert THEME["text"]["sample_badge"] in texts
+    assert any(THEME["text"]["sample_note"] in t for t in texts)
+    qa.verify(marked.image, marked.report, (1180, 1450))
 
 
 def test_disclaimer_is_always_drawn():
