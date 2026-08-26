@@ -72,8 +72,7 @@ jobs:
         env:
           FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
           # シェルに直接展開せず環境変数で渡す（入力に何が入っても壊れないように）
-          # TODO(一時): 初回確認のため今週を指定。確認後に空へ戻す。
-          WEEK_START: ${{ inputs.week_start || '2026-08-24' }}
+          WEEK_START: ${{ inputs.week_start }}
         run: |
           set +e
           ARGS=""
