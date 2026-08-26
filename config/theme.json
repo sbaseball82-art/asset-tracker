@@ -1,0 +1,97 @@
+{
+  "_comment": "週次・米国決算カレンダー画像の見た目。ここを編集すればコードを触らずに調整できる。色は既存の ASSET LOG シリーズと共通。",
+
+  "canvas": {
+    "width": 1180,
+    "height": 1450,
+    "margin_x": 48,
+    "margin_top": 44,
+    "margin_bottom": 40
+  },
+
+  "colors": {
+    "bg": "#0B1220",
+    "card": "#111A2E",
+    "card_alt": "#16203A",
+    "line": "#1E2A42",
+    "text": "#EAF0FA",
+    "dim": "#A8B4C8",
+    "up": "#6EE7A8",
+    "down": "#F08A8A",
+    "gold": "#E0B45C",
+    "blue": "#6BA8F5",
+    "teal": "#7FD4C1",
+    "logo_pad": "#FFFFFF"
+  },
+
+  "_comment_palette": "ロゴが取れなかったときのフォールバック用ブロック色。ティッカーのハッシュで決定的に選ぶ。",
+  "fallback_palette": ["#6BA8F5", "#7FD4C1", "#E0B45C"],
+
+  "font": {
+    "family": "Noto Sans CJK JP",
+    "index": 0
+  },
+
+  "text": {
+    "brand": "EARNINGS WEEK",
+    "title": "今週の米国決算",
+    "footer_brand": "ASSET LOG",
+    "disclaimer": "※データ：Finnhub。予想値は市場コンセンサス。投資助言ではありません"
+  },
+
+  "sizes": {
+    "brand": 34,
+    "title": 46,
+    "range": 24,
+    "handle": 22,
+    "badge_week": 22,
+    "day_heading": 30,
+    "footer": 19,
+    "footer_brand": 24,
+    "note": 19,
+    "timing_min": 18,
+    "timing_max": 26,
+    "timing_ratio": 0.30,
+    "estimate_min": 17,
+    "estimate_max": 24,
+    "estimate_ratio": 0.26,
+
+    "_comment_card": "カード高さは掲載社数から自動で決まる（この範囲で伸縮）。ティッカー/企業名の級数はカード高さに比例させる。",
+    "card_height_min": 64,
+    "card_height_max": 190,
+    "ticker_min": 40,
+    "ticker_max": 56,
+    "ticker_ratio": 0.62,
+    "name_min": 17,
+    "name_max": 24,
+    "name_ratio": 0.26
+  },
+
+  "layout": {
+    "max_companies": 12,
+    "card_radius": 14,
+    "card_pad_x": 24,
+    "logo_box_ratio": 0.62,
+    "logo_radius": 10,
+    "logo_gap": 22,
+    "day_heading_gap": 10,
+    "card_gap": 9,
+    "card_gap_max": 30,
+    "section_gap": 20,
+    "section_gap_max": 64
+  },
+
+  "timing_labels": {
+    "bmo": "寄付前",
+    "amc": "引け後",
+    "dmh": "場中",
+    "": "時間未定"
+  },
+
+  "weekday_ja": ["月", "火", "水", "木", "金", "土", "日"],
+
+  "qa": {
+    "thumbnail_width": 400,
+    "jpeg_quality": 93
+  }
+}

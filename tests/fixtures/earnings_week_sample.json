@@ -1,0 +1,18 @@
+{
+  "_comment": "レイアウト確認用のサンプル。--sample はこのファイルだけを読み、本番の出力先・キャッシュには一切触れない。EPS予想が null の行を意図的に混ぜてある（「—」と描かれることの確認用）。",
+  "week_start": "2026-08-31",
+  "companies": [
+    {"symbol": "AAPL",  "name": "Apple Inc.",             "date": "2026-08-31", "hour": "amc", "epsEstimate": 2.41,  "revenueEstimate": 98500000000,  "marketCapitalization": 3450000},
+    {"symbol": "MSFT",  "name": "Microsoft Corporation",  "date": "2026-08-31", "hour": "bmo", "epsEstimate": 3.62,  "revenueEstimate": 74200000000,  "marketCapitalization": 3310000},
+    {"symbol": "NVDA",  "name": "NVIDIA Corporation",     "date": "2026-09-01", "hour": "amc", "epsEstimate": 1.18,  "revenueEstimate": 52800000000,  "marketCapitalization": 3120000},
+    {"symbol": "GOOGL", "name": "Alphabet Inc.",          "date": "2026-09-01", "hour": "amc", "epsEstimate": 2.07,  "revenueEstimate": 96100000000,  "marketCapitalization": 2280000},
+    {"symbol": "AMZN",  "name": "Amazon.com, Inc.",       "date": "2026-09-01", "hour": "amc", "epsEstimate": 1.53,  "revenueEstimate": 173000000000, "marketCapitalization": 2140000},
+    {"symbol": "AVGO",  "name": "Broadcom Inc.",          "date": "2026-09-02", "hour": "amc", "epsEstimate": 1.72,  "revenueEstimate": 15900000000,  "marketCapitalization": 1180000},
+    {"symbol": "TSM",   "name": "Taiwan Semiconductor Manufacturing Company Limited", "date": "2026-09-02", "hour": "bmo", "epsEstimate": null, "revenueEstimate": 28400000000, "marketCapitalization": 980000},
+    {"symbol": "COST",  "name": "Costco Wholesale Corporation", "date": "2026-09-03", "hour": "amc", "epsEstimate": 5.94, "revenueEstimate": 79800000000, "marketCapitalization": 420000},
+    {"symbol": "ORCL",  "name": "Oracle Corporation",     "date": "2026-09-03", "hour": "amc", "epsEstimate": 1.44,  "revenueEstimate": 15200000000,  "marketCapitalization": 398000},
+    {"symbol": "ADBE",  "name": "Adobe Inc.",             "date": "2026-09-03", "hour": "dmh", "epsEstimate": 5.12,  "revenueEstimate": 5900000000,   "marketCapitalization": 214000},
+    {"symbol": "LULU",  "name": "Lululemon Athletica Inc.", "date": "2026-09-04", "hour": "amc", "epsEstimate": 3.08, "revenueEstimate": 2560000000,  "marketCapitalization": 41000},
+    {"symbol": "DOCU",  "name": "DocuSign, Inc.",         "date": "2026-09-04", "hour": "",    "epsEstimate": 0.87,  "revenueEstimate": 785000000,    "marketCapitalization": 18000}
+  ]
+}

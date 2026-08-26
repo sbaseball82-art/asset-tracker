@@ -1,0 +1,5 @@
+# 週次・米国決算カレンダー画像（src/earnings_week）専用の依存。
+# GitHub Actions で毎週同じ結果になるようバージョンを固定する。
+# 画像は Pillow で描く（matplotlib は使わない。フォント制御が効かないため）。
+pillow==11.3.0
+requests==2.32.4
