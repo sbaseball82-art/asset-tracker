@@ -586,19 +586,38 @@ def _draw_card(cv: Canvas, c: Company, x0: float, y0: float, x1: float, y1: floa
     text_left = lx + box + lay["logo_gap"]
     text_right = right_edge - right_w - 30
     avail_w = text_right - text_left
-    symbol = cv.fit(c.symbol, plan.ticker_size, avail_w, True)
-    name = cv.fit(c.name or c.symbol, plan.name_size, avail_w)
-    tb = cv.ink(symbol, plan.ticker_size, True)
-    nb = cv.ink(name, plan.name_size)
-    th, nh = tb[3] - tb[1], nb[3] - nb[1]
+    # 級数は掲載社数から決まるが、字形によってはインクが高くなる
+    # （QCOM の Q のように下に伸びる字を含むと 1割ほど背が高い）。
+    # カードに収まるまで「行間 → 級数」の順に詰める。収まらないまま描いて
+    # qa.py に落とされるより、少し小さくしてでも収める。
+    pad_y = 2.0
+    avail_h = h - 2 * pad_y
+    ticker_size, name_size = plan.ticker_size, plan.name_size
     gap = max(3.0, h * 0.055)
-    block = th + gap + nh
-    top = y0 + (h - block) / 2
-    clip_l = (text_left - 1, y0 + 2, text_right, y1 - 2)
+    while True:
+        symbol = cv.fit(c.symbol, ticker_size, avail_w, True)
+        name = cv.fit(c.name or c.symbol, name_size, avail_w)
+        tb = cv.ink(symbol, ticker_size, True)
+        nb = cv.ink(name, name_size)
+        th, nh = tb[3] - tb[1], nb[3] - nb[1]
+        block = th + gap + nh
+        if block <= avail_h:
+            break
+        if gap > 2.0:
+            gap = max(2.0, gap - 1.0)
+        elif ticker_size > 22:
+            ticker_size -= 1
+            if name_size > 13 and ticker_size % 2 == 0:
+                name_size -= 1
+        else:
+            break   # ここまで来ることは無いが、無限ループにはしない
 
-    cv.text((text_left, top - tb[1]), symbol, plan.ticker_size, col["text"],
+    top = y0 + (h - block) / 2
+    clip_l = (text_left - 1, y0 + pad_y, text_right, y1 - pad_y)
+
+    cv.text((text_left, top - tb[1]), symbol, ticker_size, col["text"],
             bold=True, clip=clip_l, label=f"ticker:{c.symbol}")
-    cv.text((text_left, top + th + gap - nb[1]), name, plan.name_size, col["dim"],
+    cv.text((text_left, top + th + gap - nb[1]), name, name_size, col["dim"],
             clip=clip_l, label=f"name:{c.symbol}")
 
     # バッジはティッカーの行、予想値は企業名の行に揃える
@@ -616,11 +635,11 @@ def _draw_card(cv: Canvas, c: Company, x0: float, y0: float, x1: float, y1: floa
     cv.rrect(badge, badge_h / 2, fill=fill, outline=outline, width=1)
     cv.text(((badge[0] + badge[2]) / 2, badge_cy), tlabel, plan.timing_size, tcolor,
             bold=True, anchor="mm",
-            clip=(badge[0] + 2, y0 + 2, badge[2], y1 - 2),
+            clip=(badge[0] + 2, y0 + pad_y, badge[2], y1 - pad_y),
             label=f"timing:{c.symbol}")
     cv.text((right_edge, top + th + gap + nh / 2), est, plan.estimate_size,
             col["dim"],
-            anchor="rm", clip=(text_right, y0 + 2, right_edge, y1 - 2),
+            anchor="rm", clip=(text_right, y0 + pad_y, right_edge, y1 - pad_y),
             label=f"est:{c.symbol}")
 
 

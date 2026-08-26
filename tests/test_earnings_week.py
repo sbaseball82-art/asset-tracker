@@ -165,6 +165,21 @@ def test_render_passes_qa_at_every_density(n):
     assert result.report.companies == n
 
 
+@pytest.mark.parametrize("symbol", ["QCOM", "JPM", "PYPL", "GOOGL"])
+def test_tickers_with_descenders_stay_inside_the_card(symbol):
+    """Q や J のように下に伸びる字を含むティッカーでも枠からはみ出さない。
+
+    級数は掲載社数から決まるため、一番詰まった12社の週で検査する。
+    （実際にこれで QCOM がはみ出す不具合を見つけた）
+    """
+    comps = _sample_companies(12)
+    comps[0] = Company(symbol=symbol, name="Qualcomm Incorporated Holdings plc",
+                       date=comps[0].date, hour="amc", eps_estimate=None,
+                       revenue_estimate=57_200_000_000, market_cap=999_999)
+    result = render.render_week(comps, date(2026, 8, 31), date(2026, 9, 4), THEME)
+    qa.verify(result.image, result.report, (1180, 1450))
+
+
 def test_rendered_text_shows_dash_for_missing_eps():
     """EPS予想が null の TSM の行に「—」が出ており、数字を作っていない。"""
     comps = [c for c in _sample_companies(12) if c.symbol == "TSM"]
