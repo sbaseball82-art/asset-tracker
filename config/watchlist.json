@@ -1,0 +1,18 @@
+{
+  "_comment": "決算カレンダーに載せる候補ティッカー。ここを編集すれば掲載対象が変わる（コードは触らない）。Finnhub は週に数百社を返すため、この一覧で絞り込み、時価総額の大きい順に上位12社だけ画像に載せる。載せたい会社が漏れていたら tickers に足す。",
+  "_note": "米国上場のティッカーのみ。ADR は Finnhub の表記に合わせる（例: TSM）。",
+  "updated": "2026-08-26",
+  "tickers": [
+    "AAPL", "MSFT", "NVDA", "GOOGL", "AMZN", "META", "TSLA", "AVGO", "LLY",
+
+    "AMD", "INTC", "MU", "QCOM", "TXN", "ADI", "AMAT", "LRCX", "KLAC", "ARM",
+    "TSM", "ASML", "SMCI", "MRVL", "ORCL", "CRM", "ADBE", "NOW", "INTU", "IBM", "CSCO", "ACN", "PANW", "CRWD",
+    "SNOW", "UBER", "NFLX", "DIS", "PLTR",
+
+    "JPM", "BAC", "WFC", "GS", "MS", "V", "MA", "AXP", "BLK", "UNH", "JNJ", "ABBV", "MRK", "PFE", "TMO", "ABT", "AMGN",
+
+    "XOM", "CVX", "COP", "CAT", "DE", "HON", "GE", "BA", "LMT", "RTX", "UNP",
+
+    "PG", "KO", "PEP", "COST", "WMT", "HD", "MCD", "NKE", "SBUX", "LOW", "VZ", "CMCSA"
+  ]
+}
