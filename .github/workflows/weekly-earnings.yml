@@ -1,0 +1,115 @@
+name: weekly-earnings
+
+# 週次・米国決算カレンダー画像。
+#
+# 日曜 22:00 JST に**翌週ぶん**を作る。生成物は画像だけで、投稿文は作らない。
+# 対象が0社の週は DATA WAIT として画像を作らずに終わる（ダミーの数字で埋めない）。
+# 過去週・未来週を作り直したいときは workflow_dispatch に week_start を渡す。
+
+on:
+  schedule:
+    - cron: "0 13 * * 0"        # 日曜 13:00 UTC = 日曜 22:00 JST
+  workflow_dispatch:
+    inputs:
+      week_start:
+        description: "対象週の任意の日 (YYYY-MM-DD)。空なら翌週"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-earnings
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      # 日本語フォント。無いと豆腐（□）になるので必ず入れる
+      - name: Install Noto CJK fonts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-earnings-week.txt
+
+      # ロゴは30日キャッシュ。毎回落とし直さないための永続化
+      - name: Restore logo cache
+        uses: actions/cache@v4
+        with:
+          path: cache
+          key: earnings-logos-${{ github.run_id }}
+          restore-keys: |
+            earnings-logos-
+
+      - name: Generate image
+        id: gen
+        env:
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+          # シェルに直接展開せず環境変数で渡す（入力に何が入っても壊れないように）
+          WEEK_START: ${{ inputs.week_start }}
+        run: |
+          set +e
+          ARGS=""
+          if [ -n "$WEEK_START" ]; then
+            ARGS="--week-start $WEEK_START"
+          fi
+          python -m src.earnings_week.main $ARGS
+          CODE=$?
+          echo "code=$CODE" >> "$GITHUB_OUTPUT"
+          # 2 = DATA WAIT（対象0社。異常ではないのでジョブは緑のままにする）
+          if [ "$CODE" = "2" ]; then exit 0; fi
+          exit $CODE
+
+      - name: Upload artifact
+        if: steps.gen.outputs.code == '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: earnings-week
+          path: |
+            output/earnings_week/
+            qa/
+          retention-days: 30
+
+      - name: Commit output
+        if: steps.gen.outputs.code == '0'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          BRANCH="${GITHUB_REF_NAME}"
+
+          # 生成物を退避 → 最新originに重ねてpush（画像はrebase不能のため
+          # fetch + checkout -B 方式。lookthrough.yml と同一の実績パターン）。
+          mkdir -p "$RUNNER_TEMP/gen"
+          cp -r output qa "$RUNNER_TEMP/gen/" 2>/dev/null || true
+
+          for i in 1 2 3 4 5; do
+            git fetch origin "$BRANCH"
+            git reset --hard
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+            mkdir -p output/earnings_week qa
+            cp -r "$RUNNER_TEMP/gen/output/." output/ 2>/dev/null || true
+            cp -r "$RUNNER_TEMP/gen/qa/."     qa/     2>/dev/null || true
+            git add output/earnings_week qa
+            if git diff --cached --quiet; then
+              echo "変更なし(コミットをスキップ)"; exit 0
+            fi
+            git commit -m "earnings week: $(date -u +%Y-%m-%d)"
+            if git push origin "$BRANCH"; then exit 0; fi
+            echo "::warning::push拒否 (試行 $i)。5秒後に再試行"; sleep 5
+          done
+          echo "::error::5回試行してもpushできませんでした"; exit 1
