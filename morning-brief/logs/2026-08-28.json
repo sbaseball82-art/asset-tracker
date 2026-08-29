@@ -1,0 +1,79 @@
+{
+ "date": "2026-08-28",
+ "generated_at": "2026-08-29T02:57:02",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "NVDA",
+   "name": "エヌビディア",
+   "theme": "半導体",
+   "headline": "エヌビディア大幅安 -5%",
+   "conclusion": "エヌビディアのz=-1.7σは半導体見通しの修正を示唆",
+   "score": 0.5829,
+   "score_parts": {
+    "z": 0.1526,
+    "volume": 0.1292,
+    "media": 0.2,
+    "sns": 0.0011,
+    "holdings": 0.1,
+    "calendar": 0.0,
+    "global": 0.0,
+    "learn": 0.0
+   },
+   "n_media": 8,
+   "sns_heat": 0.011,
+   "slot": 1,
+   "template_id": "T6",
+   "topic_tag": "semiconductor",
+   "numbers": [
+    {
+     "label": "エヌビディア 日次",
+     "value": "-4.6%",
+     "sub": "z=-1.7σ",
+     "source": "yfinance終値",
+     "asof": "2026-08-28"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.6倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-08-28"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+22.9%",
+     "sub": "エヌビディア",
+     "source": "yfinance終値",
+     "asof": "2026-08-28"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "-0.2%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-08-28"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-3.5%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-08-28"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.73%",
+     "sub": "2026-08-28",
+     "source": "米財務省",
+     "asof": "2026-08-28"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-08-28_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-08-28_1.txt"
+   ]
+  }
+ ],
+ "skipped": []
+}
