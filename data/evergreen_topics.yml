@@ -187,7 +187,7 @@ topics:
   theme: 投資信託 vs ETF：課税繰延の差を保有年数別に試算
   format: table
   builder: static
-  last_used: null
+  last_used: '2026-08-31'
   table:
     title: 分配金あり(ETF) vs 分配金なし(投信) 課税の差
     subtitle: 概算試算 / 年利5%・配当相当2%・税率20.315%・100万円スタート
