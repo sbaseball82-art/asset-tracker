@@ -1,0 +1,57 @@
+{
+ "date": "2026-09-02",
+ "generated_at": "2026-09-02T22:52:16",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "^GSPC",
+   "name": "S&P500",
+   "theme": "指数",
+   "headline": "静かな1日 S&P500 +0.46%",
+   "conclusion": "深掘りの基準に届いた銘柄はなし",
+   "score": null,
+   "score_parts": null,
+   "n_media": 0,
+   "sns_heat": 0.0,
+   "slot": 1,
+   "template_id": "T2",
+   "topic_tag": "quiet",
+   "numbers": [
+    {
+     "label": "S&P500",
+     "value": "+0.46%",
+     "sub": "7,667",
+     "source": "yfinance終値",
+     "asof": "2026-09-02"
+    },
+    {
+     "label": "ナスダック",
+     "value": "+0.45%",
+     "sub": "26,218",
+     "source": "yfinance終値",
+     "asof": "2026-09-02"
+    },
+    {
+     "label": "ドル円",
+     "value": "-0.62%",
+     "sub": "158.76円",
+     "source": "yfinance終値",
+     "asof": "2026-09-02"
+    },
+    {
+     "label": "米10年金利",
+     "value": "+0bp",
+     "sub": "4.80%",
+     "source": "yfinance終値",
+     "asof": "2026-09-02"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-02_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-02_1.txt"
+   ]
+  }
+ ],
+ "skipped": [],
+ "note": "quiet_day:no_anomaly"
+}
