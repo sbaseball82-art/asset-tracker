@@ -69,3 +69,9 @@ events:
   announce_jst: 2026-10-01 05:05
   session: 引け後
   note: Finnhub自動追記・時刻は概算
+- date: '2026-10-19'
+  ticker: NFLX
+  type: earnings
+  announce_jst: 2026-10-20 05:05
+  session: 引け後
+  note: Finnhub自動追記・時刻は概算
