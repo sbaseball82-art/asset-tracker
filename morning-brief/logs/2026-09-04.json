@@ -1,0 +1,150 @@
+{
+ "date": "2026-09-04",
+ "generated_at": "2026-09-04T22:34:56",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "TSLA",
+   "name": "テスラ",
+   "theme": "ハイテク",
+   "headline": "テスラ大幅安 -6%",
+   "conclusion": "テスラのz=-1.7σはハイテク見通しの修正を示唆",
+   "score": 0.7518,
+   "score_parts": {
+    "z": 0.1451,
+    "volume": 0.1467,
+    "media": 0.2,
+    "sns": 0.1,
+    "holdings": 0.06,
+    "calendar": 0.1,
+    "global": 0.0,
+    "learn": 0.0
+   },
+   "n_media": 6,
+   "sns_heat": 1.0,
+   "slot": 1,
+   "template_id": "T6",
+   "topic_tag": "ai",
+   "numbers": [
+    {
+     "label": "テスラ 日次",
+     "value": "-5.9%",
+     "sub": "z=-1.7σ",
+     "source": "yfinance終値",
+     "asof": "2026-09-04"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.8倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-09-04"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "-10.8%",
+     "sub": "テスラ",
+     "source": "yfinance終値",
+     "asof": "2026-09-04"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "-0.4%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-04"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "+3.4%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-04"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.78%",
+     "sub": "2026-09-04",
+     "source": "米財務省",
+     "asof": "2026-09-04"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-04_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-04_1.txt"
+   ]
+  },
+  {
+   "ticker": "JPY=X",
+   "name": "ドル円",
+   "theme": "為替",
+   "headline": "ドル円下落 -2%",
+   "conclusion": "z=-3.9σは通常の値動きの外。前提が変わった可能性",
+   "score": 0.6812,
+   "score_parts": {
+    "z": 0.3412,
+    "volume": 0.0,
+    "media": 0.1,
+    "sns": 0.0,
+    "holdings": 0.06,
+    "calendar": 0.1,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 3,
+   "sns_heat": 0.0,
+   "slot": 2,
+   "template_id": "T2",
+   "topic_tag": "fx",
+   "numbers": [
+    {
+     "label": "ドル円 日次",
+     "value": "-1.7%",
+     "sub": "z=-3.9σ",
+     "source": "yfinance終値",
+     "asof": "2026-09-04"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "-1.8%",
+     "sub": "ドル円",
+     "source": "yfinance終値",
+     "asof": "2026-09-04"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "-0.4%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-04"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "+3.4%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-04"
+    },
+    {
+     "label": "米10年金利 日次",
+     "value": "+0.5%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-04"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.78%",
+     "sub": "2026-09-04",
+     "source": "米財務省",
+     "asof": "2026-09-04"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-04_2.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-04_2.txt"
+   ]
+  }
+ ],
+ "skipped": []
+}
