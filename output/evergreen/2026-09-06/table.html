@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Roboto+Mono:wght@500;700&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:#0d1117; --panel:#161b22; --line:#2a3242;
+  --txt:#e6edf3; --dim:#8b98a9; --accent:#58a6ff; --gold:#e3b341;
+  --up:#3fb950; --down:#f85149;
+}
+body {
+  width:1600px; height:900px; background:
+    radial-gradient(1100px 600px at 85% -8%, rgba(88,166,255,.10), transparent 60%),
+    radial-gradient(900px 600px at -5% 110%, rgba(227,179,65,.08), transparent 55%),
+    var(--bg);
+  color:var(--txt); font-family:'Zen Kaku Gothic New',sans-serif;
+  padding:52px 64px 40px; display:flex; flex-direction:column; overflow:hidden;
+}
+.mono { font-family:'Roboto Mono',monospace; }
+header { display:flex; justify-content:space-between; align-items:flex-end;
+  border-bottom:2px solid var(--line); padding-bottom:20px; }
+.title { font-size:42px; font-weight:900; letter-spacing:.02em; }
+.sub { font-size:22px; color:var(--dim); margin-top:8px; }
+.acct { font-size:22px; color:var(--accent); font-weight:700; }
+.content { flex:1; margin-top:28px; overflow:hidden; }
+table { width:100%; border-collapse:collapse; }
+th { font-size:24px; color:var(--dim); font-weight:700; text-align:left;
+  padding:12px 18px; border-bottom:2px solid var(--line); }
+td { font-size:26px; padding:13px 18px; border-bottom:1px solid var(--line); }
+th.num, td.num { text-align:right; font-family:'Roboto Mono',monospace; }
+tr.hl td { color:var(--gold); font-weight:700; }
+.check { font-size:28px; padding:14px 8px; border-bottom:1px solid var(--line);
+  display:flex; gap:18px; align-items:baseline; }
+.check .box { color:var(--accent); font-weight:900; }
+.check .date { color:var(--gold); font-family:'Roboto Mono',monospace;
+  min-width:130px; }
+.check .note { color:var(--dim); font-size:22px; margin-left:auto; }
+footer { margin-top:20px; display:flex; justify-content:space-between;
+  font-size:17px; color:var(--dim); }
+.stale { color:var(--down); opacity:.8; }
+</style></head><body>
+  <header>
+    <div>
+      <div class="title">分配金の再投資有無で20年後にどれだけ差がつくか</div>
+      <div class="sub">概算シミュレーション / 元本100万円・成長5.0%・分配3.0%・税引前</div>
+    </div>
+    <div class="acct">@84m5dm9xdm</div>
+  </header>
+  <div class="content"><div style="margin-bottom:10px;"><span style="color:#58a6ff;font-size:24px;margin-right:36px;">━ 再投資あり</span><span style="color:#e3b341;font-size:24px;margin-right:36px;">━ 再投資なし(元本のみ)</span></div><svg width="1460" height="620"><line x1="110" y1="30" x2="110" y2="560" stroke="#2a3242" stroke-width="2"/><line x1="110" y1="560" x2="1440" y2="560" stroke="#2a3242" stroke-width="2"/><polyline points="110.0,560.0 176.0,548.4 242.0,535.9 308.0,522.4 374.0,507.8 440.0,492.1 506.0,475.0 572.0,456.7 638.0,436.8 704.0,415.4 770.0,392.2 836.0,367.2 902.0,340.2 968.0,311.0 1034.0,279.6 1100.0,245.5 1166.0,208.8 1232.0,169.1 1298.0,126.3 1364.0,80.0 1430.0,30.0" fill="none" stroke="#58a6ff" stroke-width="4"/><polyline points="110.0,560.0 176.0,552.8 242.0,545.2 308.0,537.2 374.0,528.8 440.0,520.0 506.0,510.8 572.0,501.1 638.0,490.9 704.0,480.2 770.0,469.0 836.0,457.2 902.0,444.8 968.0,431.8 1034.0,418.1 1100.0,403.8 1166.0,388.8 1232.0,373.0 1298.0,356.4 1364.0,338.9 1430.0,320.7" fill="none" stroke="#e3b341" stroke-width="4"/><text x="96" y="38" fill="#8b98a9" font-size="20" text-anchor="end">466</text><text x="96" y="560" fill="#8b98a9" font-size="20" text-anchor="end">100</text><text x="110" y="602" fill="#8b98a9" font-size="20" text-anchor="middle">0年</text><text x="242" y="602" fill="#8b98a9" font-size="20" text-anchor="middle">2年</text><text x="374" y="602" fill="#8b98a9" font-size="20" text-anchor="middle">4年</text><text x="506" y="602" fill="#8b98a9" font-size="20" text-anchor="middle">6年</text><text x="638" y="602" fill="#8b98a9" font-size="20" text-anchor="middle">8年</text><text x="770" y="602" fill="#8b98a9" font-size="20" text-anchor="middle">10年</text><text x="902" y="602" fill="#8b98a9" font-size="20" text-anchor="middle">12年</text><text x="1034" y="602" fill="#8b98a9" font-size="20" text-anchor="middle">14年</text><text x="1166" y="602" fill="#8b98a9" font-size="20" text-anchor="middle">16年</text><text x="1298" y="602" fill="#8b98a9" font-size="20" text-anchor="middle">18年</text><text x="1430" y="602" fill="#8b98a9" font-size="20" text-anchor="middle">20年</text></svg></div>
+  <footer>
+    <span>※報道／公表ベースの概算。投資助言ではありません</span>
+    <span></span>
+  </footer>
+</body></html>

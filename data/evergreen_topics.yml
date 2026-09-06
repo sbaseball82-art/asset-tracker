@@ -243,7 +243,7 @@ topics:
   theme: 分配金の再投資有無で20年後にどれだけ差がつくか
   format: line
   builder: line_sim
-  last_used: null
+  last_used: '2026-09-06'
   params:
     mode: reinvest_diff
     principal: 1000000
