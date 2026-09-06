@@ -277,7 +277,7 @@ topics:
   theme: 為替163円が円建てリターンに与える寄与の分解
   format: table
   builder: static
-  last_used: null
+  last_used: '2026-09-07'
   table:
     title: 円建てリターンの分解（ドル資産・概算）
     subtitle: 報道・公表ベースの概算 / USD/JPY 163円時点
