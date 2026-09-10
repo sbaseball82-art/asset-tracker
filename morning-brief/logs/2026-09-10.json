@@ -1,0 +1,150 @@
+{
+ "date": "2026-09-10",
+ "generated_at": "2026-09-10T22:49:19",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "^TNX",
+   "name": "米10年金利",
+   "theme": "金利",
+   "headline": "米10年金利急伸 +11bp",
+   "conclusion": "z=+2.5σは通常の値動きの外。前提が変わった可能性",
+   "score": 0.5364,
+   "score_parts": {
+    "z": 0.2197,
+    "volume": 0.0,
+    "media": 0.1667,
+    "sns": 0.0,
+    "holdings": 0.07,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 5,
+   "sns_heat": 0.0,
+   "slot": 1,
+   "template_id": "T6",
+   "topic_tag": "rates",
+   "numbers": [
+    {
+     "label": "米10年金利 日次",
+     "value": "+11bp",
+     "sub": "4.94% / z=+2.5σ",
+     "source": "yfinance終値",
+     "asof": "2026-09-10"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+17.5%",
+     "sub": "米10年金利",
+     "source": "yfinance終値",
+     "asof": "2026-09-10"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "-0.6%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-10"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-2.7%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-10"
+    },
+    {
+     "label": "ドル円 日次",
+     "value": "+0.6%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-10"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.95%",
+     "sub": "2026-09-10",
+     "source": "米財務省",
+     "asof": "2026-09-10"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-10_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-10_1.txt"
+   ]
+  },
+  {
+   "ticker": "AAPL",
+   "name": "アップル",
+   "theme": "ハイテク",
+   "headline": "アップル上昇 +4%",
+   "conclusion": "アップルのz=+1.7σはハイテク見通しの修正を示唆",
+   "score": 0.4513,
+   "score_parts": {
+    "z": 0.1513,
+    "volume": 0.1433,
+    "media": 0.0667,
+    "sns": 0.0,
+    "holdings": 0.09,
+    "calendar": 0.0,
+    "global": 0.0,
+    "learn": 0.0
+   },
+   "n_media": 2,
+   "sns_heat": 0.0,
+   "slot": 2,
+   "template_id": "T2",
+   "topic_tag": "ai",
+   "numbers": [
+    {
+     "label": "アップル 日次",
+     "value": "+3.6%",
+     "sub": "z=+1.7σ",
+     "source": "yfinance終値",
+     "asof": "2026-09-10"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.7倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-09-10"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+25.4%",
+     "sub": "アップル",
+     "source": "yfinance終値",
+     "asof": "2026-09-10"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "-0.6%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-10"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-2.7%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-10"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.95%",
+     "sub": "2026-09-10",
+     "source": "米財務省",
+     "asof": "2026-09-10"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-10_2.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-10_2.txt"
+   ]
+  }
+ ],
+ "skipped": []
+}
