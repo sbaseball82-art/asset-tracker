@@ -333,7 +333,7 @@ topics:
   theme: 主要ETFの実質コスト（信託報酬＋隠れコスト）比較
   format: table
   builder: static
-  last_used: null
+  last_used: '2026-09-14'
   table:
     title: 主要ETF・投信の実質コスト比較（概算）
     subtitle: 公表の運用報告書ベースの概算 / 年率
