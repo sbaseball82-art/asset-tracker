@@ -81,3 +81,39 @@ events:
   announce_jst: 2026-10-21 05:05
   session: 引け後
   note: Finnhub自動追記・時刻は概算
+- date: '2026-10-27'
+  ticker: GOOGL
+  type: earnings
+  announce_jst: 2026-10-28 05:05
+  session: 引け後
+  note: Finnhub自動追記・時刻は概算
+- date: '2026-10-27'
+  ticker: META
+  type: earnings
+  announce_jst: 2026-10-28 05:05
+  session: 引け後
+  note: Finnhub自動追記・時刻は概算
+- date: '2026-10-27'
+  ticker: MSFT
+  type: earnings
+  announce_jst: 2026-10-28 05:05
+  session: 引け後
+  note: Finnhub自動追記・時刻は概算
+- date: '2026-10-28'
+  ticker: AAPL
+  type: earnings
+  announce_jst: 2026-10-29 05:05
+  session: 引け後
+  note: Finnhub自動追記・時刻は概算
+- date: '2026-10-28'
+  ticker: AMZN
+  type: earnings
+  announce_jst: 2026-10-29 05:05
+  session: 引け後
+  note: Finnhub自動追記・時刻は概算
+- date: '2026-10-28'
+  ticker: WDC
+  type: earnings
+  announce_jst: 2026-10-29 05:05
+  session: 引け後
+  note: Finnhub自動追記・時刻は概算
