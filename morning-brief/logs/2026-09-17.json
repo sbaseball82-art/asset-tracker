@@ -1,0 +1,150 @@
+{
+ "date": "2026-09-17",
+ "generated_at": "2026-09-17T23:09:01",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "^GSPC",
+   "name": "S&P500",
+   "theme": "指数",
+   "headline": "S&P500小幅高 +1%",
+   "conclusion": "S&P500のz=+1.6σは指数見通しの修正を示唆",
+   "score": 0.6712,
+   "score_parts": {
+    "z": 0.1403,
+    "volume": 0.0509,
+    "media": 0.2,
+    "sns": 0.1,
+    "holdings": 0.1,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 17,
+   "sns_heat": 1.0,
+   "slot": 1,
+   "template_id": "T4",
+   "topic_tag": "macro",
+   "numbers": [
+    {
+     "label": "S&P500 日次",
+     "value": "+1.1%",
+     "sub": "z=+1.6σ",
+     "source": "yfinance終値",
+     "asof": "2026-09-17"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "0.6倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-09-17"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+15.3%",
+     "sub": "S&P500",
+     "source": "yfinance終値",
+     "asof": "2026-09-17"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "+3.1%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-17"
+    },
+    {
+     "label": "米10年金利 日次",
+     "value": "-1.2%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-17"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.94%",
+     "sub": "2026-09-17",
+     "source": "米財務省",
+     "asof": "2026-09-17"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-17_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-17_1.txt"
+   ]
+  },
+  {
+   "ticker": "INTC",
+   "name": "インテル",
+   "theme": "半導体",
+   "headline": "インテル大幅高 +8%",
+   "conclusion": "インテルのz=+1.8σは半導体見通しの修正を示唆",
+   "score": 0.6077,
+   "score_parts": {
+    "z": 0.1575,
+    "volume": 0.1347,
+    "media": 0.2,
+    "sns": 0.0055,
+    "holdings": 0.03,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 6,
+   "sns_heat": 0.055,
+   "slot": 2,
+   "template_id": "T6",
+   "topic_tag": "semiconductor",
+   "numbers": [
+    {
+     "label": "インテル 日次",
+     "value": "+7.7%",
+     "sub": "z=+1.8σ",
+     "source": "yfinance終値",
+     "asof": "2026-09-17"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.6倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-09-17"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+141.6%",
+     "sub": "インテル",
+     "source": "yfinance終値",
+     "asof": "2026-09-17"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+1.1%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-17"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "+3.1%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-17"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.94%",
+     "sub": "2026-09-17",
+     "source": "米財務省",
+     "asof": "2026-09-17"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-17_2.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-17_2.txt"
+   ]
+  }
+ ],
+ "skipped": []
+}
