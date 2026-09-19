@@ -1,21 +1,21 @@
 {
-  "updated_at": "2026-09-19T08:45:59.236369+09:00",
-  "date": "2026-09-19",
+  "updated_at": "2026-09-20T08:47:48.760415+09:00",
+  "date": "2026-09-20",
   "usdjpy": 156.85,
   "total_jpy": 33284156,
-  "day_change_jpy": 54055,
-  "day_change_pct": 0.16,
+  "day_change_jpy": 97601,
+  "day_change_pct": 0.29,
   "comparisons": {
     "day": {
-      "base_date": "2026-09-18",
-      "base_jpy": 33110680,
-      "change_jpy": 173476,
-      "change_pct": 0.52,
-      "gross_change_jpy": 173476,
+      "base_date": "2026-09-19",
+      "base_jpy": 33284156,
+      "change_jpy": 0,
+      "change_pct": 0.0,
+      "gross_change_jpy": 0,
       "cash_flow_jpy": 0
     },
     "week": {
-      "base_date": "2026-09-12",
+      "base_date": "2026-09-13",
       "base_jpy": 32821954,
       "change_jpy": 462202,
       "change_pct": 1.41,
@@ -23,11 +23,11 @@
       "cash_flow_jpy": 0
     },
     "month": {
-      "base_date": "2026-08-20",
-      "base_jpy": 34150940,
-      "change_jpy": -866784,
-      "change_pct": -2.54,
-      "gross_change_jpy": -866784,
+      "base_date": "2026-08-21",
+      "base_jpy": 34102147,
+      "change_jpy": -817991,
+      "change_pct": -2.4,
+      "gross_change_jpy": -817991,
       "cash_flow_jpy": 0
     },
     "ytd": {
@@ -44,10 +44,10 @@
       "name": "VYM 米国高配当ETF",
       "type": "ETF",
       "shares": 313,
-      "prev_price": 160.6,
+      "prev_price": 159.713,
       "curr_price": 159.26,
-      "change_pct": -0.83,
-      "prev_jpy": 7884504,
+      "change_pct": -0.28,
+      "prev_jpy": 7840958,
       "curr_jpy": 7818718,
       "usdjpy": 156.85
     },
@@ -3483,6 +3483,12 @@
     },
     {
       "date": "2026-09-19",
+      "total_jpy": 33284156,
+      "usdjpy": 156.85,
+      "cash_flow_jpy": 0
+    },
+    {
+      "date": "2026-09-20",
       "total_jpy": 33284156,
       "usdjpy": 156.85,
       "cash_flow_jpy": 0
