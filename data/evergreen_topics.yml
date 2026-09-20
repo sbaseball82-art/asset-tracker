@@ -399,7 +399,7 @@ topics:
   theme: 決算シーズンの日程チェックリスト（保有銘柄ベース）
   format: checklist
   builder: checklist_earnings
-  last_used: null
+  last_used: '2026-09-21'
   params:
     days_ahead: 21
   post:
