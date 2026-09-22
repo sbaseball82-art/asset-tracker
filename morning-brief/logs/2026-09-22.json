@@ -1,0 +1,79 @@
+{
+ "date": "2026-09-22",
+ "generated_at": "2026-09-22T23:18:49",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "XLF",
+   "name": "XLF(金融)",
+   "theme": "金融",
+   "headline": "XLF(金融)下落 -2%",
+   "conclusion": "出来高2.3倍の下落は一時要因でなくシナリオ修正の動き",
+   "score": 0.4727,
+   "score_parts": {
+    "z": 0.2216,
+    "volume": 0.1878,
+    "media": 0.0333,
+    "sns": 0.0,
+    "holdings": 0.03,
+    "calendar": 0.0,
+    "global": 0.0,
+    "learn": 0.0
+   },
+   "n_media": 1,
+   "sns_heat": 0.0,
+   "slot": 1,
+   "template_id": "T1",
+   "topic_tag": "other",
+   "numbers": [
+    {
+     "label": "XLF(金融) 日次",
+     "value": "-2.0%",
+     "sub": "z=-2.5σ",
+     "source": "yfinance終値",
+     "asof": "2026-09-22"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "2.3倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-09-22"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+12.0%",
+     "sub": "XLF(金融)",
+     "source": "yfinance終値",
+     "asof": "2026-09-22"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "-0.0%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-22"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "+2.1%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-22"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.96%",
+     "sub": "2026-09-22",
+     "source": "米財務省",
+     "asof": "2026-09-22"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-22_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-22_1.txt"
+   ]
+  }
+ ],
+ "skipped": []
+}
