@@ -2,9 +2,17 @@
  {
   "slot": 1,
   "template_id": "T3",
+  "topic_tag": "semiconductor",
+  "ticker": "INTC",
+  "score": 0.6415,
+  "headline": "インテル小幅安 -0%"
+ },
+ {
+  "slot": 2,
+  "template_id": "T2",
   "topic_tag": "ai",
-  "ticker": "AAPL",
-  "score": 0.4532,
-  "headline": "アップル小幅安 -0%"
+  "ticker": "MSFT",
+  "score": 0.5356,
+  "headline": "マイクロソフト小幅安 -1%"
  }
 ]

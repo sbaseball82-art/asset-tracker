@@ -1,62 +1,62 @@
 {
  "date": "2026-09-18",
- "generated_at": "2026-09-18T22:52:05",
+ "generated_at": "2026-09-22T00:13:50",
  "max_cards": 2,
  "adopted": [
   {
-   "ticker": "AAPL",
-   "name": "アップル",
-   "theme": "ハイテク",
-   "headline": "アップル小幅安 -0%",
-   "conclusion": "アップルのz=-0.3σはハイテク見通しの修正を示唆",
-   "score": 0.4532,
+   "ticker": "INTC",
+   "name": "インテル",
+   "theme": "半導体",
+   "headline": "インテル小幅安 -0%",
+   "conclusion": "インテルのz=+0.0σは半導体見通しの修正を示唆",
+   "score": 0.6415,
    "score_parts": {
-    "z": 0.0221,
-    "volume": 0.1744,
-    "media": 0.0667,
-    "sns": 0.0,
-    "holdings": 0.09,
+    "z": 0.0007,
+    "volume": 0.1558,
+    "media": 0.2,
+    "sns": 0.075,
+    "holdings": 0.03,
     "calendar": 0.1,
-    "global": 0.0,
+    "global": 0.08,
     "learn": 0.0
    },
-   "n_media": 2,
-   "sns_heat": 0.0,
+   "n_media": 9,
+   "sns_heat": 0.75,
    "slot": 1,
    "template_id": "T3",
-   "topic_tag": "ai",
+   "topic_tag": "semiconductor",
    "numbers": [
     {
-     "label": "アップル 日次",
-     "value": "-0.3%",
-     "sub": "z=-0.3σ",
+     "label": "インテル 日次",
+     "value": "-0.2%",
+     "sub": "z=+0.0σ",
      "source": "yfinance終値",
      "asof": "2026-09-18"
     },
     {
      "label": "出来高 20日比",
-     "value": "2.1倍",
+     "value": "1.9倍",
      "sub": "当日/平均",
      "source": "yfinance出来高",
      "asof": "2026-09-18"
     },
     {
      "label": "6ヶ月騰落",
-     "value": "+35.3%",
-     "sub": "アップル",
+     "value": "+135.2%",
+     "sub": "インテル",
      "source": "yfinance終値",
      "asof": "2026-09-18"
     },
     {
      "label": "S&P500 日次",
-     "value": "+0.2%",
+     "value": "+1.5%",
      "sub": "同日",
      "source": "yfinance終値",
      "asof": "2026-09-18"
     },
     {
      "label": "SOX指数 日次",
-     "value": "+2.8%",
+     "value": "+4.3%",
      "sub": "同日",
      "source": "yfinance終値",
      "asof": "2026-09-18"
@@ -73,36 +73,78 @@
     "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-18_1.png",
     "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-18_1.txt"
    ]
-  }
- ],
- "skipped": [
+  },
   {
    "ticker": "MSFT",
-   "score": 0.4353,
-   "unmet": [
-    "スコア0.44が閾値0.45未満（材料薄）"
-   ]
-  },
-  {
-   "ticker": "GOOGL",
-   "score": 0.4024,
-   "unmet": [
-    "スコア0.40が閾値0.45未満（材料薄）"
-   ]
-  },
-  {
-   "ticker": "VYM",
-   "score": 0.3894,
-   "unmet": [
-    "スコア0.39が閾値0.45未満（材料薄）"
-   ]
-  },
-  {
-   "ticker": "INTC",
-   "score": 0.3446,
-   "unmet": [
-    "スコア0.34が閾値0.45未満（材料薄）"
+   "name": "マイクロソフト",
+   "theme": "ハイテク",
+   "headline": "マイクロソフト小幅安 -1%",
+   "conclusion": "マイクロソフトのz=-0.5σはハイテク見通しの修正を示唆",
+   "score": 0.5356,
+   "score_parts": {
+    "z": 0.0431,
+    "volume": 0.1642,
+    "media": 0.0333,
+    "sns": 0.1,
+    "holdings": 0.095,
+    "calendar": 0.1,
+    "global": 0.0,
+    "learn": 0.0
+   },
+   "n_media": 1,
+   "sns_heat": 1.0,
+   "slot": 2,
+   "template_id": "T2",
+   "topic_tag": "ai",
+   "numbers": [
+    {
+     "label": "マイクロソフト 日次",
+     "value": "-0.8%",
+     "sub": "z=-0.5σ",
+     "source": "yfinance終値",
+     "asof": "2026-09-18"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "2.0倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-09-18"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+27.4%",
+     "sub": "マイクロソフト",
+     "source": "yfinance終値",
+     "asof": "2026-09-18"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+1.5%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-18"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "+4.3%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-09-18"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "5.01%",
+     "sub": "2026-09-18",
+     "source": "米財務省",
+     "asof": "2026-09-18"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-18_2.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-18_2.txt"
    ]
   }
- ]
+ ],
+ "skipped": []
 }

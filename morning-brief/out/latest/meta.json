@@ -1,18 +1,18 @@
 [
  {
   "slot": 1,
-  "template_id": "T4",
-  "topic_tag": "ai",
-  "ticker": "META",
-  "score": 0.903,
-  "headline": "メタ急騰 +11%"
+  "template_id": "T3",
+  "topic_tag": "semiconductor",
+  "ticker": "INTC",
+  "score": 0.6415,
+  "headline": "インテル小幅安 -0%"
  },
  {
   "slot": 2,
-  "template_id": "T6",
-  "topic_tag": "semiconductor",
-  "ticker": "INTC",
-  "score": 0.7822,
-  "headline": "インテル急騰 +12%"
+  "template_id": "T2",
+  "topic_tag": "ai",
+  "ticker": "MSFT",
+  "score": 0.5356,
+  "headline": "マイクロソフト小幅安 -1%"
  }
 ]
