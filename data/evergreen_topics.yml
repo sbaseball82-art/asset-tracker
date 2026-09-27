@@ -429,7 +429,7 @@ topics:
   theme: ドルコスト平均法と一括投資の比較（過去データ）
   format: line
   builder: line_sim
-  last_used: null
+  last_used: '2026-09-28'
   params:
     mode: dca_vs_lump
     principal: 1200000
