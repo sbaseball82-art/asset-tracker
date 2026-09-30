@@ -1,0 +1,72 @@
+{
+ "date": "2026-09-29",
+ "generated_at": "2026-09-30T00:00:24",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "^GSPC",
+   "name": "S&P500",
+   "theme": "指数",
+   "headline": "材料待ち S&P500 -0.17%",
+   "conclusion": "値動きはあったが裏取りが揃わず見送り",
+   "score": null,
+   "score_parts": null,
+   "n_media": 0,
+   "sns_heat": 0.0,
+   "slot": 1,
+   "template_id": "T2",
+   "topic_tag": "quiet",
+   "numbers": [
+    {
+     "label": "S&P500",
+     "value": "-0.17%",
+     "sub": "7,671",
+     "source": "yfinance終値",
+     "asof": "2026-09-29"
+    },
+    {
+     "label": "ナスダック",
+     "value": "-0.09%",
+     "sub": "26,798",
+     "source": "yfinance終値",
+     "asof": "2026-09-29"
+    },
+    {
+     "label": "ドル円",
+     "value": "-0.06%",
+     "sub": "157.36円",
+     "source": "yfinance終値",
+     "asof": "2026-09-29"
+    },
+    {
+     "label": "米10年金利",
+     "value": "+2bp",
+     "sub": "5.26%",
+     "source": "yfinance終値",
+     "asof": "2026-09-29"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-29_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-09-29_1.txt"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "ticker": "AAPL",
+   "score": 0.4124,
+   "unmet": [
+    "スコア0.41が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "XLU",
+   "score": 0.3733,
+   "unmet": [
+    "スコア0.37が閾値0.45未満（材料薄）"
+   ]
+  }
+ ],
+ "note": "quiet_day:gate_failed"
+}
