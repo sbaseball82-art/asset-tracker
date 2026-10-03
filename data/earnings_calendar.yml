@@ -117,3 +117,9 @@ events:
   announce_jst: 2026-10-29 05:05
   session: 引け後
   note: Finnhub自動追記・時刻は概算
+- date: '2026-11-17'
+  ticker: NVDA
+  type: earnings
+  announce_jst: 2026-11-18 05:05
+  session: 引け後
+  note: Finnhub自動追記・時刻は概算
