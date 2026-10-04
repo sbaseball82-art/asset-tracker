@@ -462,7 +462,7 @@ topics:
   theme: VYM / HDV / SCHD セクター構成の違い（同じ高配当でも別物）
   format: table
   builder: static
-  last_used: null
+  last_used: '2026-10-05'
   table:
     title: 高配当ETF セクター構成の違い（概算）
     subtitle: 公表の構成データベースの概算 / 上位セクター
