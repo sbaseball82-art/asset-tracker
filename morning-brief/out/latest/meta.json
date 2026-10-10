@@ -2,17 +2,9 @@
  {
   "slot": 1,
   "template_id": "T5",
-  "topic_tag": "other",
-  "ticker": "XLE",
-  "score": 0.6236,
-  "headline": "XLE(エネルギー)上昇 +3%"
- },
- {
-  "slot": 2,
-  "template_id": "T6",
-  "topic_tag": "semiconductor",
-  "ticker": "TSM",
-  "score": 0.493,
-  "headline": "TSMC下落 -3%"
+  "topic_tag": "quiet",
+  "ticker": "^GSPC",
+  "score": null,
+  "headline": "静かな1日 S&P500 +0.59%"
  }
 ]
