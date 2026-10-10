@@ -1,0 +1,150 @@
+{
+ "date": "2026-10-08",
+ "generated_at": "2026-10-10T00:21:42",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "XLE",
+   "name": "XLE(エネルギー)",
+   "theme": "エネルギー",
+   "headline": "XLE(エネルギー)上昇 +3%",
+   "conclusion": "XLE(エネルギー)のz=+2.2σはエネルギー見通しの修正を示唆",
+   "score": 0.6236,
+   "score_parts": {
+    "z": 0.191,
+    "volume": 0.1226,
+    "media": 0.2,
+    "sns": 0.0,
+    "holdings": 0.03,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 8,
+   "sns_heat": 0.0,
+   "slot": 1,
+   "template_id": "T5",
+   "topic_tag": "other",
+   "numbers": [
+    {
+     "label": "XLE(エネルギー) 日次",
+     "value": "+3.0%",
+     "sub": "z=+2.2σ",
+     "source": "yfinance終値",
+     "asof": "2026-10-08"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.5倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-10-08"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+15.3%",
+     "sub": "XLE(エネルギー)",
+     "source": "yfinance終値",
+     "asof": "2026-10-08"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+0.6%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-08"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-0.4%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-08"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "5.22%",
+     "sub": "2026-10-08",
+     "source": "米財務省",
+     "asof": "2026-10-08"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-08_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-08_1.txt"
+   ]
+  },
+  {
+   "ticker": "TSM",
+   "name": "TSMC",
+   "theme": "半導体",
+   "headline": "TSMC下落 -3%",
+   "conclusion": "TSMCのz=-1.5σは半導体見通しの修正を示唆",
+   "score": 0.493,
+   "score_parts": {
+    "z": 0.1345,
+    "volume": 0.1136,
+    "media": 0.1667,
+    "sns": 0.0283,
+    "holdings": 0.05,
+    "calendar": 0.0,
+    "global": 0.0,
+    "learn": 0.0
+   },
+   "n_media": 5,
+   "sns_heat": 0.283,
+   "slot": 2,
+   "template_id": "T6",
+   "topic_tag": "semiconductor",
+   "numbers": [
+    {
+     "label": "TSMC 日次",
+     "value": "-3.0%",
+     "sub": "z=-1.5σ",
+     "source": "yfinance終値",
+     "asof": "2026-10-08"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.4倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-10-08"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+25.9%",
+     "sub": "TSMC",
+     "source": "yfinance終値",
+     "asof": "2026-10-08"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+0.6%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-08"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-0.4%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-08"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "5.22%",
+     "sub": "2026-10-08",
+     "source": "米財務省",
+     "asof": "2026-10-08"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-08_2.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-08_2.txt"
+   ]
+  }
+ ],
+ "skipped": []
+}
