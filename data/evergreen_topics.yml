@@ -528,7 +528,7 @@ topics:
   theme: NASDAQ100連動の投信3本（ニッセイ/SBI/QQQ）コストと使い分け
   format: table
   builder: static
-  last_used: null
+  last_used: '2026-10-12'
   table:
     title: NASDAQ100連動 商品比較（概算）
     subtitle: 公表データベースの概算
