@@ -1,13 +1,13 @@
 {
  "date": "2026-10-12",
- "generated_at": "2026-10-13T02:16:53",
+ "generated_at": "2026-10-14T00:27:31",
  "max_cards": 2,
  "adopted": [
   {
    "ticker": "^GSPC",
    "name": "S&P500",
    "theme": "指数",
-   "headline": "材料待ち S&P500 -0.06%",
+   "headline": "材料待ち S&P500 -0.02%",
    "conclusion": "値動きはあったが裏取りが揃わず見送り",
    "score": null,
    "score_parts": null,
@@ -19,31 +19,31 @@
    "numbers": [
     {
      "label": "S&P500",
-     "value": "-0.06%",
-     "sub": "7,807",
+     "value": "-0.02%",
+     "sub": "7,805",
      "source": "yfinance終値",
-     "asof": "2026-10-12"
+     "asof": "2026-10-13"
     },
     {
      "label": "ナスダック",
-     "value": "-0.44%",
-     "sub": "27,246",
+     "value": "-0.15%",
+     "sub": "27,204",
      "source": "yfinance終値",
-     "asof": "2026-10-12"
+     "asof": "2026-10-13"
     },
     {
      "label": "ドル円",
-     "value": "+0.16%",
-     "sub": "158.32円",
+     "value": "-0.12%",
+     "sub": "158.33円",
      "source": "yfinance終値",
-     "asof": "2026-10-12"
+     "asof": "2026-10-13"
     },
     {
      "label": "米10年金利",
-     "value": "-0bp",
-     "sub": "5.24%",
+     "value": "-2bp",
+     "sub": "5.22%",
      "source": "yfinance終値",
-     "asof": "2026-10-12"
+     "asof": "2026-10-13"
     }
    ],
    "files": [
