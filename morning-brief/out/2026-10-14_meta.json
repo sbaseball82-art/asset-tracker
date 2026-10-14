@@ -1,0 +1,18 @@
+[
+ {
+  "slot": 1,
+  "template_id": "T4",
+  "topic_tag": "macro",
+  "ticker": "^GSPC",
+  "score": 0.6663,
+  "headline": "S&P500小幅安 -1%"
+ },
+ {
+  "slot": 2,
+  "template_id": "T2",
+  "topic_tag": "semiconductor",
+  "ticker": "TSM",
+  "score": 0.6029,
+  "headline": "TSMC下落 -3%"
+ }
+]
