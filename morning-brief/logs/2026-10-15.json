@@ -1,0 +1,101 @@
+{
+ "date": "2026-10-15",
+ "generated_at": "2026-10-15T23:20:54",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "TSM",
+   "name": "TSMC",
+   "theme": "半導体",
+   "headline": "TSMC下落 -2%",
+   "conclusion": "TSMCのz=-0.9σは半導体見通しの修正を示唆",
+   "score": 0.558,
+   "score_parts": {
+    "z": 0.0795,
+    "volume": 0.1869,
+    "media": 0.1333,
+    "sns": 0.0283,
+    "holdings": 0.05,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 4,
+   "sns_heat": 0.283,
+   "slot": 1,
+   "template_id": "T3",
+   "topic_tag": "semiconductor",
+   "numbers": [
+    {
+     "label": "TSMC 日次",
+     "value": "-1.8%",
+     "sub": "z=-0.9σ",
+     "source": "yfinance終値",
+     "asof": "2026-10-15"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "2.2倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-10-15"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+16.8%",
+     "sub": "TSMC",
+     "source": "yfinance終値",
+     "asof": "2026-10-15"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+0.3%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-15"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-0.9%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-15"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "5.10%",
+     "sub": "2026-10-15",
+     "source": "米財務省",
+     "asof": "2026-10-15"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-15_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-15_1.txt"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "ticker": "^TNX",
+   "score": 0.3497,
+   "unmet": [
+    "スコア0.35が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "XLF",
+   "score": 0.3235,
+   "unmet": [
+    "スコア0.32が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "SCHD",
+   "score": 0.2885,
+   "unmet": [
+    "スコア0.29が閾値0.45未満（材料薄）"
+   ]
+  }
+ ]
+}
