@@ -582,7 +582,7 @@ topics:
   theme: FANG+の等ウェイト10銘柄という設計の意味（時価総額加重との違い）
   format: table
   builder: static
-  last_used: null
+  last_used: '2026-10-19'
   table:
     title: FANG+（等ウェイト10銘柄）と時価総額加重の違い
     subtitle: 公表ベースの概算 / 構成比率
