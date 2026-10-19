@@ -1,0 +1,87 @@
+{
+ "date": "2026-10-19",
+ "generated_at": "2026-10-19T23:59:04",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "AMZN",
+   "name": "アマゾン",
+   "theme": "ハイテク",
+   "headline": "アマゾン大幅高 +5%",
+   "conclusion": "アマゾンのz=+1.9σはハイテク見通しの修正を示唆",
+   "score": 0.5194,
+   "score_parts": {
+    "z": 0.1634,
+    "volume": 0.1274,
+    "media": 0.0667,
+    "sns": 0.0019,
+    "holdings": 0.08,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 2,
+   "sns_heat": 0.019,
+   "slot": 1,
+   "template_id": "T2",
+   "topic_tag": "ai",
+   "numbers": [
+    {
+     "label": "アマゾン 日次",
+     "value": "+5.0%",
+     "sub": "z=+1.9σ",
+     "source": "yfinance終値",
+     "asof": "2026-10-19"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.5倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-10-19"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+5.7%",
+     "sub": "アマゾン",
+     "source": "yfinance終値",
+     "asof": "2026-10-19"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+0.4%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-19"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "+1.6%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-19"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "5.15%",
+     "sub": "2026-10-19",
+     "source": "米財務省",
+     "asof": "2026-10-19"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-19_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-19_1.txt"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "ticker": "XLU",
+   "score": 0.2959,
+   "unmet": [
+    "スコア0.30が閾値0.45未満（材料薄）"
+   ]
+  }
+ ]
+}
