@@ -51,3 +51,4 @@ date,type,topic_id,format,char_count,has_image,posted,views,likes,bookmarks,repl
 2026-10-19,evergreen,ev013,table,209,true,false,,,,,,
 2026-10-20,earnings,2026-10-19_NFLX,post,151,false,false,,,,,,
 2026-10-20,earnings,2026-10-19_NFLX,morning,213,false,false,,,,,,
+2026-10-21,earnings,2026-10-20_TSLA,pre,221,false,false,,,,,,
