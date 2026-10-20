@@ -1,10 +1,10 @@
 [
  {
   "slot": 1,
-  "template_id": "T2",
-  "topic_tag": "ai",
-  "ticker": "AMZN",
-  "score": 0.5194,
-  "headline": "アマゾン大幅高 +5%"
+  "template_id": "T5",
+  "topic_tag": "other",
+  "ticker": "XLE",
+  "score": 0.5907,
+  "headline": "XLE(エネルギー)上昇 +3%"
  }
 ]

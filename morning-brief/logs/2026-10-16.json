@@ -1,62 +1,62 @@
 {
  "date": "2026-10-16",
- "generated_at": "2026-10-16T23:04:01",
+ "generated_at": "2026-10-20T00:30:11",
  "max_cards": 2,
  "adopted": [
   {
-   "ticker": "^IXIC",
-   "name": "ナスダック総合",
-   "theme": "指数",
-   "headline": "ナスダック総合下落 -2%",
-   "conclusion": "ナスダック総合のz=-2.1σは指数見通しの修正を示唆",
-   "score": 0.6422,
+   "ticker": "XLE",
+   "name": "XLE(エネルギー)",
+   "theme": "エネルギー",
+   "headline": "XLE(エネルギー)上昇 +3%",
+   "conclusion": "XLE(エネルギー)のz=+1.7σはエネルギー見通しの修正を示唆",
+   "score": 0.5907,
    "score_parts": {
-    "z": 0.1878,
-    "volume": 0.0844,
-    "media": 0.2,
-    "sns": 0.0,
-    "holdings": 0.09,
+    "z": 0.1507,
+    "volume": 0.0967,
+    "media": 0.1333,
+    "sns": 0.1,
+    "holdings": 0.03,
     "calendar": 0.0,
     "global": 0.08,
     "learn": 0.0
    },
-   "n_media": 6,
-   "sns_heat": 0.0,
+   "n_media": 4,
+   "sns_heat": 1.0,
    "slot": 1,
    "template_id": "T5",
-   "topic_tag": "macro",
+   "topic_tag": "other",
    "numbers": [
     {
-     "label": "ナスダック総合 日次",
-     "value": "-2.1%",
-     "sub": "z=-2.1σ",
+     "label": "XLE(エネルギー) 日次",
+     "value": "+2.5%",
+     "sub": "z=+1.7σ",
      "source": "yfinance終値",
      "asof": "2026-10-16"
     },
     {
      "label": "出来高 20日比",
-     "value": "1.0倍",
+     "value": "1.2倍",
      "sub": "当日/平均",
      "source": "yfinance出来高",
      "asof": "2026-10-16"
     },
     {
      "label": "6ヶ月騰落",
-     "value": "+6.8%",
-     "sub": "ナスダック総合",
+     "value": "+25.7%",
+     "sub": "XLE(エネルギー)",
      "source": "yfinance終値",
      "asof": "2026-10-16"
     },
     {
      "label": "S&P500 日次",
-     "value": "-1.1%",
+     "value": "+0.4%",
      "sub": "同日",
      "source": "yfinance終値",
      "asof": "2026-10-16"
     },
     {
      "label": "SOX指数 日次",
-     "value": "-3.8%",
+     "value": "+1.6%",
      "sub": "同日",
      "source": "yfinance終値",
      "asof": "2026-10-16"
@@ -73,78 +73,57 @@
     "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-16_1.png",
     "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-16_1.txt"
    ]
-  },
-  {
-   "ticker": "^GSPC",
-   "name": "S&P500",
-   "theme": "指数",
-   "headline": "S&P500小幅安 -1%",
-   "conclusion": "S&P500のz=-1.7σは指数見通しの修正を示唆",
-   "score": 0.5772,
-   "score_parts": {
-    "z": 0.1456,
-    "volume": 0.0516,
-    "media": 0.2,
-    "sns": 0.0,
-    "holdings": 0.1,
-    "calendar": 0.0,
-    "global": 0.08,
-    "learn": 0.0
-   },
-   "n_media": 15,
-   "sns_heat": 0.0,
-   "slot": 2,
-   "template_id": "T1",
-   "topic_tag": "macro",
-   "numbers": [
-    {
-     "label": "S&P500 日次",
-     "value": "-1.1%",
-     "sub": "z=-1.7σ",
-     "source": "yfinance終値",
-     "asof": "2026-10-16"
-    },
-    {
-     "label": "出来高 20日比",
-     "value": "0.6倍",
-     "sub": "当日/平均",
-     "source": "yfinance出来高",
-     "asof": "2026-10-16"
-    },
-    {
-     "label": "6ヶ月騰落",
-     "value": "+7.5%",
-     "sub": "S&P500",
-     "source": "yfinance終値",
-     "asof": "2026-10-16"
-    },
-    {
-     "label": "SOX指数 日次",
-     "value": "-3.8%",
-     "sub": "同日",
-     "source": "yfinance終値",
-     "asof": "2026-10-16"
-    },
-    {
-     "label": "米10年金利 日次",
-     "value": "+0.2%",
-     "sub": "同日",
-     "source": "yfinance終値",
-     "asof": "2026-10-16"
-    },
-    {
-     "label": "米10年利回り",
-     "value": "5.09%",
-     "sub": "2026-10-16",
-     "source": "米財務省",
-     "asof": "2026-10-16"
-    }
-   ],
-   "files": [
-    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-16_2.png",
-    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-16_2.txt"
-   ]
   }
  ],
- "skipped": []
+ "skipped": [
+  {
+   "ticker": "QQQ",
+   "score": 0.4466,
+   "unmet": [
+    "スコア0.45が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "AVGO",
+   "score": 0.4012,
+   "unmet": [
+    "スコア0.40が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "VTI",
+   "score": 0.3381,
+   "unmet": [
+    "スコア0.34が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "HDV",
+   "score": 0.3339,
+   "unmet": [
+    "スコア0.33が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "AMD",
+   "score": 0.3297,
+   "unmet": [
+    "スコア0.33が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "TSLA",
+   "score": 0.3059,
+   "unmet": [
+    "スコア0.31が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "XLU",
+   "score": 0.2797,
+   "unmet": [
+    "スコア0.28が閾値0.45未満（材料薄）"
+   ]
+  }
+ ]
 }
