@@ -1,6 +1,6 @@
 {
- "market_day": "2026-10-16",
+ "market_day": "2026-10-20",
  "cards": 1,
- "quiet_day": false,
- "generated_at": "2026-10-20T00:30:11"
+ "quiet_day": true,
+ "generated_at": "2026-10-20T23:27:39"
 }

@@ -1,10 +1,10 @@
 [
  {
   "slot": 1,
-  "template_id": "T5",
-  "topic_tag": "other",
-  "ticker": "XLE",
-  "score": 0.5907,
-  "headline": "XLE(エネルギー)上昇 +3%"
+  "template_id": "T2",
+  "topic_tag": "quiet",
+  "ticker": "^GSPC",
+  "score": null,
+  "headline": "材料待ち S&P500 +0.28%"
  }
 ]
