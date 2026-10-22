@@ -1,0 +1,150 @@
+{
+ "date": "2026-10-22",
+ "generated_at": "2026-10-22T23:49:02",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "META",
+   "name": "メタ",
+   "theme": "ハイテク",
+   "headline": "メタ大幅安 -7%",
+   "conclusion": "出来高2.1倍の大幅安は一時要因でなくシナリオ修正の動き",
+   "score": 0.7093,
+   "score_parts": {
+    "z": 0.2197,
+    "volume": 0.173,
+    "media": 0.1667,
+    "sns": 0.0,
+    "holdings": 0.07,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 5,
+   "sns_heat": 0.0,
+   "slot": 1,
+   "template_id": "T6",
+   "topic_tag": "ai",
+   "numbers": [
+    {
+     "label": "メタ 日次",
+     "value": "-7.0%",
+     "sub": "z=-2.5σ",
+     "source": "yfinance終値",
+     "asof": "2026-10-22"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "2.1倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-10-22"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "-1.4%",
+     "sub": "メタ",
+     "source": "yfinance終値",
+     "asof": "2026-10-22"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "-1.2%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-22"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-6.7%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-22"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.96%",
+     "sub": "2026-10-22",
+     "source": "米財務省",
+     "asof": "2026-10-22"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-22_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-22_1.txt"
+   ]
+  },
+  {
+   "ticker": "^IXIC",
+   "name": "ナスダック総合",
+   "theme": "指数",
+   "headline": "ナスダック総合下落 -3%",
+   "conclusion": "z=-2.6σは通常の値動きの外。前提が変わった可能性",
+   "score": 0.6815,
+   "score_parts": {
+    "z": 0.2286,
+    "volume": 0.0829,
+    "media": 0.2,
+    "sns": 0.0,
+    "holdings": 0.09,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 12,
+   "sns_heat": 0.0,
+   "slot": 2,
+   "template_id": "T1",
+   "topic_tag": "macro",
+   "numbers": [
+    {
+     "label": "ナスダック総合 日次",
+     "value": "-2.6%",
+     "sub": "z=-2.6σ",
+     "source": "yfinance終値",
+     "asof": "2026-10-22"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.0倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-10-22"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+6.4%",
+     "sub": "ナスダック総合",
+     "source": "yfinance終値",
+     "asof": "2026-10-22"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "-1.2%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-22"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-6.7%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-22"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.96%",
+     "sub": "2026-10-22",
+     "source": "米財務省",
+     "asof": "2026-10-22"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-22_2.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-22_2.txt"
+   ]
+  }
+ ],
+ "skipped": []
+}

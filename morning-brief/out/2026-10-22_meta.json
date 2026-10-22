@@ -1,0 +1,18 @@
+[
+ {
+  "slot": 1,
+  "template_id": "T6",
+  "topic_tag": "ai",
+  "ticker": "META",
+  "score": 0.7093,
+  "headline": "メタ大幅安 -7%"
+ },
+ {
+  "slot": 2,
+  "template_id": "T1",
+  "topic_tag": "macro",
+  "ticker": "^IXIC",
+  "score": 0.6815,
+  "headline": "ナスダック総合下落 -3%"
+ }
+]
