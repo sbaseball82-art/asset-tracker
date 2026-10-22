@@ -1,13 +1,13 @@
 {
  "date": "2026-10-20",
- "generated_at": "2026-10-20T23:27:39",
+ "generated_at": "2026-10-22T00:05:52",
  "max_cards": 2,
  "adopted": [
   {
    "ticker": "^GSPC",
    "name": "S&P500",
    "theme": "指数",
-   "headline": "材料待ち S&P500 +0.28%",
+   "headline": "材料待ち S&P500 +0.58%",
    "conclusion": "値動きはあったが裏取りが揃わず見送り",
    "score": null,
    "score_parts": null,
@@ -19,31 +19,31 @@
    "numbers": [
     {
      "label": "S&P500",
-     "value": "+0.28%",
-     "sub": "7,713",
+     "value": "+0.58%",
+     "sub": "7,757",
      "source": "yfinance終値",
-     "asof": "2026-10-20"
+     "asof": "2026-10-21"
     },
     {
      "label": "ナスダック",
-     "value": "-0.02%",
-     "sub": "26,425",
+     "value": "+1.05%",
+     "sub": "26,703",
      "source": "yfinance終値",
-     "asof": "2026-10-20"
+     "asof": "2026-10-21"
     },
     {
      "label": "ドル円",
-     "value": "+0.45%",
-     "sub": "158.52円",
+     "value": "-0.07%",
+     "sub": "158.16円",
      "source": "yfinance終値",
-     "asof": "2026-10-20"
+     "asof": "2026-10-21"
     },
     {
      "label": "米10年金利",
-     "value": "-2bp",
-     "sub": "5.12%",
+     "value": "+3bp",
+     "sub": "5.15%",
      "source": "yfinance終値",
-     "asof": "2026-10-20"
+     "asof": "2026-10-21"
     }
    ],
    "files": [
@@ -62,7 +62,7 @@
   },
   {
    "ticker": "SCHD",
-   "score": 0.2791,
+   "score": 0.2797,
    "unmet": [
     "スコア0.28が閾値0.45未満（材料薄）"
    ]
@@ -76,7 +76,7 @@
   },
   {
    "ticker": "XLF",
-   "score": 0.2093,
+   "score": 0.2101,
    "unmet": [
     "スコア0.21が閾値0.45未満（材料薄）"
    ]
