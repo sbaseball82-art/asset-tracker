@@ -1,13 +1,13 @@
 {
  "date": "2026-10-21",
- "generated_at": "2026-10-21T23:40:29",
+ "generated_at": "2026-10-23T00:21:35",
  "max_cards": 2,
  "adopted": [
   {
    "ticker": "^GSPC",
    "name": "S&P500",
    "theme": "指数",
-   "headline": "静かな1日 S&P500 +0.58%",
+   "headline": "静かな1日 S&P500 -1.21%",
    "conclusion": "深掘りの基準に届いた銘柄はなし",
    "score": null,
    "score_parts": null,
@@ -19,31 +19,31 @@
    "numbers": [
     {
      "label": "S&P500",
-     "value": "+0.58%",
-     "sub": "7,757",
+     "value": "-1.21%",
+     "sub": "7,663",
      "source": "yfinance終値",
-     "asof": "2026-10-21"
+     "asof": "2026-10-22"
     },
     {
      "label": "ナスダック",
-     "value": "+1.05%",
-     "sub": "26,703",
+     "value": "-2.60%",
+     "sub": "26,009",
      "source": "yfinance終値",
-     "asof": "2026-10-21"
+     "asof": "2026-10-22"
     },
     {
      "label": "ドル円",
-     "value": "-0.16%",
-     "sub": "158.27円",
+     "value": "-1.19%",
+     "sub": "156.25円",
      "source": "yfinance終値",
-     "asof": "2026-10-21"
+     "asof": "2026-10-22"
     },
     {
      "label": "米10年金利",
-     "value": "+3bp",
-     "sub": "5.15%",
+     "value": "-19bp",
+     "sub": "4.95%",
      "source": "yfinance終値",
-     "asof": "2026-10-21"
+     "asof": "2026-10-22"
     }
    ],
    "files": [
