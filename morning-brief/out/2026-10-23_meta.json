@@ -1,0 +1,18 @@
+[
+ {
+  "slot": 1,
+  "template_id": "T1",
+  "topic_tag": "other",
+  "ticker": "XLE",
+  "score": 0.5664,
+  "headline": "XLE(エネルギー)上昇 +3%"
+ },
+ {
+  "slot": 2,
+  "template_id": "T4",
+  "topic_tag": "macro",
+  "ticker": "^DJI",
+  "score": 0.5632,
+  "headline": "NYダウ小幅安 -1%"
+ }
+]
