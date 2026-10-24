@@ -2,17 +2,17 @@
  {
   "slot": 1,
   "template_id": "T6",
-  "topic_tag": "ai",
-  "ticker": "META",
-  "score": 0.7093,
-  "headline": "メタ大幅安 -7%"
+  "topic_tag": "semiconductor",
+  "ticker": "TSM",
+  "score": 0.6545,
+  "headline": "TSMC大幅安 -5%"
  },
  {
   "slot": 2,
   "template_id": "T1",
-  "topic_tag": "macro",
-  "ticker": "^IXIC",
-  "score": 0.6815,
-  "headline": "ナスダック総合下落 -3%"
+  "topic_tag": "other",
+  "ticker": "HDV",
+  "score": 0.5662,
+  "headline": "HDV(高配当)上昇 +2%"
  }
 ]
