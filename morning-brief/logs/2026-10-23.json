@@ -1,6 +1,6 @@
 {
  "date": "2026-10-23",
- "generated_at": "2026-10-23T23:34:47",
+ "generated_at": "2026-10-24T22:46:29",
  "max_cards": 2,
  "adopted": [
   {
@@ -20,7 +20,7 @@
     "global": 0.08,
     "learn": 0.0
    },
-   "n_media": 9,
+   "n_media": 11,
    "sns_heat": 0.0,
    "slot": 1,
    "template_id": "T1",
@@ -80,18 +80,18 @@
    "theme": "指数",
    "headline": "NYダウ小幅安 -1%",
    "conclusion": "NYダウのz=-1.9σは指数見通しの修正を示唆",
-   "score": 0.5632,
+   "score": 0.5298,
    "score_parts": {
     "z": 0.1651,
     "volume": 0.0681,
-    "media": 0.2,
+    "media": 0.1667,
     "sns": 0.0,
     "holdings": 0.05,
     "calendar": 0.0,
     "global": 0.08,
     "learn": 0.0
    },
-   "n_media": 10,
+   "n_media": 5,
    "sns_heat": 0.0,
    "slot": 2,
    "template_id": "T4",
