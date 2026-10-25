@@ -644,7 +644,7 @@ topics:
   theme: 指数を3本持つと自分は結局何%メガテックなのか（実効比率の計算）
   format: table
   builder: static
-  last_used: null
+  last_used: '2026-10-26'
   table:
     title: 複数指数保有時のメガテック実効比率（計算例・概算）
     subtitle: 保有比率×指数内ウェイトの合計 / 概算
