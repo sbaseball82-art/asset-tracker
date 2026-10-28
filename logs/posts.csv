@@ -58,3 +58,6 @@ date,type,topic_id,format,char_count,has_image,posted,views,likes,bookmarks,repl
 2026-10-28,earnings,2026-10-27_GOOGL,post,151,false,false,,,,,,
 2026-10-28,earnings,2026-10-27_META,post,145,false,false,,,,,,
 2026-10-28,earnings,2026-10-27_MSFT,post,150,false,false,,,,,,
+2026-10-28,earnings,2026-10-27_GOOGL,morning,214,false,false,,,,,,
+2026-10-28,earnings,2026-10-27_META,morning,204,false,false,,,,,,
+2026-10-28,earnings,2026-10-27_MSFT,morning,211,false,false,,,,,,
