@@ -61,3 +61,6 @@ date,type,topic_id,format,char_count,has_image,posted,views,likes,bookmarks,repl
 2026-10-28,earnings,2026-10-27_GOOGL,morning,214,false,false,,,,,,
 2026-10-28,earnings,2026-10-27_META,morning,204,false,false,,,,,,
 2026-10-28,earnings,2026-10-27_MSFT,morning,211,false,false,,,,,,
+2026-10-29,earnings,2026-10-28_AAPL,pre,219,false,false,,,,,,
+2026-10-29,earnings,2026-10-28_AMZN,pre,214,false,false,,,,,,
+2026-10-29,earnings,2026-10-28_WDC,pre,220,false,false,,,,,,
