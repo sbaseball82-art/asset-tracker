@@ -1,0 +1,79 @@
+{
+ "date": "2026-10-26",
+ "generated_at": "2026-10-28T00:04:36",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "TSLA",
+   "name": "テスラ",
+   "theme": "ハイテク",
+   "headline": "テスラ大幅高 +5%",
+   "conclusion": "テスラのz=+2.0σはハイテク見通しの修正を示唆",
+   "score": 0.5698,
+   "score_parts": {
+    "z": 0.1744,
+    "volume": 0.122,
+    "media": 0.1333,
+    "sns": 0.0,
+    "holdings": 0.06,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 4,
+   "sns_heat": 0.0,
+   "slot": 1,
+   "template_id": "T3",
+   "topic_tag": "ai",
+   "numbers": [
+    {
+     "label": "テスラ 日次",
+     "value": "+5.2%",
+     "sub": "z=+2.0σ",
+     "source": "yfinance終値",
+     "asof": "2026-10-26"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.5倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-10-26"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+3.4%",
+     "sub": "テスラ",
+     "source": "yfinance終値",
+     "asof": "2026-10-26"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+0.6%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-26"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "+3.6%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-26"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "5.00%",
+     "sub": "2026-10-26",
+     "source": "米財務省",
+     "asof": "2026-10-26"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-26_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-26_1.txt"
+   ]
+  }
+ ],
+ "skipped": []
+}

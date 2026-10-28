@@ -1,18 +1,10 @@
 [
  {
   "slot": 1,
-  "template_id": "T1",
-  "topic_tag": "other",
-  "ticker": "XLE",
-  "score": 0.5664,
-  "headline": "XLE(エネルギー)上昇 +3%"
- },
- {
-  "slot": 2,
-  "template_id": "T4",
-  "topic_tag": "macro",
-  "ticker": "^DJI",
-  "score": 0.5298,
-  "headline": "NYダウ小幅安 -1%"
+  "template_id": "T3",
+  "topic_tag": "ai",
+  "ticker": "TSLA",
+  "score": 0.5698,
+  "headline": "テスラ大幅高 +5%"
  }
 ]
