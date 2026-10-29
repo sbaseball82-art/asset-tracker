@@ -1,0 +1,86 @@
+{
+ "date": "2026-10-27",
+ "generated_at": "2026-10-29T00:29:02",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "^GSPC",
+   "name": "S&P500",
+   "theme": "指数",
+   "headline": "材料待ち S&P500 +0.28%",
+   "conclusion": "値動きはあったが裏取りが揃わず見送り",
+   "score": null,
+   "score_parts": null,
+   "n_media": 0,
+   "sns_heat": 0.0,
+   "slot": 1,
+   "template_id": "T5",
+   "topic_tag": "quiet",
+   "numbers": [
+    {
+     "label": "S&P500",
+     "value": "+0.28%",
+     "sub": "7,744",
+     "source": "yfinance終値",
+     "asof": "2026-10-28"
+    },
+    {
+     "label": "ナスダック",
+     "value": "+0.27%",
+     "sub": "26,550",
+     "source": "yfinance終値",
+     "asof": "2026-10-28"
+    },
+    {
+     "label": "ドル円",
+     "value": "+0.04%",
+     "sub": "158.05円",
+     "source": "yfinance終値",
+     "asof": "2026-10-28"
+    },
+    {
+     "label": "米10年金利",
+     "value": "+5bp",
+     "sub": "5.05%",
+     "source": "yfinance終値",
+     "asof": "2026-10-28"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-27_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-27_1.txt"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "ticker": "META",
+   "score": 0.3821,
+   "unmet": [
+    "スコア0.38が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "AVGO",
+   "score": 0.3545,
+   "unmet": [
+    "スコア0.35が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "TSM",
+   "score": 0.3154,
+   "unmet": [
+    "スコア0.32が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "XLE",
+   "score": 0.2971,
+   "unmet": [
+    "スコア0.30が閾値0.45未満（材料薄）"
+   ]
+  }
+ ],
+ "note": "quiet_day:gate_failed"
+}
