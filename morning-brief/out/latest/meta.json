@@ -1,10 +1,18 @@
 [
  {
   "slot": 1,
-  "template_id": "T5",
-  "topic_tag": "quiet",
-  "ticker": "^GSPC",
-  "score": null,
-  "headline": "材料待ち S&P500 +0.28%"
+  "template_id": "T2",
+  "topic_tag": "ai",
+  "ticker": "GOOGL",
+  "score": 0.7695,
+  "headline": "アルファベット小幅高 +1%"
+ },
+ {
+  "slot": 2,
+  "template_id": "T6",
+  "topic_tag": "semiconductor",
+  "ticker": "MU",
+  "score": 0.6263,
+  "headline": "マイクロン大幅高 +6%"
  }
 ]
