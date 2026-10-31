@@ -1,0 +1,18 @@
+[
+ {
+  "slot": 1,
+  "template_id": "T3",
+  "topic_tag": "semiconductor",
+  "ticker": "INTC",
+  "score": 1.06,
+  "headline": "インテル急落 -29%"
+ },
+ {
+  "slot": 2,
+  "template_id": "T1",
+  "topic_tag": "macro",
+  "ticker": "^GSPC",
+  "score": 0.8465,
+  "headline": "S&P500下落 -2%"
+ }
+]
