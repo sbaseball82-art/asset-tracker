@@ -1,0 +1,129 @@
+{
+ "date": "2026-10-29",
+ "generated_at": "2026-10-31T00:08:13",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "AMZN",
+   "name": "アマゾン",
+   "theme": "ハイテク",
+   "headline": "アマゾン大幅安 -4%",
+   "conclusion": "アマゾンのz=-2.4σはハイテク見通しの修正を示唆",
+   "score": 0.8395,
+   "score_parts": {
+    "z": 0.2128,
+    "volume": 0.2,
+    "media": 0.2,
+    "sns": 0.0667,
+    "holdings": 0.08,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 7,
+   "sns_heat": 0.667,
+   "slot": 1,
+   "template_id": "T4",
+   "topic_tag": "ai",
+   "numbers": [
+    {
+     "label": "アマゾン 日次",
+     "value": "-4.2%",
+     "sub": "z=-2.4σ",
+     "source": "yfinance終値",
+     "asof": "2026-10-29"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "2.4倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-10-29"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "-8.0%",
+     "sub": "アマゾン",
+     "source": "yfinance終値",
+     "asof": "2026-10-29"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "-1.8%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-29"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-7.2%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-10-29"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.98%",
+     "sub": "2026-10-29",
+     "source": "米財務省",
+     "asof": "2026-10-29"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-29_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-10-29_1.txt"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "ticker": "HDV",
+   "score": 0.3226,
+   "unmet": [
+    "スコア0.32が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "SCHD",
+   "score": 0.3066,
+   "unmet": [
+    "スコア0.31が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "XLF",
+   "score": 0.2835,
+   "unmet": [
+    "スコア0.28が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "MU",
+   "score": 0.2785,
+   "unmet": [
+    "スコア0.28が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "MSFT",
+   "score": 0.2776,
+   "unmet": [
+    "スコア0.28が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "VYM",
+   "score": 0.2727,
+   "unmet": [
+    "スコア0.27が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "XLU",
+   "score": 0.2643,
+   "unmet": [
+    "スコア0.26が閾値0.45未満（材料薄）"
+   ]
+  }
+ ]
+}
