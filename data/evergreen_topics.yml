@@ -3,7 +3,7 @@ topics:
   theme: 高配当ETF比較（VYM / HDV / SCHD / SBI S 米国高配当）の構成銘柄 重複率
   format: table
   builder: etf_overlap
-  last_used: '2026-08-02'
+  last_used: '2026-11-02'
   params:
     etfs:
     - VYM
