@@ -37,9 +37,14 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest
+          python -m playwright install --with-deps chromium
 
       - name: Run tests
+        env:
+          DASHBOARD_RENDER_TESTS: "1"
         run: python -m pytest tests/ -q

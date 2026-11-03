@@ -13,6 +13,9 @@ ETF・投資信託の価格/基準価額を取得し data.json に保存する�
 履歴(history)に毎日の総資産を蓄積し、前日比/先週比/先月比/年初来を計算する。
 """
 
+import argparse
+import copy
+import math
 import csv
 import io
 import json
@@ -24,7 +27,7 @@ from pathlib import Path
 import requests
 import yfinance as yf
 
-from config import ETF_HOLDINGS, FUND_HOLDINGS
+from config import ETF_HOLDINGS, FUND_HOLDINGS, load_stocks
 
 OUTPUT_FILE = Path("data.json")
 JST = timezone(timedelta(hours=9))
@@ -37,29 +40,61 @@ UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
 # ─────────────────────────────────────────────────────
 # 1. USD/JPY
 # ─────────────────────────────────────────────────────
-def fetch_usdjpy() -> float:
+def valid_price(value):
+    return (not isinstance(value, bool) and isinstance(value, (int, float))
+            and math.isfinite(value) and value > 0)
+
+
+def quote_fx_dates_match(quote, fx):
+    """円建て日次比較は株価と為替の両基準日が一致する場合だけ行う。"""
+    return (not quote.get("stale") and not fx.get("stale")
+            and not quote.get("corporate_action_review")
+            and all(quote.get(key) and quote[key] == fx.get(key)
+                    for key in ("curr_date", "prev_date")))
+
+
+def split_events(frame):
+    """取得窓内で提供元が報告した株式分割。数量は自動補正しない。"""
+    if "Stock Splits" not in frame:
+        return []
+    return [{"date": str(index.date()), "ratio": float(ratio)}
+            for index, ratio in frame["Stock Splits"].dropna().items()
+            if valid_price(float(ratio)) and float(ratio) != 1]
+
+
+def fetch_fx(existing=None):
+    """確認済み価格だけを採用する。未確認の固定レートで補完しない。"""
     try:
-        hist = yf.Ticker("USDJPY=X").history(period="5d", interval="1d")
-        rate = float(hist["Close"].dropna().iloc[-1])
-        print(f"[USD/JPY] {rate:.2f} 円")
-        return round(rate, 2)
-    except Exception as e:
-        print(f"[USD/JPY] 取得失敗: {e} → 150.00 を使用")
-        return 150.00
+        hist = yf.Ticker("USDJPY=X").history(period="5d", interval="1d", auto_adjust=False)
+        series = hist["Close"].dropna().sort_index()
+        rate, previous = float(series.iloc[-1]), float(series.iloc[-2])
+        if not valid_price(rate) or not valid_price(previous):
+            raise ValueError("invalid exchange rate")
+        return {"rate": round(rate, 4), "prev_rate": round(previous, 4),
+                "curr_date": str(series.index[-1].date()), "prev_date": str(series.index[-2].date()),
+                "source": "Yahoo Finance USDJPY=X", "stale": False}
+    except Exception:
+        cached = (existing or {}).get("fx") or {}
+        if valid_price(cached.get("rate")) and cached.get("curr_date") and cached.get("source"):
+            return {**cached, "stale": True, "fetch_failed": True}
+        raise RuntimeError("USD/JPY取得失敗。確認済み為替がないため更新を中止します") from None
 
 
-# ─────────────────────────────────────────────────────
-# 2. ETF (yfinance)
-# ─────────────────────────────────────────────────────
-def fetch_etf_prices(usdjpy: float) -> dict:
+def fetch_usdjpy(existing=None) -> float:
+    """旧呼出元との互換用。新しい呼出元は日付も返す fetch_fx を使用。"""
+    return fetch_fx(existing)["rate"]
+
+
+def fetch_etf_prices(usdjpy: float, prev_usdjpy=None, fx=None) -> dict:
     results = {}
+    prev_usdjpy = prev_usdjpy if valid_price(prev_usdjpy) else usdjpy
     symbols = list(ETF_HOLDINGS.keys())
     print(f"\n[ETF] 取得開始: {', '.join(symbols)}")
 
     try:
         data = yf.download(
             tickers=symbols, period="5d", interval="1d",
-            progress=False, auto_adjust=True, group_by="ticker",
+            progress=False, auto_adjust=False, group_by="ticker", actions=True,
         )
     except Exception as e:
         print(f"  ❌ yfinance エラー: {e}")
@@ -71,22 +106,34 @@ def fetch_etf_prices(usdjpy: float) -> dict:
                 series = data["Close"].dropna()
             else:
                 series = data[symbol]["Close"].dropna()
+            events = split_events(data if len(symbols) == 1 else data[symbol])
             if len(series) < 2:
                 print(f"  ⚠️  {symbol}: データ不足")
                 continue
 
             prev_usd = round(float(series.iloc[-2]), 4)
             curr_usd = round(float(series.iloc[-1]), 4)
+            if not valid_price(curr_usd) or not valid_price(prev_usd):
+                continue
             change_pct = round((curr_usd - prev_usd) / prev_usd * 100, 2)
 
             results[symbol] = {
                 "name": display_name, "type": "ETF", "shares": shares,
                 "prev_price": prev_usd, "curr_price": curr_usd,
                 "change_pct": change_pct,
-                "prev_jpy": round(prev_usd * shares * usdjpy),
+                "prev_jpy": round(prev_usd * shares * prev_usdjpy),
                 "curr_jpy": round(curr_usd * shares * usdjpy),
-                "usdjpy": usdjpy,
+                "usdjpy": usdjpy, "source": "Yahoo Finance close",
+                "curr_date": str(series.index[-1].date()),
+                "prev_date": str(series.index[-2].date()), "stale": False,
+                "corporate_action_review": bool(events), "split_events": events,
             }
+            row = results[symbol]
+            matched = quote_fx_dates_match(row, fx or {})
+            row["change_jpy"] = row["curr_jpy"] - row["prev_jpy"] if matched else None
+            row["jpy_change_note"] = "基準日一致" if matched else "株価・為替の基準日不一致、旧価格または分割要確認"
+            if events:
+                row["change_pct"] = None
             print(f"  ✅ {symbol}: ${prev_usd} → ${curr_usd} "
                   f"({change_pct:+.2f}%) ≈ ¥{results[symbol]['curr_jpy']:,}")
         except Exception as e:
@@ -243,6 +290,8 @@ def fetch_fund_prices() -> dict:
 
         navs = data["navs"]
         curr, prev = navs[0], navs[1]
+        if not valid_price(curr) or not valid_price(prev):
+            continue
 
         # Yahoo!推定は HTML から粗く数値を拾うため、純資産総額などを誤取得して
         # 基準価額として異常な値になることがある(総資産・履歴を汚染する)。
@@ -281,7 +330,7 @@ def fetch_fund_prices() -> dict:
 def nearest_on_or_before(history: list, target: str):
     """history(date昇順)からtarget日付以前で最も近いレコードを返す。"""
     cands = [h for h in history if h["date"] <= target]
-    return cands[-1] if cands else (history[0] if history else None)
+    return cands[-1] if cands else None
 
 def pct(curr, base):
     if not base:
@@ -298,12 +347,15 @@ def build_comparisons(history: list, curr_total: int, today: datetime) -> dict:
     comp = {}
     d = today.date()
 
-    def find(days_ago=None, ymd=None):
+    def find(days_ago=None, ymd=None, max_lag=4):
         if ymd is None:
             target = (d - timedelta(days=days_ago)).strftime("%Y-%m-%d")
         else:
             target = ymd
         rec = nearest_on_or_before(history, target)
+        if rec and (datetime.fromisoformat(target).date()
+                    - datetime.fromisoformat(rec["date"]).date()).days > max_lag:
+            return None
         return rec
 
     def contrib_after(base_date: str) -> int:
@@ -314,12 +366,17 @@ def build_comparisons(history: list, curr_total: int, today: datetime) -> dict:
 
     # 前日比は history の最後から2番目(=前回記録)を使う
     prev_rec = history[-2] if len(history) >= 2 else None
+    if prev_rec and prev_rec["date"] != (d - timedelta(days=1)).isoformat():
+        prev_rec = None
     week_rec = find(days_ago=7)
     month_rec = find(days_ago=30)
-    ytd_rec = find(ymd=f"{d.year}-01-01")
+    ytd_rec = find(ymd=f"{d.year - 1}-12-31", max_lag=7)
 
     for key, rec in (("day", prev_rec), ("week", week_rec),
                      ("month", month_rec), ("ytd", ytd_rec)):
+        if rec and any(h.get("stale") or h.get("complete") is False
+                       for h in history if rec["date"] <= h["date"] <= d.isoformat()):
+            rec = None
         if rec:
             base = rec["total_jpy"]
             gross = curr_total - base            # 総資産の増減(拠出込み)
@@ -330,7 +387,9 @@ def build_comparisons(history: list, curr_total: int, today: datetime) -> dict:
                 "change_jpy": market,
                 "change_pct": (round(market / base * 100, 2) if base else None),
                 "gross_change_jpy": gross,       # 参考: 拠出込みの総資産増減
-                "cash_flow_jpy": contrib,        # 参考: 期間中の純拠出額
+                "cash_flow_jpy": contrib,
+                "method": "quantity_change_at_current_price_estimate",
+                "note": "数量差を当日価格で評価した概算。実際の入出金・配当・税手数料は未反映"
             }
         else:
             comp[key] = None
@@ -399,13 +458,18 @@ def carry_forward_missing(existing: dict, etf: dict, fund: dict, usdjpy: float):
         if sym in etf or sym not in prev_etf:
             continue
         price = prev_etf[sym].get("curr_price")
-        if not price:
+        if not valid_price(price):
             continue
         jpy = round(price * shares * usdjpy)
         etf[sym] = {
             "name": name, "type": "ETF", "shares": shares,
             "prev_price": price, "curr_price": price, "change_pct": None,
             "prev_jpy": jpy, "curr_jpy": jpy, "usdjpy": usdjpy, "stale": True,
+            "curr_date": prev_etf[sym].get("curr_date"), "prev_date": None,
+            "source": "確認済み保存価格(取得失敗)", "fetch_failed": True,
+            "change_jpy": None, "jpy_change_note": "価格取得失敗",
+            "corporate_action_review": prev_etf[sym].get("corporate_action_review", False),
+            "split_events": prev_etf[sym].get("split_events", []),
         }
         print(f"  ⚠️  {sym}: 取得失敗 → 前日値で補完 (¥{jpy:,})")
 
@@ -413,7 +477,7 @@ def carry_forward_missing(existing: dict, etf: dict, fund: dict, usdjpy: float):
         if code in fund or code not in prev_fund:
             continue
         nav = prev_fund[code].get("curr_nav")
-        if not nav:
+        if not valid_price(nav):
             continue
         jpy = round(units * nav / 10000)
         fund[code] = {
@@ -431,80 +495,210 @@ def carry_forward_missing(existing: dict, etf: dict, fund: dict, usdjpy: float):
 def main():
     now = datetime.now(JST)
     today = now.strftime("%Y-%m-%d")
-    print(f"\n{'='*55}\n  資産価格取得  {now:%Y-%m-%d %H:%M:%S} JST\n{'='*55}")
-
-    existing = {}
-    if OUTPUT_FILE.exists():
-        with open(OUTPUT_FILE, encoding="utf-8") as f:
-            existing = json.load(f)
-
-    usdjpy = fetch_usdjpy()
-    etf = fetch_etf_prices(usdjpy)
+    existing = json.loads(OUTPUT_FILE.read_text(encoding="utf-8")) if OUTPUT_FILE.exists() else {}
+    fx = fetch_fx(existing)
+    usdjpy = fx["rate"]
+    etf = fetch_etf_prices(usdjpy, fx.get("prev_rate"), fx)
     fund = fetch_fund_prices()
-
-    # 取得失敗した保有は前回値で補完(総資産の見かけ上の急落と履歴汚染を防ぐ)
     etf, fund = carry_forward_missing(existing, etf, fund, usdjpy)
-
+    missing = (set(ETF_HOLDINGS) - set(etf)) | (set(FUND_HOLDINGS) - set(fund))
+    if missing:
+        raise RuntimeError("価格未取得の銘柄があります。部分合計を総資産として保存しません")
+    warnings = mark_freshness(etf, fund, fx, now)
+    for warning in warnings:
+        print("::warning::" + warning)
     prev_total, curr_total = calc_total(etf, fund)
     if curr_total == 0:
-        print("\n❌ 取得できた資産がありません。終了します。")
-        return
-
-    # 当日の純拠出(買い増し-売却)を算出。前回 data.json の保有数量と当日数量の差 ×
-    # 当日価格。相場変動と資金の出し入れを分離し、期間比較を市場変動ベースにするため。
+        raise RuntimeError("資産評価額が0のため更新を中止します")
     cash_flow_jpy = compute_cash_flow(existing, etf, fund, usdjpy)
-    # 同日に複数回実行された場合(1日に複数回 買い増しを反映する等)、既存の当日拠出に
-    # 上乗せして累計にする。existing は前回runの出力なので、同日なら compute_cash_flow は
-    # 前回run以降の増分のみを返す。既存の当日拠出を足さないと過去分が失われ比較が狂う。
     if existing.get("date") == today:
-        for h in existing.get("history", []):
-            if h.get("date") == today:
-                cash_flow_jpy += int(h.get("cash_flow_jpy", 0) or 0)
+        for row in existing.get("history", []):
+            if row.get("date") == today:
+                cash_flow_jpy += int(row.get("cash_flow_jpy", 0) or 0)
                 break
-    if cash_flow_jpy:
-        print(f"\n[拠出] 当日の純拠出(買い増し-売却): ¥{cash_flow_jpy:,}")
-
-    # 履歴更新(同日上書き, 昇順, 直近400日保持)
-    history = [h for h in existing.get("history", []) if h.get("date") != today]
-    history.append({"date": today, "total_jpy": curr_total,
-                    "usdjpy": usdjpy, "cash_flow_jpy": cash_flow_jpy})
-    history = sorted(history, key=lambda x: x["date"])[-400:]
-
+    history = [row for row in existing.get("history", []) if row.get("date") != today]
+    history.append({"date": today, "total_jpy": curr_total, "usdjpy": usdjpy,
+                    "cash_flow_jpy": cash_flow_jpy, "complete": True, "stale": bool(warnings)})
+    history = sorted(history, key=lambda row: row["date"])[-400:]
     comparisons = build_comparisons(history, curr_total, now)
+    day = comparisons.get("day") or {}
+    output = {"updated_at": now.isoformat(), "date": today, "usdjpy": usdjpy, "fx": fx,
+              "complete": True, "status": "degraded" if warnings else "ok", "warnings": warnings,
+              "total_jpy": curr_total, "day_change_jpy": day.get("change_jpy"),
+              "day_change_pct": day.get("change_pct"), "comparisons": comparisons,
+              "etf": etf, "fund": fund, "history": history}
+    OUTPUT_FILE.write_text(json.dumps(output, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")
+    print(f"{OUTPUT_FILE} を保存しました（履歴 {len(history)} 日分）")
 
-    # 前日比(history不足時はprice差分でフォールバック)
-    day_change_jpy = curr_total - prev_total
-    day_change_pct = pct(curr_total, prev_total) or 0.0
 
-    print(f"\n{'─'*40}")
-    print(f"  総資産(当日): ¥{curr_total:,}")
-    for label, key in (("前日比", "day"), ("先週比", "week"),
-                       ("先月比", "month"), ("年初来", "ytd")):
-        c = comparisons.get(key)
-        if c and c["change_pct"] is not None:
-            print(f"  {label}: {c['change_pct']:+.2f}% "
-                  f"({'+' if c['change_jpy']>=0 else ''}¥{c['change_jpy']:,})")
-        else:
-            print(f"  {label}: データ蓄積中")
-    print(f"{'─'*40}")
 
-    output = {
-        "updated_at": now.isoformat(),
-        "date": today,
-        "usdjpy": usdjpy,
-        "total_jpy": curr_total,
-        "day_change_jpy": day_change_jpy,
-        "day_change_pct": day_change_pct,
-        "comparisons": comparisons,
-        "etf": etf,
-        "fund": fund,
-        "history": history,
-    }
+def mark_freshness(etf, fund, fx, now):
+    """休日を含む4暦日を超える価格、または基準日不明を明示する。"""
+    warnings = []
+    for symbol, row in list(etf.items()) + list(fund.items()) + [("USD/JPY", fx)]:
+        try:
+            quote_date = datetime.fromisoformat(row["curr_date"]).date()
+            age = (now.date() - quote_date).days
+            outdated = age > 4 or age < 0
+        except (KeyError, TypeError, ValueError):
+            outdated = True
+        if outdated:
+            row["stale"] = True
+        if row.get("stale"):
+            warnings.append(f"{symbol}: 取得失敗・価格が古い・基準日不明のいずれか。価格基準日を確認してください")
+        if row.get("corporate_action_review"):
+            warnings.append(f"{symbol}: 株式分割を検出。保有数量・取得単価・入出金の要確認（自動補正なし）")
+    return warnings
 
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
-    print(f"\n💾 {OUTPUT_FILE} を保存しました（履歴 {len(history)} 日分）")
+
+def stock_valuation(meta, quote, fx):
+    """個別株の計算。取得時為替未設定なら円建て取得損益を推測しない。"""
+    shares = meta.get("shares")
+    price = quote.get("curr_price")
+    missing = shares is None or not valid_price(price) or not valid_price(fx.get("rate"))
+    row = {**meta, **quote, "type": "個別株", "shares": shares,
+           "missing": missing, "curr_jpy": None, "prev_jpy": None,
+           "usdjpy": fx.get("rate"), "unrealized_gain_usd": None,
+           "unrealized_jpy": None, "unrealized_pct": None,
+           "cost_basis_status": "未設定"}
+    if missing:
+        return row
+    row["curr_jpy"] = round(price * shares * fx["rate"])
+    matched = quote_fx_dates_match(quote, fx)
+    row["jpy_change_note"] = "基準日一致" if matched else "株価・為替の基準日不一致、旧価格または分割要確認"
+    if valid_price(quote.get("prev_price")) and valid_price(fx.get("prev_rate")) and matched:
+        row["prev_jpy"] = round(quote["prev_price"] * shares * fx["prev_rate"])
+        row["change_jpy"] = row["curr_jpy"] - row["prev_jpy"]
+    else:
+        row["change_jpy"] = None
+    if quote.get("corporate_action_review"):
+        row["change_pct"] = None
+    cost = meta.get("purchase_price_usd")
+    if valid_price(cost):
+        row["unrealized_gain_usd"] = round((price - cost) * shares, 2)
+        row["unrealized_pct"] = round((price - cost) / cost * 100, 2)
+        row["cost_basis_status"] = "USD建て・税手数料除外"
+        purchase_fx = meta.get("purchase_usdjpy")
+        if valid_price(purchase_fx):
+            row["unrealized_jpy"] = row["curr_jpy"] - round(cost * shares * purchase_fx)
+            row["cost_basis_status"] = "取得時為替設定済・税手数料除外"
+    return row
+
+
+def fetch_stock_prices(stocks, fx, previous=None):
+    results = {}
+    previous = previous or {}
+    for symbol, meta in stocks.items():
+        quote = {"curr_price": None, "prev_price": None, "change_pct": None,
+                 "curr_date": None, "prev_date": None, "stale": False,
+                 "source": "Yahoo Finance close"}
+        if meta.get("shares") is not None:
+            try:
+                hist = yf.Ticker(symbol).history(period="5d", interval="1d", auto_adjust=False, actions=True)
+                series = hist["Close"].dropna().sort_index()
+                price, prev = float(series.iloc[-1]), float(series.iloc[-2])
+                if not valid_price(price) or not valid_price(prev):
+                    raise ValueError("invalid stock price")
+                quote.update(curr_price=price, prev_price=prev,
+                             curr_date=str(series.index[-1].date()), prev_date=str(series.index[-2].date()),
+                             change_pct=round((price - prev) / prev * 100, 2))
+                events = split_events(hist)
+                quote.update(corporate_action_review=bool(events), split_events=events)
+            except Exception:
+                cached = previous.get(symbol, {})
+                if valid_price(cached.get("curr_price")) and cached.get("curr_date"):
+                    quote.update(curr_price=cached["curr_price"], curr_date=cached["curr_date"],
+                                 source="確認済み保存価格(取得失敗)",
+                                 corporate_action_review=cached.get("corporate_action_review", False),
+                                 split_events=cached.get("split_events", []))
+                quote.update(stale=True, fetch_failed=True)
+        results[symbol] = stock_valuation(meta, quote, fx)
+    return results
+
+
+def portfolio_snapshot(public, previous, stocks, now):
+    """既存11銘柄と個別株を統合する。統合前の履歴は接続しない。"""
+    etf, fund = copy.deepcopy(public.get("etf", {})), copy.deepcopy(public.get("fund", {}))
+    fx = copy.deepcopy(public.get("fx") or {
+        "rate": None, "prev_rate": None, "curr_date": None, "prev_date": None,
+        "source": "旧データ・価格基準日不明", "stale": True})
+    warnings = mark_freshness(etf, fund, fx, now)
+    warnings += mark_freshness(stocks, {}, fx, now)
+    if public.get("date") != now.strftime("%Y-%m-%d"):
+        warnings.append("ETF・投資信託の取得結果が本日更新されていません")
+    rows = list(etf.values()) + list(fund.values()) + list(stocks.values())
+    complete = (bool(stocks) and valid_price(fx.get("rate"))
+                and set(etf) == set(ETF_HOLDINGS) and set(fund) == set(FUND_HOLDINGS)
+                and all(not row.get("missing") and isinstance(row.get("curr_jpy"), (int, float))
+                        and math.isfinite(row["curr_jpy"]) and row["curr_jpy"] >= 0 for row in rows))
+    known = sum(row["curr_jpy"] for row in rows if isinstance(row.get("curr_jpy"), (int, float))
+                and math.isfinite(row["curr_jpy"]) and row["curr_jpy"] >= 0)
+    total = known if complete else None
+    quantities_match = (all(row.get("shares") == ETF_HOLDINGS[symbol][1]
+                            for symbol, row in etf.items() if symbol in ETF_HOLDINGS)
+                        and all(row.get("units") == FUND_HOLDINGS[symbol][1]
+                                for symbol, row in fund.items() if symbol in FUND_HOLDINGS))
+    if not quantities_match:
+        complete = False
+        total = None
+        warnings.append("ETF・投資信託の数量が設定と異なります。先に通常の価格更新を実行してください")
+    if not complete:
+        warnings.append("保有数量または価格が未取得のため総資産・運用変動は未確定です")
+    history = copy.deepcopy(previous.get("history", []))
+    date = now.strftime("%Y-%m-%d")
+    if complete:
+        flow = compute_cash_flow(previous, etf, fund, fx["rate"])
+        if previous:
+            for symbol, row in stocks.items():
+                old_shares = previous.get("stocks", {}).get(symbol, {}).get("shares") or 0
+                flow += round((row["shares"] - old_shares) * row["curr_price"] * fx["rate"])
+        if previous.get("date") == date:
+            flow += sum(row.get("cash_flow_jpy", 0) for row in history if row["date"] == date)
+        history = [row for row in history if row["date"] != date]
+        history.append({"date": date, "total_jpy": total, "usdjpy": fx["rate"],
+                        "cash_flow_jpy": flow, "complete": True, "stale": bool(warnings),
+                        "cash_flow_method": "quantity_change_at_current_price_estimate"})
+        history = sorted(history, key=lambda row: row["date"])[-400:]
+    comparisons = build_comparisons(history, total, now) if complete else dict.fromkeys(("day", "week", "month", "ytd"))
+    day = comparisons.get("day") or {}
+    for row in rows:
+        row["weight_pct"] = round(row["curr_jpy"] / total * 100, 2) if total and row.get("curr_jpy") is not None else None
+    return {"updated_at": now.isoformat(), "date": date,
+            "price_data_updated_at": public.get("updated_at"), "usdjpy": fx.get("rate"), "fx": fx,
+            "total_jpy": total, "known_total_jpy": known, "complete": complete,
+            "status": "incomplete" if not complete else "degraded" if warnings else "ok",
+            "warnings": list(dict.fromkeys(warnings)),
+            "day_change_jpy": day.get("change_jpy"), "day_change_pct": day.get("change_pct"),
+            "comparisons": comparisons, "etf": etf, "fund": fund, "stocks": stocks,
+            "history": history, "legacy_history": public.get("history", []),
+            "history_note": "統合資産の履歴は初回取得から。旧11銘柄の履歴はlegacy_historyに保存し接続しません",
+            "performance_note": "数量差を当日価格で評価した概算拠出を除外。配当・税金・手数料・実取引価格は未反映",
+            "corporate_action_note": "株式分割・併合等の数量と取得単価は自動補正しません。取得窓外または提供元未報告の企業行動は未検知のため、証券口座の保有数量と照合してください"}
+
+
+def portfolio_main():
+    public = json.loads(OUTPUT_FILE.read_text(encoding="utf-8"))
+    destination = Path("portfolio.json")
+    cache_path = Path("portfolio_last_complete.json")
+    previous = json.loads(cache_path.read_text(encoding="utf-8")) if cache_path.exists() else {}
+    fx = public.get("fx") or {"rate": None, "prev_rate": None, "curr_date": None, "stale": True}
+    stocks = fetch_stock_prices(load_stocks(), fx, previous.get("stocks"))
+    output = portfolio_snapshot(public, previous, stocks, datetime.now(JST))
+    from src.portfolio_analysis import analyze
+    output["analysis"] = analyze(output)
+    destination.write_text(json.dumps(output, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")
+    if output["complete"]:
+        cache_path.write_text(destination.read_text(encoding="utf-8"), encoding="utf-8")
+    print("統合ダッシュボードデータを更新しました。状態: " + output["status"])
+    if output["status"] == "degraded":
+        print("::warning::価格の取得失敗・古い価格があります。ダッシュボードの価格基準日を確認してください")
+    return 0 if output["complete"] else 2
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="既存11銘柄または個別株を含む統合資産を更新")
+    parser.add_argument("--portfolio", action="store_true", help="既存data.jsonと個別株設定からportfolio.jsonを生成")
+    args = parser.parse_args()
+    if args.portfolio:
+        raise SystemExit(portfolio_main())
     main()

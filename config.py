@@ -9,6 +9,7 @@ config.py
 """
 
 import json
+import math
 from pathlib import Path
 
 # 保有数量を holdings.json から読み込む
@@ -17,9 +18,8 @@ try:
     _h = json.loads(_HOLDINGS_FILE.read_text(encoding="utf-8"))
     _ETF_QTY = _h.get("etf", {})
     _FUND_QTY = _h.get("fund", {})
-except Exception as e:
-    print(f"holdings.json 読込失敗: {e} -> 数量0で続行")
-    _ETF_QTY, _FUND_QTY = {}, {}
+except (OSError, ValueError) as e:
+    raise RuntimeError("holdings.json を読めません。数量を確認してください") from e
 
 
 # 1. 保有ETF：シンボル -> (表示名, 保有株数)
@@ -49,6 +49,35 @@ FUND_HOLDINGS = {
     code: (name, _FUND_QTY.get(code, 0), isin)
     for code, (name, isin) in _FUND_META.items()
 }
+
+
+# 個別株はETFと別分類。数量・取得情報も holdings.json から読む。
+STOCK_HOLDINGS = _h.get("stocks", {})
+
+
+def load_stocks():
+    """個別株設定を検証する。取得単価・購入日が未設定ならそのまま残す。"""
+    try:
+        if not isinstance(STOCK_HOLDINGS, dict) or not STOCK_HOLDINGS:
+            raise ValueError("missing stocks")
+        stocks = {symbol: dict(value) for symbol, value in STOCK_HOLDINGS.items()}
+        for symbol, values in stocks.items():
+            if not isinstance(symbol, str) or not symbol or values.get("currency") != "USD":
+                raise ValueError("invalid symbol/currency")
+            qty = values.get("shares")
+            if isinstance(qty, bool) or not isinstance(qty, int) or qty < 0:
+                raise ValueError("invalid quantity")
+            for field in ("purchase_price_usd", "purchase_usdjpy"):
+                value = values.get(field)
+                if value is not None and (isinstance(value, bool) or not isinstance(value, (int, float))
+                                          or not math.isfinite(value) or value <= 0):
+                    raise ValueError("invalid cost")
+            if values.get("purchase_date") is not None:
+                from datetime import date
+                date.fromisoformat(values["purchase_date"])
+    except (ValueError, TypeError):
+        raise ValueError("holdings.json の個別株設定が不正です。数量・通貨・取得単価・日付を確認してください") from None
+    return stocks
 
 
 # 3. 市場イベント解説の生成モード（"semi" / "auto" / "manual"）
