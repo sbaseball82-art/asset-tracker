@@ -209,14 +209,15 @@ def main():
     import io
     from PIL import Image
     with sync_playwright() as p:
-        browser = p.chromium.launch(args=["--no-sandbox"])
+        from src.common.render import _launch_chromium
+        browser = _launch_chromium(p)
         # 2倍解像度でレンダリングしてから 1080x1080 へ縮小(スーパーサンプリング)。
         # 高解像描画の鮮明さは保ちつつ、最終出力は 1080x1080(=1.17MP)に抑える。
         # 2160x2160(4.67MP)のままだと iOS Safari / GitHub モバイルの画像デコード上限に
         # 引っかかり、スマホの blob 表示で画像が出ない事象があるため。
         page = browser.new_page(viewport={"width": 1080, "height": 1080},
                                 device_scale_factor=2)
-        page.goto(OUT_HTML.resolve().as_uri())
+        page.set_content(html, wait_until="load")
         page.wait_for_timeout(1200)
         raw = page.screenshot(clip={"x": 0, "y": 0, "width": 1080, "height": 1080})
         browser.close()

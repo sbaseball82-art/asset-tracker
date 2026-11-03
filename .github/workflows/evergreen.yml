@@ -50,9 +50,8 @@ jobs:
             python -m src.evergreen.generate
           fi
 
-      - name: Propose new topics (needs ANTHROPIC_API_KEY)
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      - name: Check optional topic proposals (free mode skips paid AI)
+        # APIキーを渡さないため、既存の仕様どおり正常スキップする。
         run: python -m src.evergreen.propose_topics
         continue-on-error: true
 

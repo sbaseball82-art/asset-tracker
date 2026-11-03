@@ -12,9 +12,14 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: daily-asset-slide-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
 
@@ -25,6 +30,8 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           python -m playwright install --with-deps chromium
@@ -46,14 +53,19 @@ jobs:
         run: python scripts/report_fund_sources.py
 
       - name: Fetch market events
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        # 課金APIのキーを渡さず、既存の無料フォールバックを利用。
         run: python fetch_events.py
+
+      - name: Update integrated portfolio
+        id: portfolio
+        continue-on-error: true
+        run: python fetch_prices.py --portfolio
 
       - name: Make slide images
         run: |
           python make_slide.py
           python make_allocation_slide.py
+          python make_dashboard.py
 
       - name: Upload slide artifacts
         uses: actions/upload-artifact@v4
@@ -62,6 +74,8 @@ jobs:
           path: |
             slide/slide.png
             slide/allocation.png
+            slide/dashboard.png
+            slide/dashboard.html
           retention-days: 30
 
       - name: Commit data & slides
@@ -71,10 +85,15 @@ jobs:
 
           BRANCH="${GITHUB_REF_NAME}"
 
-          # このrunの生成物(6ファイル)を退避。このrunの成果が常に最新なので他コミットに勝たせる。
+          # 確認済みの生成物を退避し、最新ブランチへ重ねる。
           mkdir -p "$RUNNER_TEMP/gen/slide"
           cp data.json events.json "$RUNNER_TEMP/gen/"
+          cp portfolio.json "$RUNNER_TEMP/gen/"
+          if [ -f portfolio_last_complete.json ]; then
+            cp portfolio_last_complete.json "$RUNNER_TEMP/gen/"
+          fi
           cp slide/slide.png slide/slide.html slide/allocation.png slide/allocation.html "$RUNNER_TEMP/gen/slide/"
+          cp slide/dashboard.png slide/dashboard.html "$RUNNER_TEMP/gen/slide/"
 
           # rebase/merge を一切使わず「最新の origin を取り直して生成物を重ねる」方式
           # (daily_report.yml と同一の実績パターン)。理由:
@@ -89,9 +108,17 @@ jobs:
 
             # 最新 origin の上に生成物を重ねる(上書きのみ。他ファイルには触れない)
             cp "$RUNNER_TEMP/gen/data.json" "$RUNNER_TEMP/gen/events.json" .
+            cp "$RUNNER_TEMP/gen/portfolio.json" .
+            if [ -f "$RUNNER_TEMP/gen/portfolio_last_complete.json" ]; then
+              cp "$RUNNER_TEMP/gen/portfolio_last_complete.json" .
+            fi
             cp -r "$RUNNER_TEMP/gen/slide/." slide/
 
             git add data.json events.json slide/slide.png slide/slide.html slide/allocation.png slide/allocation.html
+            git add portfolio.json slide/dashboard.png slide/dashboard.html
+            if [ -f portfolio_last_complete.json ]; then
+              git add portfolio_last_complete.json
+            fi
             if git diff --cached --quiet; then
               echo "変更なし(コミットをスキップ)"
               exit 0
@@ -105,4 +132,10 @@ jobs:
             sleep 5
           done
           echo "::error::5回試行しても push できませんでした"
+          exit 1
+
+      - name: Report incomplete portfolio
+        if: steps.portfolio.outcome == 'failure'
+        run: |
+          echo "::error::統合価格に欠損があります。ダッシュボードの取得状態を確認してください。"
           exit 1

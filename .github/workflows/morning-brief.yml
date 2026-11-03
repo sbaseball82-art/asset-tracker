@@ -49,7 +49,7 @@ jobs:
       - name: Generate deep-dive cards (max 2, may be 0 on thin days)
         env:
           # すべて任意。未設定でも動く（該当取得元だけスキップ）
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # 無料運用: 任意の有料AI整文にはキーを渡さず、既存の定型文を利用。
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
           FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
         run: python morning-brief/scripts/main.py

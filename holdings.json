@@ -14,5 +14,16 @@
     "89311265": 775437,
     "04311181": 367908,
     "8931224C": 1984942
+  },
+  "stocks": {
+    "FTNT": {
+      "name": "Fortinet",
+      "market": "NASDAQ",
+      "currency": "USD",
+      "shares": 82,
+      "purchase_price_usd": null,
+      "purchase_date": null,
+      "purchase_usdjpy": null
+    }
   }
 }
