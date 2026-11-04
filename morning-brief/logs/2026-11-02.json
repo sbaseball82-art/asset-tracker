@@ -1,29 +1,100 @@
 {
  "date": "2026-11-02",
- "generated_at": "2026-11-03T02:41:52",
+ "generated_at": "2026-11-04T01:33:28",
  "max_cards": 2,
  "adopted": [
+  {
+   "ticker": "INTC",
+   "name": "インテル",
+   "theme": "半導体",
+   "headline": "インテル急落 -9%",
+   "conclusion": "インテルのz=-1.6σは半導体見通しの修正を示唆",
+   "score": 0.6454,
+   "score_parts": {
+    "z": 0.1369,
+    "volume": 0.1652,
+    "media": 0.1333,
+    "sns": 0.1,
+    "holdings": 0.03,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 4,
+   "sns_heat": 1.0,
+   "slot": 1,
+   "template_id": "T2",
+   "topic_tag": "semiconductor",
+   "numbers": [
+    {
+     "label": "インテル 日次",
+     "value": "-8.8%",
+     "sub": "z=-1.6σ",
+     "source": "yfinance終値",
+     "asof": "2026-11-02"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "2.0倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-11-02"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "-37.4%",
+     "sub": "インテル",
+     "source": "yfinance終値",
+     "asof": "2026-11-02"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+0.4%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-02"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "+2.6%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-02"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.91%",
+     "sub": "2026-11-02",
+     "source": "米財務省",
+     "asof": "2026-11-02"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-02_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-02_1.txt"
+   ]
+  },
   {
    "ticker": "XLE",
    "name": "XLE(エネルギー)",
    "theme": "エネルギー",
    "headline": "XLE(エネルギー)下落 -4%",
    "conclusion": "z=-3.2σは通常の値動きの外。前提が変わった可能性",
-   "score": 0.7252,
+   "score": 0.6252,
    "score_parts": {
     "z": 0.2804,
-    "volume": 0.1348,
-    "media": 0.2,
+    "volume": 0.1349,
+    "media": 0.1,
     "sns": 0.0,
     "holdings": 0.03,
     "calendar": 0.0,
     "global": 0.08,
     "learn": 0.0
    },
-   "n_media": 11,
+   "n_media": 3,
    "sns_heat": 0.0,
-   "slot": 1,
-   "template_id": "T2",
+   "slot": 2,
+   "template_id": "T5",
    "topic_tag": "other",
    "numbers": [
     {
@@ -49,80 +120,23 @@
     },
     {
      "label": "S&P500 日次",
-     "value": "-0.5%",
+     "value": "+0.4%",
      "sub": "同日",
      "source": "yfinance終値",
      "asof": "2026-11-02"
     },
     {
      "label": "SOX指数 日次",
-     "value": "-3.4%",
-     "sub": "同日",
-     "source": "yfinance終値",
-     "asof": "2026-11-02"
-    }
-   ],
-   "files": [
-    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-02_1.png",
-    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-02_1.txt"
-   ]
-  },
-  {
-   "ticker": "AAPL",
-   "name": "アップル",
-   "theme": "ハイテク",
-   "headline": "アップル下落 -2%",
-   "conclusion": "アップルのz=-1.7σはハイテク見通しの修正を示唆",
-   "score": 0.65,
-   "score_parts": {
-    "z": 0.1484,
-    "volume": 0.1317,
-    "media": 0.2,
-    "sns": 0.0,
-    "holdings": 0.09,
-    "calendar": 0.0,
-    "global": 0.08,
-    "learn": 0.0
-   },
-   "n_media": 8,
-   "sns_heat": 0.0,
-   "slot": 2,
-   "template_id": "T4",
-   "topic_tag": "ai",
-   "numbers": [
-    {
-     "label": "アップル 日次",
-     "value": "-1.8%",
-     "sub": "z=-1.7σ",
-     "source": "yfinance終値",
-     "asof": "2026-11-02"
-    },
-    {
-     "label": "出来高 20日比",
-     "value": "1.6倍",
-     "sub": "当日/平均",
-     "source": "yfinance出来高",
-     "asof": "2026-11-02"
-    },
-    {
-     "label": "6ヶ月騰落",
-     "value": "+22.4%",
-     "sub": "アップル",
-     "source": "yfinance終値",
-     "asof": "2026-11-02"
-    },
-    {
-     "label": "S&P500 日次",
-     "value": "-0.5%",
+     "value": "+2.6%",
      "sub": "同日",
      "source": "yfinance終値",
      "asof": "2026-11-02"
     },
     {
-     "label": "SOX指数 日次",
-     "value": "-3.4%",
-     "sub": "同日",
-     "source": "yfinance終値",
+     "label": "米10年利回り",
+     "value": "4.91%",
+     "sub": "2026-11-02",
+     "source": "米財務省",
      "asof": "2026-11-02"
     }
    ],
