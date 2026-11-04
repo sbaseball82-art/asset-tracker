@@ -1,43 +1,53 @@
 {
-  "updated_at": "2026-11-03T12:10:59.599657+09:00",
-  "date": "2026-11-03",
-  "usdjpy": 157.91,
-  "total_jpy": 34353946,
-  "day_change_jpy": -258645,
-  "day_change_pct": -0.75,
+  "updated_at": "2026-11-04T10:46:36.997460+09:00",
+  "date": "2026-11-04",
+  "usdjpy": 157.765,
+  "fx": {
+    "rate": 157.765,
+    "prev_rate": 157.915,
+    "curr_date": "2026-11-04",
+    "prev_date": "2026-11-03",
+    "source": "Yahoo Finance USDJPY=X",
+    "stale": false
+  },
+  "complete": true,
+  "status": "ok",
+  "warnings": [],
+  "total_jpy": 34332239,
+  "day_change_jpy": -21707,
+  "day_change_pct": -0.06,
   "comparisons": {
     "day": {
-      "base_date": "2026-11-02",
-      "base_jpy": 34599077,
-      "change_jpy": -245131,
-      "change_pct": -0.71,
-      "gross_change_jpy": -245131,
-      "cash_flow_jpy": 0
+      "base_date": "2026-11-03",
+      "base_jpy": 34353946,
+      "change_jpy": -21707,
+      "change_pct": -0.06,
+      "gross_change_jpy": -21707,
+      "cash_flow_jpy": 0,
+      "method": "quantity_change_at_current_price_estimate",
+      "note": "数量差を当日価格で評価した概算。実際の入出金・配当・税手数料は未反映"
     },
     "week": {
-      "base_date": "2026-10-27",
-      "base_jpy": 33862259,
-      "change_jpy": -51985,
-      "change_pct": -0.15,
-      "gross_change_jpy": 491687,
-      "cash_flow_jpy": 543672
+      "base_date": "2026-10-28",
+      "base_jpy": 34797362,
+      "change_jpy": -465123,
+      "change_pct": -1.34,
+      "gross_change_jpy": -465123,
+      "cash_flow_jpy": 0,
+      "method": "quantity_change_at_current_price_estimate",
+      "note": "数量差を当日価格で評価した概算。実際の入出金・配当・税手数料は未反映"
     },
     "month": {
-      "base_date": "2026-10-04",
-      "base_jpy": 33521232,
-      "change_jpy": -36281,
-      "change_pct": -0.11,
-      "gross_change_jpy": 832714,
-      "cash_flow_jpy": 868995
+      "base_date": "2026-10-05",
+      "base_jpy": 33503397,
+      "change_jpy": -40153,
+      "change_pct": -0.12,
+      "gross_change_jpy": 828842,
+      "cash_flow_jpy": 868995,
+      "method": "quantity_change_at_current_price_estimate",
+      "note": "数量差を当日価格で評価した概算。実際の入出金・配当・税手数料は未反映"
     },
-    "ytd": {
-      "base_date": "2026-06-08",
-      "base_jpy": 31853815,
-      "change_jpy": 273874,
-      "change_pct": 0.86,
-      "gross_change_jpy": 2500131,
-      "cash_flow_jpy": 2226257
-    }
+    "ytd": null
   },
   "etf": {
     "VYM": {
@@ -47,9 +57,17 @@
       "prev_price": 163.74,
       "curr_price": 163.84,
       "change_pct": 0.06,
-      "prev_jpy": 8092985,
-      "curr_jpy": 8097928,
-      "usdjpy": 157.91
+      "prev_jpy": 8093242,
+      "curr_jpy": 8090492,
+      "usdjpy": 157.765,
+      "source": "Yahoo Finance close",
+      "curr_date": "2026-11-02",
+      "prev_date": "2026-10-30",
+      "stale": false,
+      "corporate_action_review": false,
+      "split_events": [],
+      "change_jpy": null,
+      "jpy_change_note": "株価・為替の基準日不一致、旧価格または分割要確認"
     },
     "VTI": {
       "name": "VTI 全米株式ETF",
@@ -58,9 +76,17 @@
       "prev_price": 371.57,
       "curr_price": 370.0,
       "change_pct": -0.42,
-      "prev_jpy": 11441551,
-      "curr_jpy": 11393206,
-      "usdjpy": 157.91
+      "prev_jpy": 11441913,
+      "curr_jpy": 11382745,
+      "usdjpy": 157.765,
+      "source": "Yahoo Finance close",
+      "curr_date": "2026-11-02",
+      "prev_date": "2026-10-30",
+      "stale": false,
+      "corporate_action_review": false,
+      "split_events": [],
+      "change_jpy": null,
+      "jpy_change_note": "株価・為替の基準日不一致、旧価格または分割要確認"
     },
     "HDV": {
       "name": "HDV 米国高配当ETF",
@@ -69,9 +95,17 @@
       "prev_price": 31.04,
       "curr_price": 30.99,
       "change_pct": -0.16,
-      "prev_jpy": 2426256,
-      "curr_jpy": 2422347,
-      "usdjpy": 157.91
+      "prev_jpy": 2426332,
+      "curr_jpy": 2420123,
+      "usdjpy": 157.765,
+      "source": "Yahoo Finance close",
+      "curr_date": "2026-11-02",
+      "prev_date": "2026-10-30",
+      "stale": false,
+      "corporate_action_review": false,
+      "split_events": [],
+      "change_jpy": null,
+      "jpy_change_note": "株価・為替の基準日不一致、旧価格または分割要確認"
     },
     "QQQ": {
       "name": "QQQ ナスダック100ETF",
@@ -80,9 +114,17 @@
       "prev_price": 690.49,
       "curr_price": 681.09,
       "change_pct": -1.36,
-      "prev_jpy": 1744564,
-      "curr_jpy": 1720815,
-      "usdjpy": 157.91
+      "prev_jpy": 1744620,
+      "curr_jpy": 1719235,
+      "usdjpy": 157.765,
+      "source": "Yahoo Finance close",
+      "curr_date": "2026-11-02",
+      "prev_date": "2026-10-30",
+      "stale": false,
+      "corporate_action_review": false,
+      "split_events": [],
+      "change_jpy": null,
+      "jpy_change_note": "株価・為替の基準日不一致、旧価格または分割要確認"
     },
     "DRAM": {
       "name": "DRAM メモリ半導体ETF",
@@ -92,8 +134,16 @@
       "curr_price": 46.32,
       "change_pct": -3.52,
       "prev_jpy": 7581,
-      "curr_jpy": 7314,
-      "usdjpy": 157.91
+      "curr_jpy": 7308,
+      "usdjpy": 157.765,
+      "source": "Yahoo Finance close",
+      "curr_date": "2026-11-02",
+      "prev_date": "2026-10-30",
+      "stale": false,
+      "corporate_action_review": false,
+      "split_events": [],
+      "change_jpy": null,
+      "jpy_change_note": "株価・為替の基準日不一致、旧価格または分割要確認"
     }
   },
   "fund": {
@@ -3864,6 +3914,14 @@
       "total_jpy": 34353946,
       "usdjpy": 157.91,
       "cash_flow_jpy": 0
+    },
+    {
+      "date": "2026-11-04",
+      "total_jpy": 34332239,
+      "usdjpy": 157.765,
+      "cash_flow_jpy": 0,
+      "complete": true,
+      "stale": false
     }
   ]
 }
