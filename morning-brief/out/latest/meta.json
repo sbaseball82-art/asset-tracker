@@ -1,18 +1,10 @@
 [
  {
   "slot": 1,
-  "template_id": "T2",
-  "topic_tag": "semiconductor",
-  "ticker": "INTC",
-  "score": 0.6454,
-  "headline": "インテル急落 -9%"
- },
- {
-  "slot": 2,
-  "template_id": "T5",
-  "topic_tag": "other",
-  "ticker": "XLE",
-  "score": 0.6252,
-  "headline": "XLE(エネルギー)下落 -4%"
+  "template_id": "T3",
+  "topic_tag": "ai",
+  "ticker": "AAPL",
+  "score": 0.5095,
+  "headline": "アップル下落 -2%"
  }
 ]
