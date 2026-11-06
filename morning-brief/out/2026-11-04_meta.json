@@ -1,0 +1,18 @@
+[
+ {
+  "slot": 1,
+  "template_id": "T1",
+  "topic_tag": "other",
+  "ticker": "XLE",
+  "score": 0.7463,
+  "headline": "XLE(エネルギー)大幅安 -5%"
+ },
+ {
+  "slot": 2,
+  "template_id": "T4",
+  "topic_tag": "ai",
+  "ticker": "MSFT",
+  "score": 0.6681,
+  "headline": "マイクロソフト大幅高 +7%"
+ }
+]

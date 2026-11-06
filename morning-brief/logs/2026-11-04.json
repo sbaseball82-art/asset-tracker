@@ -1,0 +1,150 @@
+{
+ "date": "2026-11-04",
+ "generated_at": "2026-11-06T01:09:57",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "XLE",
+   "name": "XLE(エネルギー)",
+   "theme": "エネルギー",
+   "headline": "XLE(エネルギー)大幅安 -5%",
+   "conclusion": "出来高2.1倍の大幅安は一時要因でなくシナリオ修正の動き",
+   "score": 0.7463,
+   "score_parts": {
+    "z": 0.3261,
+    "volume": 0.1769,
+    "media": 0.1333,
+    "sns": 0.0,
+    "holdings": 0.03,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 4,
+   "sns_heat": 0.0,
+   "slot": 1,
+   "template_id": "T1",
+   "topic_tag": "other",
+   "numbers": [
+    {
+     "label": "XLE(エネルギー) 日次",
+     "value": "-4.7%",
+     "sub": "z=-3.7σ",
+     "source": "yfinance終値",
+     "asof": "2026-11-04"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "2.1倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-11-04"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+12.9%",
+     "sub": "XLE(エネルギー)",
+     "source": "yfinance終値",
+     "asof": "2026-11-04"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "-4.4%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-04"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-12.2%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-04"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.90%",
+     "sub": "2026-11-04",
+     "source": "米財務省",
+     "asof": "2026-11-04"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-04_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-04_1.txt"
+   ]
+  },
+  {
+   "ticker": "MSFT",
+   "name": "マイクロソフト",
+   "theme": "ハイテク",
+   "headline": "マイクロソフト大幅高 +7%",
+   "conclusion": "出来高2.3倍の大幅高は一時要因でなくシナリオ修正の動き",
+   "score": 0.6681,
+   "score_parts": {
+    "z": 0.35,
+    "volume": 0.1893,
+    "media": 0.0333,
+    "sns": 0.0004,
+    "holdings": 0.095,
+    "calendar": 0.0,
+    "global": 0.0,
+    "learn": 0.0
+   },
+   "n_media": 1,
+   "sns_heat": 0.004,
+   "slot": 2,
+   "template_id": "T4",
+   "topic_tag": "ai",
+   "numbers": [
+    {
+     "label": "マイクロソフト 日次",
+     "value": "+6.7%",
+     "sub": "z=+4.7σ",
+     "source": "yfinance終値",
+     "asof": "2026-11-04"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "2.3倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-11-04"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+34.8%",
+     "sub": "マイクロソフト",
+     "source": "yfinance終値",
+     "asof": "2026-11-04"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "-4.4%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-04"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-12.2%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-04"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.90%",
+     "sub": "2026-11-04",
+     "source": "米財務省",
+     "asof": "2026-11-04"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-04_2.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-04_2.txt"
+   ]
+  }
+ ],
+ "skipped": []
+}
