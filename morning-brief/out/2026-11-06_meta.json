@@ -1,0 +1,18 @@
+[
+ {
+  "slot": 1,
+  "template_id": "T2",
+  "topic_tag": "semiconductor",
+  "ticker": "^SOX",
+  "score": 0.6784,
+  "headline": "SOX指数大幅高 +4%"
+ },
+ {
+  "slot": 2,
+  "template_id": "T6",
+  "topic_tag": "semiconductor",
+  "ticker": "TSM",
+  "score": 0.6257,
+  "headline": "TSMC大幅高 +6%"
+ }
+]
