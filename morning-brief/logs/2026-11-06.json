@@ -1,6 +1,6 @@
 {
  "date": "2026-11-06",
- "generated_at": "2026-11-07T00:24:33",
+ "generated_at": "2026-11-08T00:01:26",
  "max_cards": 2,
  "adopted": [
   {
@@ -20,7 +20,7 @@
     "global": 0.08,
     "learn": 0.0
    },
-   "n_media": 25,
+   "n_media": 19,
    "sns_heat": 1.0,
    "slot": 1,
    "template_id": "T2",
@@ -56,7 +56,7 @@
     },
     {
      "label": "ドル円 日次",
-     "value": "-0.5%",
+     "value": "+0.6%",
      "sub": "同日",
      "source": "yfinance終値",
      "asof": "2026-11-06"
@@ -80,10 +80,10 @@
    "theme": "半導体",
    "headline": "TSMC大幅高 +6%",
    "conclusion": "z=+2.7σは通常の値動きの外。前提が変わった可能性",
-   "score": 0.6257,
+   "score": 0.6259,
    "score_parts": {
     "z": 0.2392,
-    "volume": 0.1415,
+    "volume": 0.1418,
     "media": 0.0667,
     "sns": 0.0283,
     "holdings": 0.05,
