@@ -1,0 +1,150 @@
+{
+ "date": "2026-11-09",
+ "generated_at": "2026-11-10T02:58:59",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "^DJI",
+   "name": "NYダウ",
+   "theme": "指数",
+   "headline": "NYダウ上昇 +2%",
+   "conclusion": "z=+2.6σは通常の値動きの外。前提が変わった可能性",
+   "score": 0.7994,
+   "score_parts": {
+    "z": 0.2275,
+    "volume": 0.1418,
+    "media": 0.2,
+    "sns": 0.1,
+    "holdings": 0.05,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 8,
+   "sns_heat": 1.0,
+   "slot": 1,
+   "template_id": "T1",
+   "topic_tag": "macro",
+   "numbers": [
+    {
+     "label": "NYダウ 日次",
+     "value": "+2.2%",
+     "sub": "z=+2.6σ",
+     "source": "yfinance終値",
+     "asof": "2026-11-09"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.7倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-11-09"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+5.4%",
+     "sub": "NYダウ",
+     "source": "yfinance終値",
+     "asof": "2026-11-09"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+2.3%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-09"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "+6.9%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-09"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.88%",
+     "sub": "2026-11-09",
+     "source": "米財務省",
+     "asof": "2026-11-09"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-09_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-09_1.txt"
+   ]
+  },
+  {
+   "ticker": "NVDA",
+   "name": "エヌビディア",
+   "theme": "半導体",
+   "headline": "エヌビディア大幅安 -4%",
+   "conclusion": "エヌビディアのz=-1.6σは半導体見通しの修正を示唆",
+   "score": 0.7704,
+   "score_parts": {
+    "z": 0.1394,
+    "volume": 0.25,
+    "media": 0.2,
+    "sns": 0.001,
+    "holdings": 0.1,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 17,
+   "sns_heat": 0.01,
+   "slot": 2,
+   "template_id": "T4",
+   "topic_tag": "semiconductor",
+   "numbers": [
+    {
+     "label": "エヌビディア 日次",
+     "value": "-4.3%",
+     "sub": "z=-1.6σ",
+     "source": "yfinance終値",
+     "asof": "2026-11-09"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "3.9倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-11-09"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "-18.4%",
+     "sub": "エヌビディア",
+     "source": "yfinance終値",
+     "asof": "2026-11-09"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "+2.3%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-09"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "+6.9%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-09"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "4.88%",
+     "sub": "2026-11-09",
+     "source": "米財務省",
+     "asof": "2026-11-09"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-09_2.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-09_2.txt"
+   ]
+  }
+ ],
+ "skipped": []
+}
