@@ -1,40 +1,40 @@
 {
-  "updated_at": "2026-11-11T10:36:47.248173+09:00",
-  "date": "2026-11-11",
-  "price_data_updated_at": "2026-11-11T10:36:31.267111+09:00",
-  "usdjpy": 158.89,
+  "updated_at": "2026-11-12T11:37:14.351979+09:00",
+  "date": "2026-11-12",
+  "price_data_updated_at": "2026-11-12T11:36:59.282388+09:00",
+  "usdjpy": 159.722,
   "fx": {
-    "rate": 158.89,
-    "prev_rate": 157.983,
-    "curr_date": "2026-11-11",
-    "prev_date": "2026-11-10",
+    "rate": 159.722,
+    "prev_rate": 158.705,
+    "curr_date": "2026-11-12",
+    "prev_date": "2026-11-11",
     "source": "Yahoo Finance USDJPY=X",
     "stale": false
   },
-  "total_jpy": 35950446,
-  "known_total_jpy": 35950446,
+  "total_jpy": 36442222,
+  "known_total_jpy": 36442222,
   "complete": true,
   "status": "ok",
   "warnings": [],
-  "day_change_jpy": 396902,
-  "day_change_pct": 1.12,
+  "day_change_jpy": 491776,
+  "day_change_pct": 1.37,
   "comparisons": {
     "day": {
-      "base_date": "2026-11-10",
-      "base_jpy": 35553544,
-      "change_jpy": 396902,
-      "change_pct": 1.12,
-      "gross_change_jpy": 396902,
+      "base_date": "2026-11-11",
+      "base_jpy": 35950446,
+      "change_jpy": 491776,
+      "change_pct": 1.37,
+      "gross_change_jpy": 491776,
       "cash_flow_jpy": 0,
       "method": "quantity_change_at_current_price_estimate",
       "note": "数量差を当日価格で評価した概算。実際の入出金・配当・税手数料は未反映"
     },
     "week": {
-      "base_date": "2026-11-04",
-      "base_jpy": 35964984,
-      "change_jpy": -14538,
-      "change_pct": -0.04,
-      "gross_change_jpy": -14538,
+      "base_date": "2026-11-05",
+      "base_jpy": 36047170,
+      "change_jpy": 395052,
+      "change_pct": 1.1,
+      "gross_change_jpy": 395052,
       "cash_flow_jpy": 0,
       "method": "quantity_change_at_current_price_estimate",
       "note": "数量差を当日価格で評価した概算。実際の入出金・配当・税手数料は未反映"
@@ -47,95 +47,95 @@
       "name": "VYM 米国高配当ETF",
       "type": "ETF",
       "shares": 313,
-      "prev_price": 162.72,
-      "curr_price": 163.45,
-      "change_pct": 0.45,
-      "prev_jpy": 8046289,
-      "curr_jpy": 8128789,
-      "usdjpy": 158.89,
+      "prev_price": 163.45,
+      "curr_price": 164.99,
+      "change_pct": 0.94,
+      "prev_jpy": 8119324,
+      "curr_jpy": 8248343,
+      "usdjpy": 159.722,
       "source": "Yahoo Finance close",
-      "curr_date": "2026-11-10",
-      "prev_date": "2026-11-09",
+      "curr_date": "2026-11-11",
+      "prev_date": "2026-11-10",
       "stale": false,
       "corporate_action_review": false,
       "split_events": [],
       "change_jpy": null,
       "jpy_change_note": "株価・為替の基準日不一致、旧価格または分割要確認",
-      "weight_pct": 22.61
+      "weight_pct": 22.63
     },
     "VTI": {
       "name": "VTI 全米株式ETF",
       "type": "ETF",
       "shares": 195,
-      "prev_price": 370.9,
-      "curr_price": 369.55,
-      "change_pct": -0.36,
-      "prev_jpy": 11426199,
-      "curr_jpy": 11449971,
-      "usdjpy": 158.89,
+      "prev_price": 369.55,
+      "curr_price": 374.25,
+      "change_pct": 1.27,
+      "prev_jpy": 11436639,
+      "curr_jpy": 11656312,
+      "usdjpy": 159.722,
       "source": "Yahoo Finance close",
-      "curr_date": "2026-11-10",
-      "prev_date": "2026-11-09",
+      "curr_date": "2026-11-11",
+      "prev_date": "2026-11-10",
       "stale": false,
       "corporate_action_review": false,
       "split_events": [],
       "change_jpy": null,
       "jpy_change_note": "株価・為替の基準日不一致、旧価格または分割要確認",
-      "weight_pct": 31.85
+      "weight_pct": 31.99
     },
     "HDV": {
       "name": "HDV 米国高配当ETF",
       "type": "ETF",
       "shares": 495,
-      "prev_price": 30.55,
-      "curr_price": 30.62,
-      "change_pct": 0.23,
-      "prev_jpy": 2389058,
-      "curr_jpy": 2408280,
-      "usdjpy": 158.89,
+      "prev_price": 30.62,
+      "curr_price": 30.74,
+      "change_pct": 0.39,
+      "prev_jpy": 2405476,
+      "curr_jpy": 2430378,
+      "usdjpy": 159.722,
       "source": "Yahoo Finance close",
-      "curr_date": "2026-11-10",
-      "prev_date": "2026-11-09",
+      "curr_date": "2026-11-11",
+      "prev_date": "2026-11-10",
       "stale": false,
       "corporate_action_review": false,
       "split_events": [],
       "change_jpy": null,
       "jpy_change_note": "株価・為替の基準日不一致、旧価格または分割要確認",
-      "weight_pct": 6.7
+      "weight_pct": 6.67
     },
     "QQQ": {
       "name": "QQQ ナスダック100ETF",
       "type": "ETF",
       "shares": 16,
-      "prev_price": 679.35,
-      "curr_price": 674.76,
-      "change_pct": -0.68,
-      "prev_jpy": 1717212,
-      "curr_jpy": 1715402,
-      "usdjpy": 158.89,
+      "prev_price": 674.76,
+      "curr_price": 690.38,
+      "change_pct": 2.31,
+      "prev_jpy": 1713405,
+      "curr_jpy": 1764302,
+      "usdjpy": 159.722,
       "source": "Yahoo Finance close",
-      "curr_date": "2026-11-10",
-      "prev_date": "2026-11-09",
+      "curr_date": "2026-11-11",
+      "prev_date": "2026-11-10",
       "stale": false,
       "corporate_action_review": false,
       "split_events": [],
       "change_jpy": null,
       "jpy_change_note": "株価・為替の基準日不一致、旧価格または分割要確認",
-      "weight_pct": 4.77
+      "weight_pct": 4.84
     },
     "DRAM": {
       "name": "DRAM メモリ半導体ETF",
       "type": "ETF",
       "shares": 1,
-      "prev_price": 39.29,
-      "curr_price": 41.78,
-      "change_pct": 6.34,
-      "prev_jpy": 6207,
-      "curr_jpy": 6638,
-      "usdjpy": 158.89,
+      "prev_price": 40.64,
+      "curr_price": 44.85,
+      "change_pct": 10.36,
+      "prev_jpy": 6450,
+      "curr_jpy": 7164,
+      "usdjpy": 159.722,
       "source": "Yahoo Finance close",
-      "curr_date": "2026-11-09",
-      "prev_date": "2026-11-06",
+      "curr_date": "2026-11-11",
+      "prev_date": "2026-11-10",
       "stale": false,
       "corporate_action_review": false,
       "split_events": [],
@@ -150,14 +150,18 @@
       "type": "投資信託",
       "fund_code": "29313233",
       "units": 92265,
-      "prev_nav": 25496.0,
-      "curr_nav": 26330.0,
-      "change_pct": 3.27,
-      "prev_jpy": 235239,
-      "curr_jpy": 242934,
+      "prev_nav": 26330.0,
+      "curr_nav": 26293.0,
+      "change_pct": -0.14,
+      "prev_jpy": 242934,
+      "curr_jpy": 242592,
       "source": "協会CSV",
-      "curr_date": "2026-11-10",
+      "curr_date": "2026-11-11",
       "nav_series": [
+        {
+          "date": "2026-11-11",
+          "jpy": 242592
+        },
         {
           "date": "2026-11-10",
           "jpy": 242934
@@ -633,27 +637,27 @@
         {
           "date": "2026-05-19",
           "jpy": 253572
-        },
-        {
-          "date": "2026-05-18",
-          "jpy": 254633
         }
       ],
-      "weight_pct": 0.68
+      "weight_pct": 0.67
     },
     "89311199": {
       "name": "SBI・V・S&P500",
       "type": "投資信託",
       "fund_code": "89311199",
       "units": 850904,
-      "prev_nav": 39338.0,
-      "curr_nav": 40209.0,
-      "change_pct": 2.21,
-      "prev_jpy": 3347286,
-      "curr_jpy": 3421400,
+      "prev_nav": 40209.0,
+      "curr_nav": 40256.0,
+      "change_pct": 0.12,
+      "prev_jpy": 3421400,
+      "curr_jpy": 3425399,
       "source": "協会CSV",
-      "curr_date": "2026-11-10",
+      "curr_date": "2026-11-11",
       "nav_series": [
+        {
+          "date": "2026-11-11",
+          "jpy": 3425399
+        },
         {
           "date": "2026-11-10",
           "jpy": 3421400
@@ -1129,27 +1133,27 @@
         {
           "date": "2026-05-19",
           "jpy": 3360901
-        },
-        {
-          "date": "2026-05-18",
-          "jpy": 3362432
         }
       ],
-      "weight_pct": 9.52
+      "weight_pct": 9.4
     },
     "04311181": {
       "name": "iFreeNEXT FANG+",
       "type": "投資信託",
       "fund_code": "04311181",
       "units": 367908,
-      "prev_nav": 89555.0,
-      "curr_nav": 92232.0,
-      "change_pct": 2.99,
-      "prev_jpy": 3294800,
-      "curr_jpy": 3393289,
+      "prev_nav": 92232.0,
+      "curr_nav": 92199.0,
+      "change_pct": -0.04,
+      "prev_jpy": 3393289,
+      "curr_jpy": 3392075,
       "source": "協会CSV",
-      "curr_date": "2026-11-10",
+      "curr_date": "2026-11-11",
       "nav_series": [
+        {
+          "date": "2026-11-11",
+          "jpy": 3392075
+        },
         {
           "date": "2026-11-10",
           "jpy": 3393289
@@ -1625,27 +1629,27 @@
         {
           "date": "2026-05-19",
           "jpy": 3372134
-        },
-        {
-          "date": "2026-05-18",
-          "jpy": 3398513
         }
       ],
-      "weight_pct": 9.44
+      "weight_pct": 9.31
     },
     "8931224C": {
       "name": "SBI S 米国高配当(年4回)",
       "type": "投資信託",
       "fund_code": "8931224C",
       "units": 1984942,
-      "prev_nav": 13092.0,
-      "curr_nav": 13253.0,
-      "change_pct": 1.23,
-      "prev_jpy": 2598686,
-      "curr_jpy": 2630644,
+      "prev_nav": 13253.0,
+      "curr_nav": 13380.0,
+      "change_pct": 0.96,
+      "prev_jpy": 2630644,
+      "curr_jpy": 2655852,
       "source": "協会CSV",
-      "curr_date": "2026-11-10",
+      "curr_date": "2026-11-11",
       "nav_series": [
+        {
+          "date": "2026-11-11",
+          "jpy": 2655852
+        },
         {
           "date": "2026-11-10",
           "jpy": 2630644
@@ -2121,27 +2125,27 @@
         {
           "date": "2026-05-19",
           "jpy": 2381136
-        },
-        {
-          "date": "2026-05-18",
-          "jpy": 2356722
         }
       ],
-      "weight_pct": 7.32
+      "weight_pct": 7.29
     },
     "79314186": {
       "name": "イノベーションAI",
       "type": "投資信託",
       "fund_code": "79314186",
       "units": 36240,
-      "prev_nav": 55498.0,
-      "curr_nav": 57971.0,
-      "change_pct": 4.46,
-      "prev_jpy": 201125,
-      "curr_jpy": 210087,
+      "prev_nav": 57971.0,
+      "curr_nav": 57958.0,
+      "change_pct": -0.02,
+      "prev_jpy": 210087,
+      "curr_jpy": 210040,
       "source": "協会CSV",
-      "curr_date": "2026-11-10",
+      "curr_date": "2026-11-11",
       "nav_series": [
+        {
+          "date": "2026-11-11",
+          "jpy": 210040
+        },
         {
           "date": "2026-11-10",
           "jpy": 210087
@@ -2617,10 +2621,6 @@
         {
           "date": "2026-05-19",
           "jpy": 242029
-        },
-        {
-          "date": "2026-05-18",
-          "jpy": 244982
         }
       ],
       "weight_pct": 0.58
@@ -2630,14 +2630,18 @@
       "type": "投資信託",
       "fund_code": "89311265",
       "units": 775437,
-      "prev_nav": 9153.0,
-      "curr_nav": 9453.0,
-      "change_pct": 3.28,
-      "prev_jpy": 709757,
-      "curr_jpy": 733021,
+      "prev_nav": 9453.0,
+      "curr_nav": 9440.0,
+      "change_pct": -0.14,
+      "prev_jpy": 733021,
+      "curr_jpy": 732013,
       "source": "協会CSV",
-      "curr_date": "2026-11-10",
+      "curr_date": "2026-11-11",
       "nav_series": [
+        {
+          "date": "2026-11-11",
+          "jpy": 732013
+        },
         {
           "date": "2026-11-10",
           "jpy": 733021
@@ -3107,7 +3111,7 @@
           "jpy": 775437
         }
       ],
-      "weight_pct": 2.04
+      "weight_pct": 2.01
     }
   },
   "stocks": {
@@ -3119,27 +3123,27 @@
       "purchase_price_usd": null,
       "purchase_date": null,
       "purchase_usdjpy": null,
-      "curr_price": 123.56999969482422,
-      "prev_price": 122.47000122070312,
-      "change_pct": 0.9,
-      "curr_date": "2026-11-10",
-      "prev_date": "2026-11-09",
+      "curr_price": 128.10000610351562,
+      "prev_price": 123.56999969482422,
+      "change_pct": 3.67,
+      "curr_date": "2026-11-11",
+      "prev_date": "2026-11-10",
       "stale": false,
       "source": "Yahoo Finance close",
       "corporate_action_review": false,
       "split_events": [],
       "type": "個別株",
       "missing": false,
-      "curr_jpy": 1609991,
+      "curr_jpy": 1677752,
       "prev_jpy": null,
-      "usdjpy": 158.89,
+      "usdjpy": 159.722,
       "unrealized_gain_usd": null,
       "unrealized_jpy": null,
       "unrealized_pct": null,
       "cost_basis_status": "未設定",
       "jpy_change_note": "株価・為替の基準日不一致、旧価格または分割要確認",
       "change_jpy": null,
-      "weight_pct": 4.48
+      "weight_pct": 4.6
     }
   },
   "history": [
@@ -3219,6 +3223,15 @@
       "date": "2026-11-11",
       "total_jpy": 35950446,
       "usdjpy": 158.89,
+      "cash_flow_jpy": 0,
+      "complete": true,
+      "stale": false,
+      "cash_flow_method": "quantity_change_at_current_price_estimate"
+    },
+    {
+      "date": "2026-11-12",
+      "total_jpy": 36442222,
+      "usdjpy": 159.722,
       "cash_flow_jpy": 0,
       "complete": true,
       "stale": false,
@@ -4117,6 +4130,14 @@
       "cash_flow_jpy": 0,
       "complete": true,
       "stale": false
+    },
+    {
+      "date": "2026-11-12",
+      "total_jpy": 34764470,
+      "usdjpy": 159.722,
+      "cash_flow_jpy": 0,
+      "complete": true,
+      "stale": false
     }
   ],
   "history_note": "統合資産の履歴は初回取得から。旧11銘柄の履歴はlegacy_historyに保存し接続しません",
@@ -4126,17 +4147,17 @@
     "largest_holding": {
       "symbol": "VTI",
       "name": "VTI 全米株式ETF",
-      "pct": 31.85
+      "pct": 31.99
     },
     "category_weights_pct": {
-      "etf": 65.95,
-      "fund": 29.57,
-      "stocks": 4.48
+      "etf": 66.15,
+      "fund": 29.25,
+      "stocks": 4.6
     },
     "direct_usd_exposure": {
-      "value_jpy": 25319071,
-      "weight_pct": 70.43,
-      "per_yen_jpy": 159350,
+      "value_jpy": 25784251,
+      "weight_pct": 70.75,
+      "per_yen_jpy": 161432,
       "note": "USD建て直接保有のみ・株価固定。投信内部の為替・ヘッジ効果は未算出"
     },
     "us_market_policy": {
@@ -4175,7 +4196,7 @@
       "method": "数量変更の推定拠出を除外した概算指数（日末入出金、配当・税を除く）"
     },
     "notes": [
-      "最大保有商品 VTI：31.9%（中身の企業集中は未算出）",
+      "最大保有商品 VTI：32.0%（中身の企業集中は未算出）",
       "NASDAQ系・全米株に重複候補。実質重複率はデータ不足",
       "米国市場への依存は商品分類で確認。実効国別比率は構成データ不足",
       "為替感応度は直接USD保有のみ。投信内部の為替影響は含みません"
