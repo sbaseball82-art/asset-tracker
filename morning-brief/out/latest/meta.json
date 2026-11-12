@@ -1,18 +1,10 @@
 [
  {
   "slot": 1,
-  "template_id": "T3",
+  "template_id": "T2",
   "topic_tag": "semiconductor",
   "ticker": "NVDA",
-  "score": 0.836,
-  "headline": "エヌビディア大幅安 -4%"
- },
- {
-  "slot": 2,
-  "template_id": "T4",
-  "topic_tag": "semiconductor",
-  "ticker": "AVGO",
-  "score": 0.6706,
-  "headline": "ブロードコム急騰 +9%"
+  "score": 0.8929,
+  "headline": "エヌビディア大幅安 -5%"
  }
 ]
