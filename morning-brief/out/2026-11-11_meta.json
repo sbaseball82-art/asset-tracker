@@ -1,0 +1,18 @@
+[
+ {
+  "slot": 1,
+  "template_id": "T6",
+  "topic_tag": "semiconductor",
+  "ticker": "NVDA",
+  "score": 0.7725,
+  "headline": "エヌビディア上昇 +3%"
+ },
+ {
+  "slot": 2,
+  "template_id": "T2",
+  "topic_tag": "semiconductor",
+  "ticker": "MU",
+  "score": 0.525,
+  "headline": "マイクロン急騰 +12%"
+ }
+]
