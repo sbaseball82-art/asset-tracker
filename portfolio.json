@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-11-14T10:55:27.935894+09:00",
-  "date": "2026-11-14",
-  "price_data_updated_at": "2026-11-14T10:55:13.802581+09:00",
+  "updated_at": "2026-11-15T10:26:58.244314+09:00",
+  "date": "2026-11-15",
+  "price_data_updated_at": "2026-11-15T10:26:43.300108+09:00",
   "usdjpy": 159.875,
   "fx": {
     "rate": 159.875,
@@ -11,30 +11,30 @@
     "source": "Yahoo Finance USDJPY=X",
     "stale": false
   },
-  "total_jpy": 36540766,
-  "known_total_jpy": 36540766,
+  "total_jpy": 36540565,
+  "known_total_jpy": 36540565,
   "complete": true,
   "status": "ok",
   "warnings": [],
-  "day_change_jpy": -126477,
-  "day_change_pct": -0.34,
+  "day_change_jpy": -201,
+  "day_change_pct": -0.0,
   "comparisons": {
     "day": {
-      "base_date": "2026-11-13",
-      "base_jpy": 36667243,
-      "change_jpy": -126477,
-      "change_pct": -0.34,
-      "gross_change_jpy": -126477,
+      "base_date": "2026-11-14",
+      "base_jpy": 36540766,
+      "change_jpy": -201,
+      "change_pct": -0.0,
+      "gross_change_jpy": -201,
       "cash_flow_jpy": 0,
       "method": "quantity_change_at_current_price_estimate",
       "note": "数量差を当日価格で評価した概算。実際の入出金・配当・税手数料は未反映"
     },
     "week": {
-      "base_date": "2026-11-07",
-      "base_jpy": 34871305,
-      "change_jpy": 1669461,
-      "change_pct": 4.79,
-      "gross_change_jpy": 1669461,
+      "base_date": "2026-11-08",
+      "base_jpy": 34982820,
+      "change_jpy": 1557745,
+      "change_pct": 4.45,
+      "gross_change_jpy": 1557745,
       "cash_flow_jpy": 0,
       "method": "quantity_change_at_current_price_estimate",
       "note": "数量差を当日価格で評価した概算。実際の入出金・配当・税手数料は未反映"
@@ -127,20 +127,20 @@
       "name": "DRAM メモリ半導体ETF",
       "type": "ETF",
       "shares": 1,
-      "prev_price": 44.85,
-      "curr_price": 43.66,
-      "change_pct": -2.65,
-      "prev_jpy": 7164,
-      "curr_jpy": 6980,
+      "prev_price": 43.66,
+      "curr_price": 42.4,
+      "change_pct": -2.89,
+      "prev_jpy": 6974,
+      "curr_jpy": 6779,
       "usdjpy": 159.875,
       "source": "Yahoo Finance close",
-      "curr_date": "2026-11-12",
-      "prev_date": "2026-11-11",
+      "curr_date": "2026-11-13",
+      "prev_date": "2026-11-12",
       "stale": false,
       "corporate_action_review": false,
       "split_events": [],
-      "change_jpy": null,
-      "jpy_change_note": "株価・為替の基準日不一致、旧価格または分割要確認",
+      "change_jpy": -195,
+      "jpy_change_note": "基準日一致",
       "weight_pct": 0.02
     }
   },
@@ -3262,6 +3262,15 @@
       "complete": true,
       "stale": false,
       "cash_flow_method": "quantity_change_at_current_price_estimate"
+    },
+    {
+      "date": "2026-11-15",
+      "total_jpy": 36540565,
+      "usdjpy": 159.875,
+      "cash_flow_jpy": 0,
+      "complete": true,
+      "stale": false,
+      "cash_flow_method": "quantity_change_at_current_price_estimate"
     }
   ],
   "legacy_history": [
@@ -4180,6 +4189,14 @@
       "cash_flow_jpy": 0,
       "complete": true,
       "stale": false
+    },
+    {
+      "date": "2026-11-15",
+      "total_jpy": 34872743,
+      "usdjpy": 159.875,
+      "cash_flow_jpy": 0,
+      "complete": true,
+      "stale": false
     }
   ],
   "history_note": "統合資産の履歴は初回取得から。旧11銘柄の履歴はlegacy_historyに保存し接続しません",
@@ -4197,9 +4214,9 @@
       "stocks": 4.56
     },
     "direct_usd_exposure": {
-      "value_jpy": 25687987,
+      "value_jpy": 25687786,
       "weight_pct": 70.3,
-      "per_yen_jpy": 160675,
+      "per_yen_jpy": 160674,
       "note": "USD建て直接保有のみ・株価固定。投信内部の為替・ヘッジ効果は未算出"
     },
     "us_market_policy": {
