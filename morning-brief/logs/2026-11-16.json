@@ -1,0 +1,150 @@
+{
+ "date": "2026-11-16",
+ "generated_at": "2026-11-17T03:13:55",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "^GSPC",
+   "name": "S&P500",
+   "theme": "指数",
+   "headline": "S&P500下落 -2%",
+   "conclusion": "S&P500のz=-2.1σは指数見通しの修正を示唆",
+   "score": 0.6569,
+   "score_parts": {
+    "z": 0.1806,
+    "volume": 0.0463,
+    "media": 0.2,
+    "sns": 0.05,
+    "holdings": 0.1,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 16,
+   "sns_heat": 0.5,
+   "slot": 1,
+   "template_id": "T1",
+   "topic_tag": "macro",
+   "numbers": [
+    {
+     "label": "S&P500 日次",
+     "value": "-1.9%",
+     "sub": "z=-2.1σ",
+     "source": "yfinance終値",
+     "asof": "2026-11-16"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "0.6倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-11-16"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+0.2%",
+     "sub": "S&P500",
+     "source": "yfinance終値",
+     "asof": "2026-11-16"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-5.3%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-16"
+    },
+    {
+     "label": "米10年金利 日次",
+     "value": "-0.6%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-16"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "5.12%",
+     "sub": "2026-11-16",
+     "source": "米財務省",
+     "asof": "2026-11-16"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-16_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-16_1.txt"
+   ]
+  },
+  {
+   "ticker": "^DJI",
+   "name": "NYダウ",
+   "theme": "指数",
+   "headline": "NYダウ小幅安 -1%",
+   "conclusion": "NYダウのz=-1.6σは指数見通しの修正を示唆",
+   "score": 0.5907,
+   "score_parts": {
+    "z": 0.1381,
+    "volume": 0.1018,
+    "media": 0.1333,
+    "sns": 0.0875,
+    "holdings": 0.05,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 4,
+   "sns_heat": 0.875,
+   "slot": 2,
+   "template_id": "T2",
+   "topic_tag": "macro",
+   "numbers": [
+    {
+     "label": "NYダウ 日次",
+     "value": "-1.4%",
+     "sub": "z=-1.6σ",
+     "source": "yfinance終値",
+     "asof": "2026-11-16"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.2倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-11-16"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+3.9%",
+     "sub": "NYダウ",
+     "source": "yfinance終値",
+     "asof": "2026-11-16"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "-1.9%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-16"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "-5.3%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-16"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "5.12%",
+     "sub": "2026-11-16",
+     "source": "米財務省",
+     "asof": "2026-11-16"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-16_2.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-16_2.txt"
+   ]
+  }
+ ],
+ "skipped": []
+}
