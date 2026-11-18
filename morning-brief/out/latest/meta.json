@@ -1,18 +1,18 @@
 [
  {
   "slot": 1,
-  "template_id": "T1",
+  "template_id": "T4",
   "topic_tag": "macro",
-  "ticker": "^GSPC",
-  "score": 0.6569,
-  "headline": "S&P500下落 -2%"
+  "ticker": "^DJI",
+  "score": 0.6952,
+  "headline": "NYダウ下落 -2%"
  },
  {
   "slot": 2,
-  "template_id": "T2",
-  "topic_tag": "macro",
-  "ticker": "^DJI",
-  "score": 0.5907,
-  "headline": "NYダウ小幅安 -1%"
+  "template_id": "T3",
+  "topic_tag": "semiconductor",
+  "ticker": "NVDA",
+  "score": 0.5823,
+  "headline": "エヌビディア小幅安 -0%"
  }
 ]
