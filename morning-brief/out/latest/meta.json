@@ -1,18 +1,10 @@
 [
  {
   "slot": 1,
-  "template_id": "T4",
-  "topic_tag": "macro",
-  "ticker": "^DJI",
-  "score": 0.6952,
-  "headline": "NYダウ下落 -2%"
- },
- {
-  "slot": 2,
-  "template_id": "T3",
-  "topic_tag": "semiconductor",
-  "ticker": "NVDA",
-  "score": 0.5823,
-  "headline": "エヌビディア小幅安 -0%"
+  "template_id": "T5",
+  "topic_tag": "other",
+  "ticker": "XLE",
+  "score": 0.5588,
+  "headline": "XLE(エネルギー)下落 -3%"
  }
 ]

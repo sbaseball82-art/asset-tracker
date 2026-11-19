@@ -1,0 +1,101 @@
+{
+ "date": "2026-11-18",
+ "generated_at": "2026-11-19T02:43:11",
+ "max_cards": 2,
+ "adopted": [
+  {
+   "ticker": "XLE",
+   "name": "XLE(エネルギー)",
+   "theme": "エネルギー",
+   "headline": "XLE(エネルギー)下落 -3%",
+   "conclusion": "XLE(エネルギー)のz=-2.1σはエネルギー見通しの修正を示唆",
+   "score": 0.5588,
+   "score_parts": {
+    "z": 0.188,
+    "volume": 0.1274,
+    "media": 0.1333,
+    "sns": 0.0,
+    "holdings": 0.03,
+    "calendar": 0.0,
+    "global": 0.08,
+    "learn": 0.0
+   },
+   "n_media": 4,
+   "sns_heat": 0.0,
+   "slot": 1,
+   "template_id": "T5",
+   "topic_tag": "other",
+   "numbers": [
+    {
+     "label": "XLE(エネルギー) 日次",
+     "value": "-3.3%",
+     "sub": "z=-2.1σ",
+     "source": "yfinance終値",
+     "asof": "2026-11-18"
+    },
+    {
+     "label": "出来高 20日比",
+     "value": "1.5倍",
+     "sub": "当日/平均",
+     "source": "yfinance出来高",
+     "asof": "2026-11-18"
+    },
+    {
+     "label": "6ヶ月騰落",
+     "value": "+3.8%",
+     "sub": "XLE(エネルギー)",
+     "source": "yfinance終値",
+     "asof": "2026-11-18"
+    },
+    {
+     "label": "S&P500 日次",
+     "value": "-0.2%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-18"
+    },
+    {
+     "label": "SOX指数 日次",
+     "value": "+0.1%",
+     "sub": "同日",
+     "source": "yfinance終値",
+     "asof": "2026-11-18"
+    },
+    {
+     "label": "米10年利回り",
+     "value": "5.07%",
+     "sub": "2026-11-18",
+     "source": "米財務省",
+     "asof": "2026-11-18"
+    }
+   ],
+   "files": [
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-18_1.png",
+    "/home/runner/work/asset-tracker/asset-tracker/morning-brief/out/2026-11-18_1.txt"
+   ]
+  }
+ ],
+ "skipped": [
+  {
+   "ticker": "AMZN",
+   "score": 0.3507,
+   "unmet": [
+    "スコア0.35が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "SCHD",
+   "score": 0.3155,
+   "unmet": [
+    "スコア0.32が閾値0.45未満（材料薄）"
+   ]
+  },
+  {
+   "ticker": "HDV",
+   "score": 0.2398,
+   "unmet": [
+    "スコア0.24が閾値0.45未満（材料薄）"
+   ]
+  }
+ ]
+}
