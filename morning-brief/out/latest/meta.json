@@ -1,10 +1,18 @@
 [
  {
   "slot": 1,
+  "template_id": "T1",
+  "topic_tag": "macro",
+  "ticker": "^DJI",
+  "score": 0.7276,
+  "headline": "NYダウ下落 -2%"
+ },
+ {
+  "slot": 2,
   "template_id": "T5",
-  "topic_tag": "other",
-  "ticker": "XLE",
-  "score": 0.5588,
-  "headline": "XLE(エネルギー)下落 -3%"
+  "topic_tag": "macro",
+  "ticker": "^IXIC",
+  "score": 0.6873,
+  "headline": "ナスダック総合下落 -2%"
  }
 ]
