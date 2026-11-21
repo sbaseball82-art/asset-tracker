@@ -1,0 +1,18 @@
+[
+ {
+  "slot": 1,
+  "template_id": "T2",
+  "topic_tag": "semiconductor",
+  "ticker": "NVDA",
+  "score": 1.0308,
+  "headline": "エヌビディア急落 -14%"
+ },
+ {
+  "slot": 2,
+  "template_id": "T5",
+  "topic_tag": "macro",
+  "ticker": "^IXIC",
+  "score": 0.796,
+  "headline": "ナスダック総合大幅安 -5%"
+ }
+]
