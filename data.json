@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-21T11:55:30.984289+09:00",
-  "date": "2026-11-21",
+  "updated_at": "2026-11-22T10:48:41.303787+09:00",
+  "date": "2026-11-22",
   "usdjpy": 159.707,
   "fx": {
     "rate": 159.707,
@@ -14,35 +14,35 @@
   "status": "ok",
   "warnings": [],
   "total_jpy": 32390525,
-  "day_change_jpy": -774761,
-  "day_change_pct": -2.34,
+  "day_change_jpy": 0,
+  "day_change_pct": 0.0,
   "comparisons": {
     "day": {
-      "base_date": "2026-11-20",
-      "base_jpy": 33165286,
-      "change_jpy": -774761,
-      "change_pct": -2.34,
-      "gross_change_jpy": -774761,
+      "base_date": "2026-11-21",
+      "base_jpy": 32390525,
+      "change_jpy": 0,
+      "change_pct": 0.0,
+      "gross_change_jpy": 0,
       "cash_flow_jpy": 0,
       "method": "quantity_change_at_current_price_estimate",
       "note": "数量差を当日価格で評価した概算。実際の入出金・配当・税手数料は未反映"
     },
     "week": {
-      "base_date": "2026-11-14",
-      "base_jpy": 34872944,
-      "change_jpy": -2482419,
+      "base_date": "2026-11-15",
+      "base_jpy": 34872743,
+      "change_jpy": -2482218,
       "change_pct": -7.12,
-      "gross_change_jpy": -2482419,
+      "gross_change_jpy": -2482218,
       "cash_flow_jpy": 0,
       "method": "quantity_change_at_current_price_estimate",
       "note": "数量差を当日価格で評価した概算。実際の入出金・配当・税手数料は未反映"
     },
     "month": {
-      "base_date": "2026-10-22",
-      "base_jpy": 34249666,
-      "change_jpy": -2402813,
-      "change_pct": -7.02,
-      "gross_change_jpy": -1859141,
+      "base_date": "2026-10-23",
+      "base_jpy": 34065608,
+      "change_jpy": -2218755,
+      "change_pct": -6.51,
+      "gross_change_jpy": -1675083,
       "cash_flow_jpy": 543672,
       "method": "quantity_change_at_current_price_estimate",
       "note": "数量差を当日価格で評価した概算。実際の入出金・配当・税手数料は未反映"
@@ -4085,6 +4085,14 @@
     },
     {
       "date": "2026-11-21",
+      "total_jpy": 32390525,
+      "usdjpy": 159.707,
+      "cash_flow_jpy": 0,
+      "complete": true,
+      "stale": false
+    },
+    {
+      "date": "2026-11-22",
       "total_jpy": 32390525,
       "usdjpy": 159.707,
       "cash_flow_jpy": 0,
