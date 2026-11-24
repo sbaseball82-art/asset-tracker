@@ -1,0 +1,18 @@
+[
+ {
+  "slot": 1,
+  "template_id": "T3",
+  "topic_tag": "semiconductor",
+  "ticker": "NVDA",
+  "score": 1.0157,
+  "headline": "エヌビディア急騰 +31%"
+ },
+ {
+  "slot": 2,
+  "template_id": "T4",
+  "topic_tag": "semiconductor",
+  "ticker": "^SOX",
+  "score": 0.79,
+  "headline": "SOX指数急騰 +14%"
+ }
+]
