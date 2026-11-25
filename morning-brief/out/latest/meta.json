@@ -1,18 +1,18 @@
 [
  {
   "slot": 1,
-  "template_id": "T3",
+  "template_id": "T6",
   "topic_tag": "semiconductor",
-  "ticker": "NVDA",
-  "score": 1.0157,
-  "headline": "エヌビディア急騰 +31%"
+  "ticker": "^SOX",
+  "score": 0.6099,
+  "headline": "SOX指数大幅安 -8%"
  },
  {
   "slot": 2,
-  "template_id": "T4",
+  "template_id": "T2",
   "topic_tag": "semiconductor",
-  "ticker": "^SOX",
-  "score": 0.79,
-  "headline": "SOX指数急騰 +14%"
+  "ticker": "MU",
+  "score": 0.5825,
+  "headline": "マイクロン急落 -11%"
  }
 ]
