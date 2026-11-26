@@ -1,60 +1,60 @@
-generated_at: 2026-11-26 10:20 JST
+generated_at: 2026-11-26 19:13 JST
 source: data.json（毎朝の自動取得結果）
-total_jpy: 33080946
-usdjpy: 159.296
+total_jpy: 33059868
+usdjpy: 159.161
 funds:
 - id: VTI
   name: VTI 全米株式ETF
   kind: etf
-  value_jpy: 10991233
-  share_pct: 33.23
+  value_jpy: 10962055
+  share_pct: 33.16
 - id: VYM
   name: VYM 米国高配当ETF
   kind: etf
-  value_jpy: 7843920
-  share_pct: 23.71
+  value_jpy: 7889082
+  share_pct: 23.86
 - id: '89311199'
   name: SBI・V・S&P500
   kind: fund
-  value_jpy: 3299976
-  share_pct: 9.98
+  value_jpy: 3292318
+  share_pct: 9.96
 - id: 04311181
   name: iFreeNEXT FANG+
   kind: fund
-  value_jpy: 3235089
-  share_pct: 9.78
+  value_jpy: 3186414
+  share_pct: 9.64
 - id: 8931224C
   name: SBI S 米国高配当(年4回)
   kind: fund
-  value_jpy: 2550650
-  share_pct: 7.71
+  value_jpy: 2594121
+  share_pct: 7.85
 - id: HDV
   name: HDV 米国高配当ETF
   kind: etf
-  value_jpy: 2390778
-  share_pct: 7.23
+  value_jpy: 2402145
+  share_pct: 7.27
 - id: QQQ
   name: QQQ ナスダック100ETF
   kind: etf
-  value_jpy: 1626348
-  share_pct: 4.92
+  value_jpy: 1614351
+  share_pct: 4.88
 - id: '89311265'
   name: SBI NASDAQ100
   kind: fund
-  value_jpy: 706190
-  share_pct: 2.13
+  value_jpy: 693939
+  share_pct: 2.1
 - id: '29313233'
   name: ニッセイNASDAQ100
   kind: fund
-  value_jpy: 234076
-  share_pct: 0.71
+  value_jpy: 229980
+  share_pct: 0.7
 - id: '79314186'
   name: イノベーションAI
   kind: fund
-  value_jpy: 196964
-  share_pct: 0.6
+  value_jpy: 189919
+  share_pct: 0.57
 - id: DRAM
   name: DRAM メモリ半導体ETF
   kind: etf
-  value_jpy: 5722
+  value_jpy: 5544
   share_pct: 0.02
